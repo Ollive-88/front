@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/models/board/board_model.dart';
-import 'package:ollive_front/service/api/api_service.dart';
 
 class BoardScreen extends StatefulWidget {
   const BoardScreen({super.key});
