@@ -5,6 +5,8 @@ import 'package:ollive_front/screens/board/board_search_screen.dart';
 import 'package:ollive_front/screens/board/board_write_screen.dart';
 import 'package:ollive_front/screens/home_screen.dart';
 import 'package:ollive_front/util/controller/getx_controller.dart';
+import 'package:ollive_front/screens/user/login_screen.dart';
+import 'package:ollive_front/widgets/global/navigationbar_widget.dart';
 
 void main() {
   runApp(const App());
