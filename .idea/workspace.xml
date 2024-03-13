@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="db3e821b-5e53-4fdd-948e-2fc3f0cedc14" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/ollive_front/lib/screens/home_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/ollive_front/lib/screens/home_screen.dart" afterDir="false" />
-    </list>
+    <list default="true" id="db3e821b-5e53-4fdd-948e-2fc3f0cedc14" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,7 +30,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feat-FE/bottomNavigationBar",
+    "git-widget-placeholder": "FE",
     "kotlin-language-version-configured": "true",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
@@ -55,6 +53,7 @@
       <updated>1710207563483</updated>
       <workItem from="1710207565628" duration="17000" />
       <workItem from="1710219630572" duration="46000" />
+      <workItem from="1710313639410" duration="47000" />
     </task>
     <servers />
   </component>
