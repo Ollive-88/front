@@ -24,10 +24,10 @@ class _AppState extends State<App> {
   ];
 
   final List<String> _title = [
-    '게시판',
+    '사람사는 얘기',
     '레시피 추천',
     '오늘의 패션',
-    '',
+    '마이페이지',
   ];
 
   void _onTapNavBar(int index) {
@@ -39,9 +39,11 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // theme: ThemeData(fontFamily: 'NanumSquare'),
       home: Scaffold(
+        backgroundColor: const Color(0xFFFFFFFC),
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
+          preferredSize: const Size.fromHeight(50),
           child: CustomAppbar(title: _title[_selectedIndex]),
         ),
         bottomNavigationBar: CustomNavigationbar(
@@ -59,7 +61,10 @@ class ClothseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text('옷');
+    return const Text(
+      '옷',
+      style: TextStyle(fontFamily: 'NanumSquare', fontSize: 50),
+    );
   }
 }
 
@@ -68,7 +73,13 @@ class RecipeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text('레시피');
+    return const Text(
+      '옷',
+      style: TextStyle(
+          fontFamily: 'NanumSquare',
+          fontSize: 50,
+          fontWeight: FontWeight.),
+    );
   }
 }
 

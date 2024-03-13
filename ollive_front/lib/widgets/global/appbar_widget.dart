@@ -7,9 +7,9 @@ class CustomAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      surfaceTintColor: Colors.white,
+      surfaceTintColor: const Color(0xFFFFFFFC),
       shadowColor: Colors.black,
-      elevation: 1,
+      elevation: 0,
       backgroundColor: Colors.white,
       foregroundColor: Colors.black,
       title: Text(

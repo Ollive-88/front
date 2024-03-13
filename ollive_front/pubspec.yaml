@@ -30,6 +30,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http: ^1.2.1
+  # 외부 링크 연결 라이브러리
+  url_launcher: ^6.2.5
+  # 캐쉬 or 쿠키 라이브러리
+  shared_preferences: ^2.2.2
+  dio: ^5.4.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -55,9 +61,18 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
+
   uses-material-design: true
+
   fonts:
-    -asset: assets/icon/MyFlutterApp.ttf
+    - family: Ollive_Icons
+      fonts:
+        - asset: ./assets/icon/MyFlutterApp.ttf
+    - family: NanumSquare
+      fonts:
+        - asset: ./assets/font/NanumSquareR.ttf
+    
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

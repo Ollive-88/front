@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ollive_front/util/icons/ollive_icons.dart';
 
 class CustomNavigationbar extends StatelessWidget {
   const CustomNavigationbar({
@@ -26,18 +27,41 @@ class CustomNavigationbar extends StatelessWidget {
         ),
         child: BottomNavigationBar(
           backgroundColor: const Color(0xFFF6F6F4),
-          items: <BottomNavigationBarItem>[
+          items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Image.asset('assets/img/your_custom_icon.png'),
-              label: 'Home',
+              icon: Icon(
+                OlliveIcons.boardicon,
+                color: Colors.black,
+              ),
+              label: 'Board',
             ),
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              label: 'Second',
+            BottomNavigationBarItem(
+              icon: Icon(
+                OlliveIcons.recipeicon,
+                color: Colors.black,
+              ),
+              label: 'Recipe',
             ),
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              label: 'Third',
+            BottomNavigationBarItem(
+              icon: Icon(
+                OlliveIcons.clothseicon,
+                color: Colors.black,
+              ),
+              label: 'Clothse',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                OlliveIcons.profileicon,
+                color: Colors.black,
+              ),
+              label: 'Profile',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.timer,
+                color: Colors.black,
+              ),
+              label: 'Profile',
             ),
           ],
           currentIndex: selectedIndex,
