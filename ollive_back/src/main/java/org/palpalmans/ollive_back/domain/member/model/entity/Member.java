@@ -28,7 +28,8 @@ public class Member {
     @Column(nullable = false)
     private String name;
 
-//    private String nickname;
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) default 'defaultUserNickname'")
+    private String nickname;
 
     @Temporal(TemporalType.TIMESTAMP)
     private String createdAt;
