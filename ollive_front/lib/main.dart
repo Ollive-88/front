@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ollive_front/screens/home_screen.dart';
+import 'package:ollive_front/util/controller/getx_controller.dart';
 import 'package:ollive_front/widgets/global/navigationbar_widget.dart';
 
 void main() {
@@ -13,28 +16,18 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _page = [];
-
-  void _onTapNavBar(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    Get.put(StatusController());
+    return GetMaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/home': (context) => const HomScreen(),
+        '/1': (context) => const Test1(),
+        '/2': (context) => const Test2(),
+      },
       theme: ThemeData(fontFamily: 'NanumSquare'),
-      home: Scaffold(
-        backgroundColor: const Color(0xFFFFFFFC),
-        bottomNavigationBar: CustomNavigationbar(
-          selectedIndex: _selectedIndex,
-          onItemTapped: _onTapNavBar,
-        ),
-        body: _page[_selectedIndex],
-      ),
+      home: LoginScreen(),
     );
   }
 }
