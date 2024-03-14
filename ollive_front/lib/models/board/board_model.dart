@@ -1,11 +1,12 @@
-class Board {
+class BoardModel {
   final String title;
-  final int viewCnt, likeCnt, commentCnt;
+  final int boardId, viewCnt, likeCnt, commentCnt;
   final List<String> tags;
   final List<String> imgUrls;
 
-  Board.fromJson(Map<String, dynamic> json)
+  BoardModel.fromJson(Map<String, dynamic> json)
       : title = json['title'],
+        boardId = json['boardId'],
         viewCnt = json['viewCnt'],
         likeCnt = json['likeCnt'],
         commentCnt = json['commentCnt'],

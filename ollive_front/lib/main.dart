@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ollive_front/screens/home_screen.dart';
 import 'package:ollive_front/util/controller/getx_controller.dart';
-import 'package:ollive_front/widgets/global/navigationbar_widget.dart';
 
 void main() {
   runApp(const App());
@@ -27,7 +26,7 @@ class _AppState extends State<App> {
         '/2': (context) => const Test2(),
       },
       theme: ThemeData(fontFamily: 'NanumSquare'),
-      home: Text("로그인 들어올 자리"),
+      home: const HomScreen(),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ollive_front/screens/board/board_screen.dart';
 import 'package:ollive_front/widgets/global/navigationbar_widget.dart';
 
 class HomScreen extends StatefulWidget {
@@ -29,11 +30,11 @@ class _HomScreenState extends State<HomScreen> {
         children: [
           Opacity(
             opacity: _selectedIndex == 0 ? 1 : 0,
-            child: const Board(),
+            child: BoardScreen(),
           ),
           Opacity(
             opacity: _selectedIndex == 1 ? 1 : 0,
-            child: const Board(),
+            child: const TestScreen(),
           ),
           // Opacity(
           //   opacity: _selectedIndex == 2 ? 1 : 0,
@@ -45,8 +46,8 @@ class _HomScreenState extends State<HomScreen> {
   }
 }
 
-class Board extends StatelessWidget {
-  const Board({super.key});
+class TestScreen extends StatelessWidget {
+  const TestScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
