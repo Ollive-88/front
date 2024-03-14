@@ -27,7 +27,7 @@ class _AppState extends State<App> {
         '/2': (context) => const Test2(),
       },
       theme: ThemeData(fontFamily: 'NanumSquare'),
-      home: LoginScreen(),
+      home: Text("로그인 들어올 자리"),
     );
   }
 }
