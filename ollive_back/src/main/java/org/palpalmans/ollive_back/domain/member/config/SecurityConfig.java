@@ -26,9 +26,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
-//        List<String> exposedHeaders = new ArrayList<>(); //todo : refresh token 적용시 활성화
-//        exposedHeaders.add("Authorization");
-//        exposedHeaders.add("Refresh");
+        List<String> exposedHeaders = new ArrayList<>();
+        exposedHeaders.add("Authorization");
+        exposedHeaders.add("Refresh");
 
 
         http
