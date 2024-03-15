@@ -2,7 +2,7 @@ package org.palpalmans.ollive_back.domain.member.controller;
 
 
 import lombok.RequiredArgsConstructor;
-import org.palpalmans.ollive_back.domain.member.model.dto.request.AccessCreateRequest;
+import org.palpalmans.ollive_back.domain.member.model.dto.request.TokenCreateRequest;
 import org.palpalmans.ollive_back.domain.member.service.JwtService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +17,10 @@ public class TokenController {
     private final JwtService jwtService;
 
     @PostMapping("/accesstoken")
-    public ResponseEntity<?> accesstoken(@RequestBody AccessCreateRequest accessCreateRequest){
+    public ResponseEntity<?> accesstoken(@RequestBody TokenCreateRequest tokenCreateRequest){
 
-
-        String atc = jwtService.generateAccessToken(accessCreateRequest);
+        //주어진 정보로 access token 발급
+        String atc = jwtService.generateAccessToken(tokenCreateRequest);
 
         // Authorization 헤더에 토큰 추가
         HttpHeaders headers = new HttpHeaders();
@@ -29,8 +29,27 @@ public class TokenController {
         // 클라이언트에게 ResponseEntity 반환
         return ResponseEntity.ok()
                 .headers(headers)
-                .body("토큰생성이 완료되었습니다");
+                .body("access토큰 생성이 완료되었습니다");
 
     }
+
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<?> refreshtoken(@RequestBody TokenCreateRequest tokenCreateRequest){
+
+        //주어진 정보로 access token 발급
+        String atc = jwtService.generateAccessToken(tokenCreateRequest);
+
+        // Authorization 헤더에 토큰 추가
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Refresh", "Bearer " + atc);
+
+        // 클라이언트에게 ResponseEntity 반환
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body("refresh토큰 생성이 완료되었습니다");
+
+    }
+
+
 
 }
