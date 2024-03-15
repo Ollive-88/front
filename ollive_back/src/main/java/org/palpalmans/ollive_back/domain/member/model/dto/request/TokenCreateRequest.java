@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class AccessCreateRequest {
+public class TokenCreateRequest {
 
     private Long id;
     private String email;
