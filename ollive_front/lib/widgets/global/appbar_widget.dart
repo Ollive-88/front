@@ -18,6 +18,12 @@ class CustomAppbar extends StatelessWidget {
           fontSize: 24,
         ),
       ),
+      shape: const Border(
+        bottom: BorderSide(
+          width: 7,
+          color: Color(0xFFEBEBE9),
+        ),
+      ),
     );
   }
 }

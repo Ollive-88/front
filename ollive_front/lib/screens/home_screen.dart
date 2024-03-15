@@ -28,18 +28,18 @@ class _HomScreenState extends State<HomScreen> {
       ),
       body: Stack(
         children: [
-          Opacity(
-            opacity: _selectedIndex == 0 ? 1 : 0,
+          Offstage(
+            offstage: _selectedIndex != 0,
             child: BoardScreen(),
           ),
-          Opacity(
-            opacity: _selectedIndex == 1 ? 1 : 0,
+          Offstage(
+            offstage: _selectedIndex != 1,
             child: const TestScreen(),
           ),
-          // Opacity(
-          //   opacity: _selectedIndex == 2 ? 1 : 0,
-          //   child: const Test(),
-          // ),
+          Offstage(
+            offstage: _selectedIndex != 2,
+            child: const Test(),
+          ),
         ],
       ),
     );

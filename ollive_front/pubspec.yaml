@@ -74,6 +74,9 @@ flutter:
     - family: NanumSquare
       fonts:
         - asset: ./assets/font/NanumSquareR.ttf
+  
+  assets:
+    - ./assets/image/icons/
     
 
 
