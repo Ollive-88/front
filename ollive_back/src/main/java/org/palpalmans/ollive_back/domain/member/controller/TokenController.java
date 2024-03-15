@@ -36,12 +36,12 @@ public class TokenController {
     @PostMapping("/refreshtoken")
     public ResponseEntity<?> refreshtoken(@RequestBody TokenCreateRequest tokenCreateRequest){
 
-        //주어진 정보로 access token 발급
-        String atc = jwtService.generateAccessToken(tokenCreateRequest);
+        //주어진 정보로 refresh token 발급
+        String rtc = jwtService.generateRefreshToken(tokenCreateRequest);
 
         // Authorization 헤더에 토큰 추가
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Refresh", "Bearer " + atc);
+        headers.set("Refresh", "Bearer " + rtc);
 
         // 클라이언트에게 ResponseEntity 반환
         return ResponseEntity.ok()
