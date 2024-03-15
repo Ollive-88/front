@@ -2,6 +2,7 @@ package org.palpalmans.ollive_back.domain.member.service;
 
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
+import org.palpalmans.ollive_back.domain.member.model.dto.request.AccessCreateRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,10 @@ public class JwtService {
     }
 
     //AccessToken 생성
-    public String generateAccessToken(Long id, String email) {
+    public String generateAccessToken(AccessCreateRequest accessCreateRequest) {
+
+        long id = accessCreateRequest.getId();
+        String email = accessCreateRequest.getEmail();
 
         long tokenPeriod = 1000L * 60L * 10L; // 10분
 //        long tokenPeriod = 1000L * 60L * 60L * 24L * 14; // 2주
