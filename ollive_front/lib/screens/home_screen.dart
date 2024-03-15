@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:ollive_front/screens/board/board_screen.dart';
 import 'package:ollive_front/widgets/global/navigationbar_widget.dart';
 
-class HomScreen extends StatefulWidget {
-  const HomScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomScreen> createState() => _HomScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomScreenState extends State<HomScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   ScrollController boardScrollController = ScrollController();
