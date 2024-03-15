@@ -5,6 +5,7 @@ import org.palpalmans.ollive_back.domain.member.model.dto.request.JoinRequest;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.model.status.JoinRequestStatus;
 import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.Date;
 public class JoinService {
 
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public JoinRequestStatus joinProcess(JoinRequest joinRequest){
 
@@ -36,7 +38,7 @@ public class JoinService {
         Member joinMember = new Member();
 
         joinMember.setEmail(email);
-        joinMember.setPassword(password); //todo : 패스워드 암호화
+        joinMember.setPassword(bCryptPasswordEncoder.encode(password));
         joinMember.setGender(gender);
         joinMember.setBirthday(birthday);
         joinMember.setName(name);
