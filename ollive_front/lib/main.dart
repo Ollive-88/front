@@ -4,9 +4,8 @@ import 'package:get/get.dart';
 import 'package:ollive_front/screens/board/board_search_screen.dart';
 import 'package:ollive_front/screens/board/board_write_screen.dart';
 import 'package:ollive_front/screens/home_screen.dart';
-import 'package:ollive_front/util/controller/getx_controller.dart';
 import 'package:ollive_front/screens/user/login_screen.dart';
-import 'package:ollive_front/widgets/global/navigationbar_widget.dart';
+import 'package:ollive_front/util/controller/getx_controller.dart';
 
 void main() {
   runApp(const App());
@@ -33,6 +32,7 @@ class _AppState extends State<App> {
         '/board/write': (context) => const BoardWriteScreen(),
         '/1': (context) => const Test1(),
         '/2': (context) => const Test2(),
+        '/3': (context) => const LoginScreen(),
       },
       // 한글 사용 설정
       localizationsDelegates: const [
