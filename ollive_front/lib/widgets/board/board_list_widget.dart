@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ollive_front/models/board/board_model.dart';
 import 'package:ollive_front/service/board/board_service.dart';
+import 'package:ollive_front/widgets/board/board_tag_widget.dart';
 
 class BoardList extends StatelessWidget {
   const BoardList({super.key, required this.boardModel});
@@ -27,32 +28,7 @@ class BoardList extends StatelessWidget {
                   Row(
                     children: [
                       for (var tag in boardModel.tags)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10, bottom: 10),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 4,
-                              horizontal: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(
-                                7,
-                              ),
-                              border: Border.all(
-                                color: Colors.grey.shade400,
-                                width: 1,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade200,
-                                  offset: const Offset(2, 3),
-                                ),
-                              ],
-                            ),
-                            child: Text(tag),
-                          ),
-                        )
+                        Tag(tagName: tag, isSearch: false)
                     ],
                   ),
                   Text(

@@ -7,7 +7,7 @@ class BoardService {
   static final Dio _dio = DioService().authDio;
 
   static Future<List<BoardModel>> getBoardList(
-      String keyword, int page, int size) async {
+      List<String>? tags, String? keyword, int page, int size) async {
     final List<BoardModel> boards = [];
 
     final response = await _dio.get("/swignsing", queryParameters: {});
