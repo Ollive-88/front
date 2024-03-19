@@ -57,4 +57,8 @@ public class JwtService {
                 .compact();
     }
 
+    public long getMemberId(String token){
+       return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("id", long.class);
+    }
+
 }
