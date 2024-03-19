@@ -8,7 +8,9 @@ class Login {
         password = json['password'],
         userId = json['userId'];
 
-  Login.fromUserInput();
+  Login.fromUserInput()
+  : userId = '',
+  password = '';
 
   Map<String, dynamic> toJson() => {
         'accountName': accountName,
