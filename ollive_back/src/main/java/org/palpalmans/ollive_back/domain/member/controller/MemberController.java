@@ -6,9 +6,8 @@ import org.palpalmans.ollive_back.domain.member.model.status.JoinRequestStatus;
 import org.palpalmans.ollive_back.domain.member.service.JoinService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +28,12 @@ public class MemberController {
             case NULL_EXIST -> new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             case EMAIL_DUPLICATED -> new ResponseEntity<>(HttpStatus.CONFLICT);
         };
+    }
+
+    @GetMapping("/memberinfo")
+    public ResponseEntity<> getMyinfo(@RequestHeader Authentication authentication){
+
+        return null;
     }
 
 }
