@@ -3,7 +3,6 @@ package org.palpalmans.ollive_back.domain.member.controller;
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.JoinRequest;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.MemberInfoResponse;
-import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.model.status.JoinRequestStatus;
 import org.palpalmans.ollive_back.domain.member.service.JoinService;
 import org.palpalmans.ollive_back.domain.member.service.JwtService;

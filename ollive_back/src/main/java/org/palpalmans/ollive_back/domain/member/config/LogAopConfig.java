@@ -21,8 +21,6 @@ public class LogAopConfig {
     private final ThreadLocal<Deque<Long>> callStack = ThreadLocal.withInitial(ArrayDeque::new);
     private final ThreadLocal<String> traceId = new ThreadLocal<>();
 
-    //todo : 경로 변경
-    // team.luckyturkey.memberservice 이하 패키지의 모든 클래스 이하 모든 메서드에 적용
     @Pointcut("execution(* org.palpalmans..*.*(..)) && !within(*..*Filter)")
     private void cut(){
     }
@@ -98,9 +96,7 @@ public class LogAopConfig {
     // 함수 호출 depth에 따라 들여쓰기 생성
     private String getIndentation(int depth) {
         StringBuilder indentation = new StringBuilder();
-        for (int i = 0; i < depth - 1; i++) {
-            indentation.append("| ");
-        }
+        indentation.append("| ".repeat(Math.max(0, depth - 1)));
         return indentation.toString();
     }
 }
