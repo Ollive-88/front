@@ -2,6 +2,7 @@ package org.palpalmans.ollive_back.domain.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.JoinRequest;
+import org.palpalmans.ollive_back.domain.member.model.dto.response.MemberInfoResponse;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.model.status.JoinRequestStatus;
 import org.palpalmans.ollive_back.domain.member.service.JoinService;
@@ -35,17 +36,15 @@ public class MemberController {
     }
 
     @GetMapping("/memberinfo")
-    public ResponseEntity<?> getMyInfo(@RequestHeader(name = "Authorization") String accessToken){
+    public ResponseEntity<MemberInfoResponse> getMyInfo(@RequestHeader(name = "Authorization") String accessToken){
 
         //access token이 존재하지 않는 경우는 jwt filter에서 처리됨
         String atc = accessToken.split(" ")[1]; //"Bearer" Header 제거
         long id = jwtService.getMemberId(atc);
 
-        //todo : Configure the appropriate Response DTO to avoid returning unnecessary information
+        MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(id); //존재하지 않는 경우는 respository에서 예외처리
 
-        Member member = memberService.getMemberInfo(id); //todo : Set return values based on output results
-
-        return ResponseEntity.ok(member);
+        return ResponseEntity.ok(memberInfoResponse);
     }
 
 }
