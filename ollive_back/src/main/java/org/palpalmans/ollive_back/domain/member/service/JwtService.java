@@ -15,7 +15,7 @@ import java.util.Date;
 @Slf4j
 public class JwtService {
 
-    private SecretKey secretKey;
+    private final SecretKey secretKey;
 
     public JwtService(@Value("${spring.jwt.secret}") String secret) {
 
@@ -58,6 +58,7 @@ public class JwtService {
     }
 
     public long getMemberId(String token){
+        //todo : Check if the code is well-written
        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("id", long.class);
     }
 

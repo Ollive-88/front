@@ -11,7 +11,9 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public Member getmMemberinfo(long id){
+    public Member getMemberInfo(long id){
+
+        //todo : Configure the appropriate Response DTO to avoid returning unnecessary information
         Member member = memberRepository.getMemberById(id);
 
         return member;

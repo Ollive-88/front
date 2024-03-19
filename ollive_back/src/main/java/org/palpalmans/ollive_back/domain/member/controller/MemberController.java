@@ -9,7 +9,6 @@ import org.palpalmans.ollive_back.domain.member.service.JwtService;
 import org.palpalmans.ollive_back.domain.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +20,7 @@ public class MemberController {
     private final JwtService jwtService;
 
 
-    @PostMapping("/join")
+    @PostMapping("/join") //todo : modify ResponseEntity type
     public ResponseEntity<?> join(@RequestBody JoinRequest joinRequest){
 
 
@@ -35,13 +34,15 @@ public class MemberController {
         };
     }
 
-    @GetMapping("/memberinfo")
-    public ResponseEntity<?> getMyinfo(@RequestHeader(name = "Authorization") String accessToken){
+    @GetMapping("/memberinfo") //todo : modify ResponseEntity type
+    public ResponseEntity<?> getMyInfo(@RequestHeader(name = "Authorization") String accessToken){
 
-        String atc = accessToken.split(" ")[1];
+        String atc = accessToken.split(" ")[1]; //todo : Change to Optional
         long id = jwtService.getMemberId(atc);
 
-        Member member = memberService.getmMemberinfo(id);
+        //todo : Configure the appropriate Response DTO to avoid returning unnecessary information
+
+        Member member = memberService.getMemberInfo(id); //todo : Set return values based on output results
 
         return ResponseEntity.ok(member);
     }
