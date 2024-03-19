@@ -12,7 +12,16 @@ class HomScreen extends StatefulWidget {
 class _HomScreenState extends State<HomScreen> {
   int _selectedIndex = 0;
 
+  ScrollController boardScrollController = ScrollController();
+
   void _onTapNavBar(int index) {
+    if (index == _selectedIndex) {
+      boardScrollController.animateTo(
+        0,
+        duration: const Duration(seconds: 1),
+        curve: Curves.linear,
+      );
+    }
     setState(() {
       _selectedIndex = index;
     });
@@ -30,7 +39,9 @@ class _HomScreenState extends State<HomScreen> {
         children: [
           Offstage(
             offstage: _selectedIndex != 0,
-            child: BoardScreen(),
+            child: BoardScreen(
+              boardScrollController: boardScrollController,
+            ),
           ),
           Offstage(
             offstage: _selectedIndex != 1,

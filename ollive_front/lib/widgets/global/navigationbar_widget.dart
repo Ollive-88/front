@@ -56,13 +56,6 @@ class CustomNavigationbar extends StatelessWidget {
               ),
               label: 'Profile',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.timer,
-                color: Colors.black,
-              ),
-              label: 'Profile',
-            ),
           ],
           currentIndex: selectedIndex,
           selectedItemColor: Colors.blue,

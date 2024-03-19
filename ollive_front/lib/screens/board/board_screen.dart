@@ -9,11 +9,18 @@ import 'package:ollive_front/widgets/board/board_appbar_widget.dart';
 import 'package:ollive_front/widgets/board/board_list_widget.dart';
 
 class BoardScreen extends StatefulWidget {
-  const BoardScreen({super.key, this.tagNames, this.keyword});
+  BoardScreen({
+    super.key,
+    this.tagNames,
+    this.keyword,
+    this.boardScrollController,
+  });
   // 검색할 태그 목록
   final List<String>? tagNames;
   // 검색어
   final String? keyword;
+
+  ScrollController? boardScrollController = ScrollController();
 
   // Todo : 나중에 지우기
   static final BoardModel board1 = BoardModel.fromJson({
@@ -51,13 +58,25 @@ class _BoardScreenState extends State<BoardScreen> {
   late ScrollController _scrollController;
   bool _isAppBarVisible = true;
 
+  void scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(seconds: 3),
+      curve: Curves.linear,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     boards = BoardService.getBoardList(widget.tagNames, widget.keyword, 0, 10);
 
-    // 컨트롤러 초기화 후 addListener로 동작 감지 설정
-    _scrollController = ScrollController();
+    if (widget.boardScrollController == null) {
+      // 컨트롤러 초기화 후 addListener로 동작 감지 설정
+      _scrollController = ScrollController();
+    } else {
+      _scrollController = widget.boardScrollController!;
+    }
     _scrollController.addListener(() {
       // 스크롤 위치에 따라 AppBar의 표시 여부를 결정
       if (_scrollController.position.userScrollDirection ==
@@ -144,6 +163,45 @@ class _BoardScreenState extends State<BoardScreen> {
             )
           ],
         ),
+        floatingActionButton: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/board/write');
+          },
+          child: SizedBox(
+            width: 100,
+            height: 45,
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFD5D5),
+                borderRadius: BorderRadius.circular(23),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade200,
+                    offset: const Offset(2, 3),
+                  ),
+                ],
+              ),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 13),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.add,
+                      size: 28,
+                    ),
+                    Text(
+                      "글쓰기",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       ),
     );
   }

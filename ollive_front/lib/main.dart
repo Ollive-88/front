@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:ollive_front/screens/board/board_search_screen.dart';
+import 'package:ollive_front/screens/board/board_write_screen.dart';
 import 'package:ollive_front/screens/home_screen.dart';
 import 'package:ollive_front/util/controller/getx_controller.dart';
 
@@ -25,6 +26,7 @@ class _AppState extends State<App> {
       routes: {
         '/home': (context) => const HomScreen(),
         '/board/search': (context) => const BoardSearchScreen(),
+        '/board/write': (context) => const BoardWriteScreen(),
         '/1': (context) => const Test1(),
         '/2': (context) => const Test2(),
       },
@@ -41,7 +43,9 @@ class _AppState extends State<App> {
           'en',
         ),
       ],
-      theme: ThemeData(fontFamily: 'NanumSquare'),
+      theme: ThemeData(
+        fontFamily: 'NanumSquare',
+      ),
       home: const HomScreen(),
     );
   }
