@@ -21,7 +21,7 @@ public class JoinService {
 
         String email = joinRequest.getEmail();
         String password = joinRequest.getPassword();
-        int gender = joinRequest.getGender();
+        String gender = joinRequest.getGender();
         String birthday = joinRequest.getBirthday();
         String name = joinRequest.getName();
         String nickname = joinRequest.getNickname();

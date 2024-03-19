@@ -18,8 +18,8 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, columnDefinition = "int default 1")
-    private int gender; // 1 : male, 0 : female
+    @Column(nullable = false)
+    private String gender;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)

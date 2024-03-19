@@ -12,7 +12,7 @@ public class JoinRequest {
 
     private String email;
     private String password;
-    private int gender;
+    private String gender;
     private String birthday;
     private String name;
     private String nickname;
