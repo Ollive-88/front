@@ -2,8 +2,11 @@ package org.palpalmans.ollive_back.domain.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.JoinRequest;
+import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.model.status.JoinRequestStatus;
 import org.palpalmans.ollive_back.domain.member.service.JoinService;
+import org.palpalmans.ollive_back.domain.member.service.JwtService;
+import org.palpalmans.ollive_back.domain.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final JoinService joinService;
+    private final MemberService memberService;
+    private final JwtService jwtService;
 
 
     @PostMapping("/join")
@@ -31,9 +36,14 @@ public class MemberController {
     }
 
     @GetMapping("/memberinfo")
-    public ResponseEntity<> getMyinfo(@RequestHeader Authentication authentication){
+    public ResponseEntity<?> getMyinfo(@RequestHeader(name = "Authorization") String accessToken){
 
-        return null;
+        String atc = accessToken.split(" ")[1];
+        long id = jwtService.getMemberId(atc);
+
+        Member member = memberService.getmMemberinfo(id);
+
+        return ResponseEntity.ok(member);
     }
 
 }
