@@ -30,6 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.18.1
   http: ^1.2.1
   # 외부 링크 연결 라이브러리
   url_launcher: ^6.2.5
