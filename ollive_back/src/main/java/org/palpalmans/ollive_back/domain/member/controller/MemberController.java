@@ -20,24 +20,25 @@ public class MemberController {
     private final JwtService jwtService;
 
 
-    @PostMapping("/join") //todo : modify ResponseEntity type
-    public ResponseEntity<?> join(@RequestBody JoinRequest joinRequest){
+    @PostMapping("/join")
+    public ResponseEntity<String> join(@RequestBody JoinRequest joinRequest){
 
 
         JoinRequestStatus status = joinService.joinProcess(joinRequest);
 
 
         return switch(status){
-            case JOIN_SUCCESS -> new ResponseEntity<>(HttpStatus.OK);
-            case NULL_EXIST -> new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            case EMAIL_DUPLICATED -> new ResponseEntity<>(HttpStatus.CONFLICT);
+            case JOIN_SUCCESS -> ResponseEntity.status(HttpStatus.OK).body("회원가입이 성공적으로 완료되었습니다.");
+            case NULL_EXIST -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body("필수 입력 항목이 누락되었습니다.");
+            case EMAIL_DUPLICATED -> ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 이메일입니다.");
         };
     }
 
-    @GetMapping("/memberinfo") //todo : modify ResponseEntity type
+    @GetMapping("/memberinfo")
     public ResponseEntity<?> getMyInfo(@RequestHeader(name = "Authorization") String accessToken){
 
-        String atc = accessToken.split(" ")[1]; //todo : Change to Optional
+        //access token이 존재하지 않는 경우는 jwt filter에서 처리됨
+        String atc = accessToken.split(" ")[1]; //"Bearer" Header 제거
         long id = jwtService.getMemberId(atc);
 
         //todo : Configure the appropriate Response DTO to avoid returning unnecessary information
