@@ -19,8 +19,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  late FocusNode focusNode;
-
+  late FocusNode idFocusNode;
+  late FocusNode passwordFocusNode;
+  Color idIconColor = Colors.grey;
+  Color passwordIconColor = Colors.grey;
   // static const storage =
   //     FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
   // dynamic userInfo = ''; // storage에 있는 유저 정보를 저장
@@ -28,7 +30,21 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    focusNode = FocusNode(); // 포커스 노드 관리
+    // 포커스 노드 관리
+    idFocusNode = FocusNode()
+      ..addListener(() {
+        setState(() {
+          idIconColor = idFocusNode.hasFocus ? Colors.black87 : Colors.grey;
+        });
+      });
+
+    passwordFocusNode = FocusNode()
+      ..addListener(() {
+        setState(() {
+          passwordIconColor =
+              passwordFocusNode.hasFocus ? Colors.black87 : Colors.grey;
+        });
+      });
     // 비동기로 flutter secure storage 정보를 불러오는 작업
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   _asyncMethod();
@@ -101,10 +117,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           keyboardType: TextInputType.emailAddress,
                           onSaved: (String? val) => _userInfo.userId = val!,
                           controller: _idController,
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.account_circle_outlined),
+                          focusNode: idFocusNode,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.account_circle_outlined,
+                              color: idIconColor,
+                            ),
                             hintText: '아이디',
-                            focusedBorder: OutlineInputBorder(
+                            focusedBorder: const OutlineInputBorder(
                               borderSide: BorderSide(
                                   color: Color(0xFF30AF98), width: 2),
                               borderRadius: BorderRadius.only(
@@ -129,13 +149,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: true,
                           obscuringCharacter: '●',
                           controller: _passwordController,
+                          focusNode: passwordFocusNode,
                           onSaved: (String? val) => _userInfo.password = val!,
                           decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.lock_outlined,
-                              color: focusNode.hasFocus
-                                  ? Colors.black
-                                  : Colors.grey,
+                              color: passwordIconColor,
                             ),
                             hintText: '비밀번호',
                             enabledBorder: baseBottomBorder,
@@ -180,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               )
                             : const SizedBox(),
                         const SizedBox(
-                          height: 10,
+                          height: 15,
                         ),
                         Row(
                           children: [
@@ -203,16 +222,41 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                           // 다음 페이지로 이동시키기 (pushedName으로 바꾸기)
                                           // Navigator.pop(context);
-                                        } else {
-                                          FocusScope.of(context)
-                                              .requestFocus(focusNode);
                                         }
+                                        //   else {
+                                        //     // 비밀번호 값 초기화 후 포커스 이동시키기
+                                        //   //   FocusScope.of(context)
+                                        //   //       .requestFocus(focusNode);
+                                        //   // }
                                       }
                                     // 폼이 변하지 않았다면 버튼 비활성화
                                     : null,
                                 child: const Text(
                                   '로그인',
                                 ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: const Text('비밀번호 찾기')),
+                            const Text('|'),
+                            Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: const Text(
+                                '회원가입',
+                                style: TextStyle(
+                                    color: Color(0xFF30AF98),
+                                    fontWeight: FontWeight.w600),
                               ),
                             ),
                           ],
