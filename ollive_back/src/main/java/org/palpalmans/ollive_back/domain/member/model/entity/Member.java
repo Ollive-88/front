@@ -3,11 +3,12 @@ package org.palpalmans.ollive_back.domain.member.model.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.palpalmans.ollive_back.common.BaseTimeEntity;
 
 @Entity
 @Getter
 @Setter
-public class Member {
+public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -31,9 +32,4 @@ public class Member {
     @Column(nullable = false, columnDefinition = "VARCHAR(255) default 'defaultUserNickname'")
     private String nickname;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private String createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private String updatedAt;
 }

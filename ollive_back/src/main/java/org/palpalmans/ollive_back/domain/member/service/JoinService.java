@@ -44,9 +44,6 @@ public class JoinService {
         joinMember.setName(name);
         joinMember.setNickname(nickname);
 
-        //가입 날짜 세팅
-        joinMember.setCreatedAt(new Date().toString());
-
         //멤버 가입시키기
         memberRepository.save(joinMember);
         //모든 과정이 끝나면 성공 반환
