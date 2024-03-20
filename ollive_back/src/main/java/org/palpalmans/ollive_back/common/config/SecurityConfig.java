@@ -1,6 +1,7 @@
 package org.palpalmans.ollive_back.common.config;
 
 import lombok.RequiredArgsConstructor;
+import org.palpalmans.ollive_back.domain.member.service.CustomOauth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +18,7 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final CustomOauth2UserService customOAuth2Service;
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
 
@@ -43,6 +45,12 @@ public class SecurityConfig {
                 //세션이 있어도 사용하지 않고, 없어도 만들지 않음
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        //oauth2
+        http
+                .oauth2Login((oauth2) -> oauth2
+                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
+                                .userService(customOAuth2Service)));
 
         //인가작업
         http
