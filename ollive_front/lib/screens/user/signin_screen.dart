@@ -56,10 +56,7 @@ class _SigninScreenState extends State<SigninScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('회원가입'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
