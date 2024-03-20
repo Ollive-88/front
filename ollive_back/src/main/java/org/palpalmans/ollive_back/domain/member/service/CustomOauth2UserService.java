@@ -1,7 +1,9 @@
 package org.palpalmans.ollive_back.domain.member.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.palpalmans.ollive_back.domain.member.model.dto.CustomOauth2Member;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.GoogleResponse;
+import org.palpalmans.ollive_back.domain.member.model.dto.response.Oauth2MemberResponse;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -20,17 +22,23 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         log.info("oAuth2User = {}",oAuth2User);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
+
+        GoogleResponse googleResponse = null;
+
         if (registrationId.equals("google")) {
 
-            GoogleResponse googleResponse = new GoogleResponse(oAuth2User.getAttributes());
+            googleResponse = new GoogleResponse(oAuth2User.getAttributes());
         } else {
 
             return null;
         }
 
-        //todo : 받은 멤버 정보 저장
+        //받은 멤버 정보 저장
+        //name, email, email_verified=true
+        Oauth2MemberResponse oauth2MemberResponse = new Oauth2MemberResponse();
+        oauth2MemberResponse.setName(googleResponse.getName());
+        oauth2MemberResponse.setEmail(googleResponse.getEmail());
 
-
-        return null;
+        return new CustomOauth2Member(oauth2MemberResponse);
     }
 }
