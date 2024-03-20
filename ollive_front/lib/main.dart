@@ -5,6 +5,7 @@ import 'package:ollive_front/screens/board/board_search_screen.dart';
 import 'package:ollive_front/screens/board/board_write_screen.dart';
 import 'package:ollive_front/screens/home_screen.dart';
 import 'package:ollive_front/screens/user/login_screen.dart';
+import 'package:ollive_front/screens/user/signin_screen.dart';
 import 'package:ollive_front/util/controller/getx_controller.dart';
 
 void main() {
@@ -32,7 +33,8 @@ class _AppState extends State<App> {
         '/board/write': (context) => const BoardWriteScreen(),
         '/1': (context) => const Test1(),
         '/2': (context) => const Test2(),
-        '/3': (context) => const LoginScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/signin': (context) => const SigninScreen(),
       },
       // 한글 사용 설정
       localizationsDelegates: const [
