@@ -17,8 +17,12 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isEmpty = false;
   // // 폼의 현재 상태 관리
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  // TextField 관리
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  // 활성화 상태 관리
   late FocusNode idFocusNode;
   late FocusNode passwordFocusNode;
   Color idIconColor = Colors.grey;
@@ -117,6 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           keyboardType: TextInputType.emailAddress,
                           onSaved: (String? val) => _userInfo.userId = val!,
                           controller: _idController,
+                          cursorColor: const Color(0xFF30AF98),
                           focusNode: idFocusNode,
                           decoration: InputDecoration(
                             prefixIcon: Icon(
@@ -148,6 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: true,
                           obscuringCharacter: '●',
+                          cursorColor: const Color(0xFF30AF98),
                           controller: _passwordController,
                           focusNode: passwordFocusNode,
                           onSaved: (String? val) => _userInfo.password = val!,
@@ -252,11 +258,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             Container(
                               margin:
                                   const EdgeInsets.symmetric(horizontal: 10),
-                              child: const Text(
-                                '회원가입',
-                                style: TextStyle(
-                                    color: Color(0xFF30AF98),
-                                    fontWeight: FontWeight.w600),
+                              child: GestureDetector(
+                                onTap: pushSignInPage,
+                                child: const Text(
+                                  '회원가입',
+                                  style: TextStyle(
+                                      color: Color(0xFF30AF98),
+                                      fontWeight: FontWeight.w600),
+                                ),
                               ),
                             ),
                           ],
@@ -290,6 +299,10 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     }
+  }
+
+  void pushSignInPage() {
+    Navigator.of(context).pushNamed("/signin");
   }
 
   // _asyncMethod() async {
