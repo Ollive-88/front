@@ -15,6 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final Login _userInfo = Login.fromUserInput();
   bool _formChanged = false; // 폼의 UI 상태 관리
   bool _isEmpty = false;
+
   // // 폼의 현재 상태 관리
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -34,6 +35,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    // 텍스트 필드 상태 관리
+    _idController.addListener(onTextChanged);
+    _passwordController.addListener(onTextChanged);
+
     // 포커스 노드 관리
     idFocusNode = FocusNode()
       ..addListener(() {
@@ -128,6 +133,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               Icons.account_circle_outlined,
                               color: idIconColor,
                             ),
+                            suffixIcon: _idController.text.isEmpty
+                                ? null
+                                : IconButton(
+                                    icon: const Icon(Icons.cancel),
+                                    color: Colors.grey.shade400,
+                                    onPressed: () {
+                                      _idController.clear();
+                                      // 포커스를 텍스트 필드로
+                                      idFocusNode.requestFocus();
+                                    },
+                                  ),
                             hintText: '아이디',
                             focusedBorder: const OutlineInputBorder(
                               borderSide: BorderSide(
@@ -162,6 +178,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               Icons.lock_outlined,
                               color: passwordIconColor,
                             ),
+                            suffixIcon: _passwordController.text.isEmpty
+                                ? null
+                                : IconButton(
+                                    icon: const Icon(Icons.cancel),
+                                    color: Colors.grey.shade400,
+                                    onPressed: () {
+                                      _passwordController.clear();
+                                      // 포커스를 텍스트 필드로
+                                      passwordFocusNode.requestFocus();
+                                    },
+                                  ),
                             hintText: '비밀번호',
                             enabledBorder: baseBottomBorder,
                             focusedBorder: const OutlineInputBorder(
@@ -299,6 +326,11 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     }
+  }
+
+  // 콜백 함수
+  void onTextChanged() {
+    setState(() {});
   }
 
   void pushSignInPage() {
