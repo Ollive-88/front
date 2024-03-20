@@ -34,10 +34,13 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         }
 
         //받은 멤버 정보 저장
-        //name, email, email_verified=true
         Oauth2MemberResponse oauth2MemberResponse = new Oauth2MemberResponse();
+
         oauth2MemberResponse.setName(googleResponse.getName());
         oauth2MemberResponse.setEmail(googleResponse.getEmail());
+
+        log.info("name = {}", googleResponse.getName());
+        log.info("email = {}", googleResponse.getEmail());
 
         return new CustomOauth2Member(oauth2MemberResponse);
     }
