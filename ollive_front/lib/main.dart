@@ -26,7 +26,7 @@ class _AppState extends State<App> {
       routes: {
         '/home': (context) => const HomScreen(),
         '/board/search': (context) => const BoardSearchScreen(),
-        '/board/write': (context) => const BoardWriteScreen(),
+        '/board/write': (context) => BoardWriteScreen(),
         '/1': (context) => const Test1(),
         '/2': (context) => const Test2(),
       },

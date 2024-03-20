@@ -19,8 +19,7 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
   // 태그 입력 처리 메서드
   void subStringTags() {
     String text = _inputController.text;
-    RegExp regExp = RegExp(r"#\S+");
-
+    RegExp regExp = RegExp(r"#[\uAC00-\uD7A3a-zA-Z0-9_]+");
     Iterable<RegExpMatch> matches = regExp.allMatches(text);
 
     for (var match in matches) {
@@ -80,13 +79,11 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
               padding: const EdgeInsets.symmetric(
                 horizontal: 4,
               ),
-              child: KeyboardListener(
+              child: RawKeyboardListener(
                 focusNode: _focusNode,
-                onKeyEvent: (event) {
-                  if (event is KeyDownEvent) {
-                    if (event.logicalKey == LogicalKeyboardKey.space) {
-                      subStringTags();
-                    }
+                onKey: (event) {
+                  if (event.physicalKey.debugName == "Space") {
+                    subStringTags();
                   }
                 },
                 child: TextField(

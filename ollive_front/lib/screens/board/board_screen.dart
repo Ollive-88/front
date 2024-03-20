@@ -30,7 +30,10 @@ class BoardScreen extends StatefulWidget {
     "viewCnt": 64,
     "likeCnt": 10,
     "commentCnt": 2,
-    "tags": ["자유", "꿀팁"],
+    "tags": [
+      "자유자유",
+      "꿀팁꿀팁",
+    ],
     "imgUrls": ["https://i.ytimg.com/vi/gpFSXXhonVk/maxresdefault.jpg"],
   });
 
