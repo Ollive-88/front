@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.member.config;
+package org.palpalmans.ollive_back.common.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

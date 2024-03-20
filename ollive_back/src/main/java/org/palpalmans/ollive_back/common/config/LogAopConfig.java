@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.member.config;
+package org.palpalmans.ollive_back.common.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
