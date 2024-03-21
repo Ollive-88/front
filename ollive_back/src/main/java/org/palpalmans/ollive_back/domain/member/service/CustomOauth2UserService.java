@@ -1,18 +1,28 @@
 package org.palpalmans.ollive_back.domain.member.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.palpalmans.ollive_back.domain.member.model.dto.request.JoinRequest;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.CustomOauth2User;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.GoogleResponse;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.Oauth2MemberResponse;
+import org.palpalmans.ollive_back.domain.member.model.entity.Member;
+import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CustomOauth2UserService extends DefaultOAuth2UserService {
+
+    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -43,8 +53,31 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         log.info("name = {}", googleResponse.getName());
         log.info("email = {}", googleResponse.getEmail());
 
-        //원래는 여기서 회원가입 진행
-        //but 추가 정보가 필요하기 때문에 그냥 반환해서 SuccessHandler에서 처리
+        //DB에서 유저 정보 확인
+        Optional<Member> isExist = memberService.getMemberInfo(googleResponse.getEmail());
+        if(isExist.isEmpty()){
+            // 유저 정보가 없다면 ROLE_NON_REGISTERED_MEMBER 회원가입 진행
+            //todo : 프로필 사진 가져오기
+            String email = googleResponse.getEmail();
+            String name = googleResponse.getName();
+
+            // Builder 패턴 사용하여 객체 생성
+            //todo : 프로필 사진 넣기
+            Member joinMember = Member.builder()
+                    .email(email)
+                    .password("dd")
+                    .gender("male")
+                    .birthday("2020-03-01")
+                    .name(name)
+                    .nickname("nick")
+                    .role("ROLE_NON_REGISTERED_MEMBER") // role 설정
+                    .profilepicture("picture")
+                    .build();
+
+            memberRepository.save(joinMember);
+
+
+        }
 
         return new CustomOauth2User(oauth2MemberResponse);
     }
