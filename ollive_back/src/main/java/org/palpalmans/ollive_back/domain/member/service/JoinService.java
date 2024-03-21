@@ -35,14 +35,16 @@ public class JoinService {
 
         if(isExist) return JoinRequestStatus.EMAIL_DUPLICATED;
 
-        Member joinMember = new Member();
-
-        joinMember.setEmail(email);
-        joinMember.setPassword(bCryptPasswordEncoder.encode(password));
-        joinMember.setGender(gender);
-        joinMember.setBirthday(birthday);
-        joinMember.setName(name);
-        joinMember.setNickname(nickname);
+        // Builder 패턴 사용하여 객체 생성
+        Member joinMember = Member.builder()
+                .email(email)
+                .password(bCryptPasswordEncoder.encode(password)) // 비밀번호는 인코딩하여 저장
+                .gender(gender)
+                .birthday(birthday)
+                .name(name)
+                .nickname(nickname)
+                .role("ROLE_REGISTERED_MEMBER") // role 설정
+                .build();
 
         //멤버 가입시키기
         memberRepository.save(joinMember);
