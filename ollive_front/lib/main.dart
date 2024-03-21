@@ -28,7 +28,7 @@ class _AppState extends State<App> {
     return GetMaterialApp(
       initialRoute: '/',
       routes: {
-        '/home': (context) => const HomScreen(),
+        '/home': (context) => const HomeScreen(),
         '/board/search': (context) => const BoardSearchScreen(),
         '/board/write': (context) => const BoardWriteScreen(),
         '/1': (context) => const Test1(),
