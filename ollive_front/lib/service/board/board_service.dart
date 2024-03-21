@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:ollive_front/models/board/board_detail_model.dart';
 import 'package:ollive_front/models/board/board_model.dart';
 import 'package:ollive_front/models/board/board_post_model.dart';
 import 'package:ollive_front/models/board/board_request_model.dart';
@@ -43,6 +44,22 @@ class BoardService {
     );
 
     return response.statusCode!;
+  }
+
+  static Future<BoardDetailModel> getBoardDetail(int boardId) async {
+    final response = await _dio.post(
+      "/boards/$boardId",
+    );
+
+    if (response.statusCode == 200) {
+      dynamic data = jsonDecode(response.data);
+
+      final instance = BoardDetailModel.fromJson(data);
+
+      return instance;
+    }
+
+    throw Error();
   }
 
   static String timeAgo(String dateTimeString) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:ollive_front/screens/board/board_detil_screen.dart';
 import 'package:ollive_front/screens/board/board_search_screen.dart';
 import 'package:ollive_front/screens/board/board_write_screen.dart';
 import 'package:ollive_front/screens/home_screen.dart';

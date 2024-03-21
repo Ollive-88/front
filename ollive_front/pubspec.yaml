@@ -45,7 +45,8 @@ dependencies:
   get: ^4.6.6
   # 아마자 업로드 라이브러리
   image_picker: ^1.0.7
-
+  # 캐러셀 라이브러리
+  carousel_slider: ^4.2.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

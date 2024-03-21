@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ollive_front/models/board/board_model.dart';
+import 'package:ollive_front/screens/board/board_detil_screen.dart';
 import 'package:ollive_front/service/board/board_service.dart';
 import 'package:ollive_front/widgets/board/board_tag_widget.dart';
 
@@ -13,7 +12,16 @@ class BoardList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BoardDetailScreen(
+              boardId: boardModel.boardId,
+            ),
+          ),
+        );
+      },
       child: SizedBox(
         height: MediaQuery.of(context).size.height / 5,
         child: Row(
