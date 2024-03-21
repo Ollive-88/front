@@ -16,4 +16,5 @@ public class JoinRequest {
     private String birthday;
     private String name;
     private String nickname;
+    private String profilepicture;
 }
