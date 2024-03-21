@@ -7,6 +7,7 @@ import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +28,14 @@ public class MemberService {
         memberInfoResponse.setEmail(member.getEmail());
         memberInfoResponse.setBirthday(member.getBirthday());
 
-
         return memberInfoResponse;
     }
+
+    public Optional<Member> getMemberInfo(String email){
+
+        return memberRepository.getMemberByEmail(email);
+    }
+
+
 
 }

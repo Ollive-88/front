@@ -10,5 +10,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> { // JPA ë
     Boolean existsByEmail(String email);
     Optional<Member> getMemberById(long id);
 
+    Optional<Member> getMemberByEmail(String email);
+
 
 }
