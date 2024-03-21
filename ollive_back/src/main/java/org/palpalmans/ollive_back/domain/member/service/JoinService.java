@@ -44,6 +44,7 @@ public class JoinService {
                 .name(name)
                 .nickname(nickname)
                 .role("ROLE_REGISTERED_MEMBER") // role 설정
+                .profilepicture("picture")
                 .build();
 
         //멤버 가입시키기
