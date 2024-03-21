@@ -1,20 +1,29 @@
 class Login {
-  late String accountName;
-  late String password;
-  late String userId;
+  late String userName, password, userId;
 
   Login.fromJson(Map<String?, dynamic> json)
-      : accountName = json['accountName'],
+      : userName = json['userName'],
         password = json['password'],
         userId = json['userId'];
 
   Login.fromUserInput()
-  : userId = '',
-  password = '';
+      : userId = '',
+        password = '';
 
   Map<String, dynamic> toJson() => {
-        'accountName': accountName,
+        'userName': userName,
         'password': password,
         'userId': userId,
       };
+}
+
+class SignIn {
+  late String userName, password, userId, birth, gender;
+
+  SignIn.fromUserInput()
+      : userId = '',
+        password = '',
+        userName = '',
+        birth = '',
+        gender = '';
 }
