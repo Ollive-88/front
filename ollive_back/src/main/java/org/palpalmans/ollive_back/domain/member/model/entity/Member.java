@@ -15,6 +15,8 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
+    //todo : Social login entity, normal member entity 분리
+
     @Column(nullable = false)
     private String email;
 

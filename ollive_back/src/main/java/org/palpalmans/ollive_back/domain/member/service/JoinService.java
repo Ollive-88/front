@@ -26,7 +26,7 @@ public class JoinService {
         String name = joinRequest.getName();
         String nickname = joinRequest.getNickname();
 
-        if(email == null || password == null || birthday == null || name == null){
+        if(email == null || birthday == null || name == null){
             return JoinRequestStatus.NULL_EXIST;
         }
 
