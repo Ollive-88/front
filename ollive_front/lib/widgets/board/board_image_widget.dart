@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+// ignore: must_be_immutable
 class BoardImage extends StatelessWidget {
   BoardImage(
       {super.key, required this.heght, required this.image, this.deleteImage});
 
   double heght;
   XFile image;
+  // ignore: prefer_typing_uninitialized_variables
   final deleteImage;
 
   @override

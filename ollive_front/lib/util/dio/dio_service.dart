@@ -88,6 +88,7 @@ class DioService {
       try {
         await _authDio!.fetch(requestOptions); // 요청 재실행
       } catch (e) {
+        // ignore: avoid_print
         print("Failed to reprocess request: $e");
       }
     }

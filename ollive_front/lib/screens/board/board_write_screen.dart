@@ -135,6 +135,7 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                       imgs: _pickedImgs);
                   Future<int> result = BoardService.postBoard(postModel);
 
+                  // ignore: unrelated_type_equality_checks
                   if (result == 200) {
                     Navigator.pop(context);
                   } else {
@@ -276,8 +277,6 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                 ),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    double containerHeight = constraints.maxHeight * 0.5;
-                    print(containerHeight);
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
