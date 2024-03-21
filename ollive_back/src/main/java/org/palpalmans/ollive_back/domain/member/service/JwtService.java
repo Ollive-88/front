@@ -25,32 +25,30 @@ public class JwtService {
 
     //AccessToken 생성
     public String generateAccessToken(TokenCreateRequest tokenCreateRequest) {
-
-        long id = tokenCreateRequest.getId();
-        String email = tokenCreateRequest.getEmail();
-
         long tokenPeriod = 1000L * 60L * 10L; // 10분
 //        long tokenPeriod = 1000L * 60L * 60L * 24L * 14; // 2주
-        return Jwts.builder()
-                .claim("id", id)
-                .claim("email", email) //멤버 이름
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + tokenPeriod))
-                .signWith(secretKey)
-                .compact();
+
+        return makeToken(tokenCreateRequest, tokenPeriod);
     }
 
     //RefreshToken 생성
     public String generateRefreshToken(TokenCreateRequest tokenCreateRequest) {
 
+        //        long tokenPeriod = 1000L * 60L * 10L; // 10분
+        long tokenPeriod = 1000L * 60L * 60L * 24L * 14; // 2주
+
+        return makeToken(tokenCreateRequest, tokenPeriod);
+    }
+
+    private String makeToken(TokenCreateRequest tokenCreateRequest, long tokenPeriod) {
         long id = tokenCreateRequest.getId();
         String email = tokenCreateRequest.getEmail();
+        String role = tokenCreateRequest.getRole();
 
-//        long tokenPeriod = 1000L * 60L * 10L; // 10분
-        long tokenPeriod = 1000L * 60L * 60L * 24L * 14; // 2주
         return Jwts.builder()
                 .claim("id", id)
                 .claim("email", email) //멤버 이름
+                .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + tokenPeriod))
                 .signWith(secretKey)
