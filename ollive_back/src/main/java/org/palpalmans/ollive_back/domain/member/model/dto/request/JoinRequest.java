@@ -17,4 +17,5 @@ public class JoinRequest {
     private String name;
     private String nickname;
     private String profilepicture;
+    private String role;
 }
