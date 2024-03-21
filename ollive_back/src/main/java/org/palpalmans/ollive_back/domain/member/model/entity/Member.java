@@ -7,7 +7,6 @@ import org.palpalmans.ollive_back.common.BaseTimeEntity;
 
 @Entity
 @Getter
-@Setter
 public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,4 +31,6 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "VARCHAR(255) default 'defaultUserNickname'")
     private String nickname;
 
+    @Column(nullable = false)
+    private String role;
 }
