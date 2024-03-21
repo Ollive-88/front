@@ -10,5 +10,4 @@ import lombok.ToString;
 public class Oauth2MemberResponse {
     private String name;
     private String email;
-    private Boolean emailVerification;
 }

@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.member.model.dto;
+package org.palpalmans.ollive_back.domain.member.model.dto.response;
 
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.Oauth2MemberResponse;
@@ -9,17 +9,18 @@ import java.util.Collection;
 import java.util.Map;
 
 @RequiredArgsConstructor
-public class CustomOauth2Member implements OAuth2User {
+public class CustomOauth2User implements OAuth2User {
 
     private final Oauth2MemberResponse oauth2MemberResponse;
 
-
     @Override
+    //일반적으로 사용자의 속성(예: 이름, 이메일 등)을 Map 형태로 반환
     public Map<String, Object> getAttributes() {
         return null;
     }
 
     @Override
+    //권한 관리
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }

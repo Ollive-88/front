@@ -1,7 +1,7 @@
 package org.palpalmans.ollive_back.domain.member.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.palpalmans.ollive_back.domain.member.model.dto.CustomOauth2Member;
+import org.palpalmans.ollive_back.domain.member.model.dto.response.CustomOauth2User;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.GoogleResponse;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.Oauth2MemberResponse;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -33,15 +33,16 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
             return null;
         }
 
-        //받은 멤버 정보 저장
+        //받은 멤버 정보를 객체에 담아 반환
         Oauth2MemberResponse oauth2MemberResponse = new Oauth2MemberResponse();
 
+        //필요한 정보인 이름과 Email만 추출
         oauth2MemberResponse.setName(googleResponse.getName());
         oauth2MemberResponse.setEmail(googleResponse.getEmail());
 
         log.info("name = {}", googleResponse.getName());
         log.info("email = {}", googleResponse.getEmail());
 
-        return new CustomOauth2Member(oauth2MemberResponse);
+        return new CustomOauth2User(oauth2MemberResponse);
     }
 }
