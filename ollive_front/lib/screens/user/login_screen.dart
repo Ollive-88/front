@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:ollive_front/models/user/user_model.dart';
+import 'package:ollive_front/widgets/user/user_info_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late FocusNode passwordFocusNode;
   Color idIconColor = Colors.grey;
   Color passwordIconColor = Colors.grey;
+
   // static const storage =
   //     FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
   // dynamic userInfo = ''; // storage에 있는 유저 정보를 저장
@@ -35,9 +36,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    // 텍스트 필드 상태 관리
-    _idController.addListener(onTextChanged);
-    _passwordController.addListener(onTextChanged);
 
     // 포커스 노드 관리
     idFocusNode = FocusNode()
@@ -54,6 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
               passwordFocusNode.hasFocus ? Colors.black87 : Colors.grey;
         });
       });
+
     // 비동기로 flutter secure storage 정보를 불러오는 작업
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   _asyncMethod();
@@ -71,28 +70,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
-      ),
-    );
-
-    const baseTopBorder = OutlineInputBorder(
-      borderSide: BorderSide(
-        width: 1,
-        color: Colors.black54,
-      ),
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(15),
-        topRight: Radius.circular(15),
-      ),
-    );
-
-    const baseBottomBorder = OutlineInputBorder(
-      borderSide: BorderSide(
-        width: 1,
-        color: Colors.black54,
-      ),
-      borderRadius: BorderRadius.only(
-        bottomLeft: Radius.circular(15),
-        bottomRight: Radius.circular(15),
       ),
     );
 
@@ -122,94 +99,54 @@ class _LoginScreenState extends State<LoginScreen> {
                     onChanged: _onFormChange, // 폼 필드가 바뀌면 호출
                     child: Column(
                       children: <Widget>[
-                        TextFormField(
+                        CustomTextFormField(
+                          hint: '아이디',
+                          controller: _idController,
+                          prefixIcon: Icon(
+                            Icons.account_circle_outlined,
+                            color: idIconColor,
+                          ),
+                          autofocus: true,
+                          keyboardType: TextInputType.emailAddress,
+                          focusNode: idFocusNode,
+                          suffixIcon: _idController.text.isEmpty
+                              ? null
+                              : IconButton(
+                                  icon: const Icon(Icons.cancel),
+                                  color: Colors.grey.shade400,
+                                  onPressed: () {
+                                    _idController.clear();
+                                    // 포커스를 텍스트 필드로
+                                    idFocusNode.requestFocus();
+                                  },
+                                ),
+                          onSaved: (String? val) => _userInfo.userId = val!,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        CustomTextFormField(
+                          hint: '비밀번호',
+                          controller: _passwordController,
+                          prefixIcon: Icon(
+                            Icons.lock_outlined,
+                            color: passwordIconColor,
+                          ),
+                          focusNode: passwordFocusNode,
+                          obscureText: true,
+                          suffixIcon: _passwordController.text.isEmpty
+                              ? null
+                              : IconButton(
+                                  icon: const Icon(Icons.cancel),
+                                  color: Colors.grey.shade400,
+                                  onPressed: () {
+                                    _passwordController.clear();
+                                    // 포커스를 텍스트 필드로
+                                    passwordFocusNode.requestFocus();
+                                  },
+                                ),
                           keyboardType: TextInputType.emailAddress,
                           onSaved: (String? val) => _userInfo.userId = val!,
-                          controller: _idController,
-                          cursorColor: const Color(0xFF30AF98),
-                          focusNode: idFocusNode,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.account_circle_outlined,
-                              color: idIconColor,
-                            ),
-                            suffixIcon: _idController.text.isEmpty
-                                ? null
-                                : IconButton(
-                                    icon: const Icon(Icons.cancel),
-                                    color: Colors.grey.shade400,
-                                    onPressed: () {
-                                      _idController.clear();
-                                      // 포커스를 텍스트 필드로
-                                      idFocusNode.requestFocus();
-                                    },
-                                  ),
-                            hintText: '아이디',
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color(0xFF30AF98), width: 2),
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15),
-                              ),
-                            ),
-                            enabledBorder: baseTopBorder,
-                          ),
-                          autofocus: true, // 이 페이지로 이동했을 때, 자동 포커스
-                          validator: (String? val) {
-                            if (val!.isEmpty) {
-                              setState(() {
-                                _isEmpty = true;
-                              });
-                            }
-                            return null;
-                          },
-                        ),
-                        TextFormField(
-                          keyboardType: TextInputType.visiblePassword,
-                          obscureText: true,
-                          obscuringCharacter: '●',
-                          cursorColor: const Color(0xFF30AF98),
-                          controller: _passwordController,
-                          focusNode: passwordFocusNode,
-                          onSaved: (String? val) => _userInfo.password = val!,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.lock_outlined,
-                              color: passwordIconColor,
-                            ),
-                            suffixIcon: _passwordController.text.isEmpty
-                                ? null
-                                : IconButton(
-                                    icon: const Icon(Icons.cancel),
-                                    color: Colors.grey.shade400,
-                                    onPressed: () {
-                                      _passwordController.clear();
-                                      // 포커스를 텍스트 필드로
-                                      passwordFocusNode.requestFocus();
-                                    },
-                                  ),
-                            hintText: '비밀번호',
-                            enabledBorder: baseBottomBorder,
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFF30AF98),
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                              ),
-                            ),
-                          ),
-                          validator: (String? val) {
-                            if (val!.isEmpty) {
-                              setState(() {
-                                _isEmpty = true;
-                              });
-                            }
-                            return null;
-                          },
                         ),
                         _isEmpty
                             ? const Column(
@@ -243,11 +180,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ? () {
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();
-                                          Get.snackbar(
-                                            'title',
-                                            'message',
-                                            backgroundColor: Colors.white,
-                                          );
+                                          // 나중에 로그인 실패 시로 코드 옮기기
+                                          setState(() {
+                                            _isEmpty = true;
+                                          });
+
+                                          // 게시판 페이지로 이동
+                                          Navigator.of(context)
+                                              .pushNamedAndRemoveUntil(
+                                                  "/home", (route) => false);
+
+                                          // 모든 포커스 해제
+                                          FocusScope.of(context).unfocus();
                                           // loginAction(
                                           //   _userInfo.userId,
                                           //   _userInfo.password,
@@ -326,11 +270,6 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     }
-  }
-
-  // 콜백 함수
-  void onTextChanged() {
-    setState(() {});
   }
 
   void pushSignInPage() {
