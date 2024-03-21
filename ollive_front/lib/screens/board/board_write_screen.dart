@@ -292,7 +292,7 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                             children: [
                               for (var i = 0; i < _pickedImgs.length; i++)
                                 Padding(
-                                  padding: const EdgeInsets.only(right: 4),
+                                  padding: const EdgeInsets.only(right: 5),
                                   child: BoardImage(
                                     image: _pickedImgs[i],
                                     heght:

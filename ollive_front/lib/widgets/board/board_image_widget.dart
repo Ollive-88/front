@@ -31,8 +31,8 @@ class BoardImage extends StatelessWidget {
         ),
         // 삭제 버튼
         Positioned(
-          right: -10, // 우측 상단에 조금 튀어나오게 조정
-          top: -10, // 상단에 조금 튀어나오게 조정
+          right: -15, // 우측 상단에 조금 튀어나오게 조정
+          top: -15, // 상단에 조금 튀어나오게 조정
           child: IconButton(
             icon: const Icon(Icons.cancel, color: Colors.red),
             onPressed: deleteImage,
