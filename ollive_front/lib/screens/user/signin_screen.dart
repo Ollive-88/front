@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:ollive_front/models/user/user_model.dart';
+import 'package:ollive_front/widgets/user/user_info_widget.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -10,22 +10,13 @@ class SigninScreen extends StatefulWidget {
 }
 
 class _SigninScreenState extends State<SigninScreen> {
-  // Map<String, dynamic> info = {'id': 'hi', 'password': 'hi'};
-
-  final Login _userInfo = Login.fromUserInput();
-  bool _formChanged = false; // 폼의 UI 상태 관리
-  bool isIdError = false;
-  bool isPasswordError = false;
-  bool isNameError = false;
-  bool isBirthError = false;
-  bool isGenderSelected = false;
+  final SignIn _userInfo = SignIn.fromUserInput();
 
   // 폼의 현재 상태 관리
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late FocusNode focusNode;
-  bool isManSelected = false;
-  bool isWomanSelected = false;
-  Map<String, String> errorMessages = {};
+  bool isGenderSelected = true;
+  bool isVisible = false;
+  String? _gender;
 
   // static const storage =
   //     FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
@@ -34,7 +25,7 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   void initState() {
     super.initState();
-    focusNode = FocusNode(); // 포커스 노드 관리
+
     // 비동기로 flutter secure storage 정보를 불러오는 작업
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   _asyncMethod();
@@ -76,214 +67,145 @@ class _SigninScreenState extends State<SigninScreen> {
                   padding: const EdgeInsets.all(10.0),
                   child: Form(
                     key: _formKey,
-                    onChanged: _onFormChange, // 폼 필드가 바뀌면 호출
                     child: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                          TextFormField(
+                          CustomTextFormField(
+                            hint: '아이디',
+                            prefixIcon: const Icon(
+                              Icons.account_circle_outlined,
+                              color: Colors.grey,
+                            ),
                             keyboardType: TextInputType.emailAddress,
-                            cursorColor: const Color(0xFF30AF98),
-                            // onSaved: (String? val) => _userInfo.userId = val!,
-                            decoration: InputDecoration(
-                              prefixIcon:
-                                  prefixIcon(Icons.account_circle_outlined),
-                              hintText: '아이디',
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xFF30AF98),
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(15),
-                                ),
-                              ),
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(15),
-                                ),
-                              ),
-                            ),
+                            onSaved: (String? val) => _userInfo.userId = val!,
                             validator: (String? val) {
                               if (val!.isEmpty) {
-                                setState(() {
-                                  isIdError = true;
-                                });
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: true,
-                            obscuringCharacter: '●',
-                            cursorColor: const Color(0xFF30AF98),
-                            // onSaved: (String? val) => _userInfo.password = val!,
-                            decoration: InputDecoration(
-                              prefixIcon: prefixIcon(Icons.lock_outlined),
-                              hintText: '비밀번호',
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xFF30AF98),
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.vertical(
-                                  bottom: Radius.circular(15),
-                                ),
-                              ),
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  bottom: Radius.circular(15),
-                                ),
-                              ),
-                            ),
-                            validator: (String? val) {
-                              if (val!.isEmpty) {
-                                setState(() {
-                                  isPasswordError = true;
-                                });
+                                return '아이디: 필수 정보입니다.';
                               }
                               return null;
                             },
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 5,
                           ),
-                          TextFormField(
+                          CustomTextFormField(
+                            hint: '비밀번호',
+                            obscureText: true,
+                            prefixIcon: const Icon(
+                              Icons.lock_outlined,
+                              color: Colors.grey,
+                            ),
+                            keyboardType: TextInputType.visiblePassword,
+                            onSaved: (String? val) => _userInfo.password = val!,
+                            validator: (String? val) {
+                              if (val!.isEmpty) {
+                                return '비밀번호: 필수 정보입니다.';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          CustomTextFormField(
+                            hint: '이름',
+                            obscureText: true,
+                            prefixIcon: const Icon(
+                              Icons.account_circle_outlined,
+                              color: Colors.grey,
+                            ),
                             keyboardType: TextInputType.name,
-                            cursorColor: const Color(0xFF30AF98),
-                            // onSaved: (String? val) => _userInfo.userId = val!,
-                            decoration: InputDecoration(
-                              prefixIcon:
-                                  prefixIcon(Icons.account_circle_outlined),
-                              hintText: '이름',
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xFF30AF98),
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(15),
-                                ),
-                              ),
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(15),
-                                ),
-                              ),
-                            ),
+                            onSaved: (String? val) => _userInfo.userName = val!,
                             validator: (String? val) {
                               if (val!.isEmpty) {
-                                setState(() {
-                                  isNameError = true;
-                                });
+                                return '이름: 필수 정보입니다.';
                               }
                               return null;
                             },
                           ),
-                          TextFormField(
-                            keyboardType: TextInputType.datetime,
-                            cursorColor: const Color(0xFF30AF98),
-                            // onSaved: (String? val) => _userInfo.userId = val!,
-                            decoration: InputDecoration(
-                              prefixIcon: prefixIcon(
-                                  Icons.perm_contact_calendar_outlined),
-                              hintText: '생년월일 8자리',
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xFF30AF98),
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.zero,
-                              ),
-                              border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.zero),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          CustomTextFormField(
+                            hint: '생년월일 8자리',
+                            obscureText: true,
+                            prefixIcon: const Icon(
+                              Icons.perm_contact_calendar_outlined,
+                              color: Colors.grey,
                             ),
+                            keyboardType: TextInputType.datetime,
+                            onSaved: (String? val) => _userInfo.birth = val!,
                             validator: (String? val) {
                               if (val!.isEmpty) {
-                                setState(() {
-                                  isBirthError = true;
-                                });
+                                return '생년월일: 필수 정보입니다.';
                               }
                               return null;
                             },
+                          ),
+                          const SizedBox(
+                            height: 5,
                           ),
                           Container(
-                            height: 64,
                             decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.vertical(
-                                  bottom: Radius.circular(15),
-                                ),
-                                border: Border.all(
-                                  color: Colors.black,
-                                )),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: OutlinedButton(
-                                      onPressed: manSelect,
-                                      style: OutlinedButton.styleFrom(
-                                        side: BorderSide(
-                                          color: isManSelected
-                                              ? const Color(0xFF30AF98)
-                                              : Colors.black54,
-                                          width: isManSelected ? 2 : 1,
-                                        ),
-                                        foregroundColor: Colors.grey,
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.horizontal(
-                                            left: Radius.circular(10),
-                                          ),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        '남자',
-                                        style: TextStyle(
-                                          color: isManSelected
-                                              ? const Color(0xFF30AF98)
-                                              : Colors.black54,
-                                          fontWeight: isManSelected
-                                              ? FontWeight.w900
-                                              : FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: OutlinedButton(
-                                      onPressed: womanSelect,
-                                      style: OutlinedButton.styleFrom(
-                                        side: BorderSide(
-                                          color: isWomanSelected
-                                              ? const Color(0xFF30AF98)
-                                              : Colors.black54,
-                                          width: isWomanSelected ? 2 : 1,
-                                        ),
-                                        foregroundColor: Colors.grey,
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.horizontal(
-                                            right: Radius.circular(10),
-                                          ),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        '여자',
-                                        style: TextStyle(
-                                          color: isWomanSelected
-                                              ? const Color(0xFF30AF98)
-                                              : Colors.black54,
-                                          fontWeight: isWomanSelected
-                                              ? FontWeight.w900
-                                              : FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(
+                                color: isGenderSelected
+                                    ? Colors.black
+                                    : const Color(0xFFb3261e),
+                                width: isGenderSelected ? 1 : 2,
                               ),
                             ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: ListTile(
+                                    title: const Text('남자'),
+                                    leading: Radio<String>(
+                                      value: 'male',
+                                      activeColor: const Color(0xFF30AF98),
+                                      groupValue: _gender,
+                                      onChanged: (String? val) {
+                                        setState(() {
+                                          _gender = 'male';
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: ListTile(
+                                    title: const Text('여자'),
+                                    leading: Radio<String>(
+                                      value: 'female',
+                                      activeColor: const Color(0xFF30AF98),
+                                      groupValue: _gender,
+                                      onChanged: (String? val) {
+                                        setState(() {
+                                          _gender = 'female';
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
+                          isVisible
+                              ? const Row(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                        '성별: 성별을 선택해 주세요.',
+                                        style: TextStyle(
+                                          color: Color(0xFFb3261e),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : const SizedBox(),
                           const SizedBox(
                             height: 10,
                           ),
@@ -294,22 +216,32 @@ class _SigninScreenState extends State<SigninScreen> {
                                 child: ElevatedButton(
                                   style: buttonStyle,
                                   onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
+                                    if (_formKey.currentState!.validate() &&
+                                        _gender != null) {
                                       _formKey.currentState!.save();
-                                      // loginAction(
+                                      _userInfo.gender = _gender!;
+
+                                      // 회원가입 요청 보내기
+                                      // SignInAction(
                                       //   _userInfo.userId,
                                       //   _userInfo.password,
                                       // );
 
                                       // 다음 페이지로 이동시키기 (pushedName으로 바꾸기)
-                                      // Navigator.pop(context);
+                                      Navigator.pop(context);
                                     } else {
-                                      Get.snackbar('title', 'message');
+                                      if (_gender == null) {
+                                        setState(() {
+                                          isVisible = true;
+                                          isGenderSelected = false;
+                                        });
+                                      } else {
+                                        setState(() {
+                                          isVisible = false;
+                                          isGenderSelected = true;
+                                        });
+                                      }
                                     }
-                                    // else {
-                                    //   FocusScope.of(context)
-                                    //       .requestFocus(focusNode);
-                                    // }
                                   },
                                   child: const Text(
                                     '인증요청',
@@ -328,54 +260,6 @@ class _SigninScreenState extends State<SigninScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  void _onFormChange() {
-    // 참이면 setState를 호출하지 않아서 플러터가 폼 다시 그리지 않도록 방지
-    if (_formChanged) return;
-    setState(() {
-      // _formChanged에 의존하는 위젯을 다시 그리도록 지시
-      _formChanged = true;
-    });
-  }
-
-  void manSelect() {
-    if (!isGenderSelected) {
-      isGenderSelected = true;
-    }
-    if (!isManSelected) {
-      setState(() {
-        isManSelected = true;
-        isWomanSelected = false;
-      });
-    }
-  }
-
-  void womanSelect() {
-    if (!isGenderSelected) {
-      isGenderSelected = true;
-    }
-    if (!isWomanSelected) {
-      setState(() {
-        isManSelected = false;
-        isWomanSelected = true;
-      });
-    }
-  }
-
-  void checkErrors(val) {
-    if (val.isEmpty) {
-      setState(() {
-        isNameError = true;
-      });
-    }
-  }
-
-  Widget prefixIcon(IconData icon) {
-    return Icon(
-      icon,
-      color: Colors.grey,
     );
   }
 
