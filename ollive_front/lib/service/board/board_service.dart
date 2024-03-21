@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:ollive_front/models/board/board_model.dart';
+import 'package:ollive_front/models/board/board_post_model.dart';
+import 'package:ollive_front/models/board/board_request_model.dart';
 import 'package:ollive_front/util/dio/dio_service.dart';
 
 class BoardService {
@@ -8,9 +10,21 @@ class BoardService {
 
   static Future<List<BoardModel>> getBoardList(
       List<String>? tags, String? keyword, int page, int size) async {
+    final BoardRequestModel requestModel = BoardRequestModel(
+      keyword: keyword,
+      tags: tags,
+      page: page,
+      sort: size,
+    );
+
     final List<BoardModel> boards = [];
 
-    final response = await _dio.get("/swignsing", queryParameters: {});
+    final response = await _dio.get(
+      "/boards",
+      queryParameters: {
+        "request": requestModel,
+      },
+    );
     List<dynamic> data = jsonDecode(response.data);
 
     for (var board in data) {
@@ -18,6 +32,17 @@ class BoardService {
     }
 
     return boards;
+  }
+
+  static Future<int> postBoard(BoardPostModel boardPostModel) async {
+    final response = await _dio.post(
+      "/boards",
+      queryParameters: {
+        "post": boardPostModel,
+      },
+    );
+
+    return response.statusCode!;
   }
 
   static String timeAgo(String dateTimeString) {

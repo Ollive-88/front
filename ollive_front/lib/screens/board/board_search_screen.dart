@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:ollive_front/screens/board/board_screen.dart';
 import 'package:ollive_front/widgets/board/board_tag_widget.dart';
 
@@ -79,6 +78,7 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
               padding: const EdgeInsets.symmetric(
                 horizontal: 4,
               ),
+              // ignore: deprecated_member_use
               child: RawKeyboardListener(
                 focusNode: _focusNode,
                 onKey: (event) {

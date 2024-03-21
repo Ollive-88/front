@@ -9,6 +9,7 @@ class CustomNavigationbar extends StatelessWidget {
   });
 
   final int selectedIndex;
+  // ignore: prefer_typing_uninitialized_variables
   final onItemTapped;
 
   @override

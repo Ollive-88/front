@@ -28,7 +28,10 @@ class BoardList extends StatelessWidget {
                   Row(
                     children: [
                       for (var tag in boardModel.tags)
-                        Tag(tagName: tag, isSearch: false)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10, bottom: 10),
+                          child: Tag(tagName: tag, isSearch: false),
+                        )
                     ],
                   ),
                   Text(

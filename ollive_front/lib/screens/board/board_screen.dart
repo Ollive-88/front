@@ -1,13 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ollive_front/models/board/board_model.dart';
 import 'package:ollive_front/service/board/board_service.dart';
 import 'package:ollive_front/widgets/board/board_appbar_widget.dart';
 import 'package:ollive_front/widgets/board/board_list_widget.dart';
 
+// ignore: must_be_immutable
 class BoardScreen extends StatefulWidget {
   BoardScreen({
     super.key,
