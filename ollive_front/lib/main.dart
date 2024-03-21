@@ -54,7 +54,7 @@ class _AppState extends State<App> {
       theme: ThemeData(
         fontFamily: 'NanumSquare',
       ),
-      home: const HomScreen(),
+      home: const HomeScreen(),
     );
   }
 }
