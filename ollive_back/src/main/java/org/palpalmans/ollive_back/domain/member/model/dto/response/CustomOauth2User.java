@@ -1,6 +1,7 @@
 package org.palpalmans.ollive_back.domain.member.model.dto.response;
 
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.Oauth2MemberResponse;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -9,6 +10,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @RequiredArgsConstructor
+@ToString
 public class CustomOauth2User implements OAuth2User {
 
     private final Oauth2MemberResponse oauth2MemberResponse;

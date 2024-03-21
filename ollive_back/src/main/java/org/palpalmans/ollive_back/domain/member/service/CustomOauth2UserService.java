@@ -43,6 +43,9 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         log.info("name = {}", googleResponse.getName());
         log.info("email = {}", googleResponse.getEmail());
 
+        //원래는 여기서 회원가입 진행
+        //but 추가 정보가 필요하기 때문에 그냥 반환해서 SuccessHandler에서 처리
+
         return new CustomOauth2User(oauth2MemberResponse);
     }
 }
