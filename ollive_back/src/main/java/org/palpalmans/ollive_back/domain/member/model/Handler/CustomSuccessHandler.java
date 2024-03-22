@@ -36,15 +36,18 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         log.info("received information = {}", customOauth2User);
         Optional<Member> isExist = memberService.getMemberInfo(customOauth2User.getEmail());
+
         if(isExist.isPresent()){
-            // 유저 권한이 NON_REGISTERD_MEMBER면 아무것도 안함
-            if(isExist.get().getRole().equals("ROLE_REGISTERED_MEMBER")){
+            // 유저 권한이 REGISTERD_MEMBER일 경우에만 동작
+            String role = isExist.get().getRole().name();
+
+            if(role.equals("ROLE_REGISTERED_MEMBER")){
 
                 TokenCreateRequest tokenCreateRequest = new TokenCreateRequest();
 
                 tokenCreateRequest.setId(isExist.get().getId());
                 tokenCreateRequest.setEmail(isExist.get().getEmail());
-                tokenCreateRequest.setRole(isExist.get().getRole());
+                tokenCreateRequest.setRole(role);
 
                 String accessToken = jwtService.generateAccessToken(tokenCreateRequest);
 

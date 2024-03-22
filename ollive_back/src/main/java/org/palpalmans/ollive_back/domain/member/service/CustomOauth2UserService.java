@@ -7,7 +7,9 @@ import org.palpalmans.ollive_back.domain.member.model.dto.response.CustomOauth2U
 import org.palpalmans.ollive_back.domain.member.model.dto.response.GoogleResponse;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.Oauth2MemberResponse;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
+import org.palpalmans.ollive_back.domain.member.model.entity.SocialMember;
 import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
+import org.palpalmans.ollive_back.domain.member.model.status.SocialType;
 import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -64,11 +66,12 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
             // Builder 패턴 사용하여 객체 생성
             //todo : 프로필 사진 넣기
-            Member joinMember = Member.builder()
+            SocialMember joinMember = SocialMember.builder()
                     .email(email)
                     .name(name)
                     .role(MemberRole.ROLE_NON_REGISTERED_MEMBER) // role 설정
                     .profilepicture("picture")
+                    .socialType(SocialType.GOOGLE)
                     .build();
 
             memberRepository.save(joinMember);
