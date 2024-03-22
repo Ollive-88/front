@@ -2,7 +2,7 @@ package org.palpalmans.ollive_back.domain.board.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.palpalmans.ollive_back.domain.board.model.dto.WriteBoardRequest;
+import org.palpalmans.ollive_back.domain.board.model.dto.request.WriteBoardRequest;
 import org.palpalmans.ollive_back.domain.board.service.BoardService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

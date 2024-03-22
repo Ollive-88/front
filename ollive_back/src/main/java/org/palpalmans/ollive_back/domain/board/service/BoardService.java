@@ -1,7 +1,7 @@
 package org.palpalmans.ollive_back.domain.board.service;
 
 import lombok.RequiredArgsConstructor;
-import org.palpalmans.ollive_back.domain.board.model.dto.WriteBoardRequest;
+import org.palpalmans.ollive_back.domain.board.model.dto.request.WriteBoardRequest;
 import org.palpalmans.ollive_back.domain.board.model.entity.Board;
 import org.palpalmans.ollive_back.domain.board.repository.BoardRepository;
 import org.palpalmans.ollive_back.domain.image.service.ImageService;

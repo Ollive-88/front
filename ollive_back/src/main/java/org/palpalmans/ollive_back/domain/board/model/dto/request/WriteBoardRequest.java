@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.board.model.dto;
+package org.palpalmans.ollive_back.domain.board.model.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.bind.annotation.RequestPart;
