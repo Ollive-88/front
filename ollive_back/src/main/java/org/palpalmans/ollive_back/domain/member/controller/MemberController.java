@@ -31,6 +31,7 @@ public class MemberController {
             case JOIN_SUCCESS -> ResponseEntity.status(HttpStatus.OK).body("회원가입이 성공적으로 완료되었습니다.");
             case NULL_EXIST -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body("필수 입력 항목이 누락되었습니다.");
             case EMAIL_DUPLICATED -> ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 이메일입니다.");
+            case INVALID_ROLE -> ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("유저 role이 잘못되었습니다");
         };
     }
 
