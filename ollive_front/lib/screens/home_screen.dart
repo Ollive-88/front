@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/screens/board/board_screen.dart';
+import 'package:ollive_front/screens/user/mypage_screen.dart';
 import 'package:ollive_front/screens/recipe/recipe_screen.dart';
 import 'package:ollive_front/widgets/global/navigationbar_widget.dart';
 
@@ -51,6 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
           Offstage(
             offstage: _selectedIndex != 2,
             child: const Test(),
+          ),
+          Offstage(
+            offstage: _selectedIndex != 3,
+            child: MyPageScreen(),
           ),
         ],
       ),
