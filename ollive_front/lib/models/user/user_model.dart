@@ -27,3 +27,31 @@ class SignIn {
         birth = '',
         gender = '';
 }
+
+class UserIngredients {
+  final String ingredientName, expirationDate;
+
+  UserIngredients({
+    required this.ingredientName,
+    required this.expirationDate,
+  });
+}
+
+final UserIngredientsList = [
+  UserIngredients(
+    ingredientName: '감자',
+    expirationDate: '5일전',
+  ),
+  UserIngredients(
+    ingredientName: '양파',
+    expirationDate: '7일전',
+  ),
+  UserIngredients(
+    ingredientName: '양배추',
+    expirationDate: '8일전',
+  ),
+  UserIngredients(
+    ingredientName: '고추',
+    expirationDate: '10일전',
+  ),
+];
