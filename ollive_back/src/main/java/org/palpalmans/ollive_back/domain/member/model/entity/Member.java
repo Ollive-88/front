@@ -3,11 +3,13 @@ package org.palpalmans.ollive_back.domain.member.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.palpalmans.ollive_back.common.BaseTimeEntity;
+import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 public class Member extends BaseTimeEntity {
@@ -15,13 +17,8 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
-    //todo : Social login entity, normal member entity 분리
-
     @Column(nullable = false)
     private String email;
-
-    @Column(nullable = false)
-    private String password;
 
     @Column(nullable = false)
     private String gender;
@@ -36,16 +33,16 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "VARCHAR(255) default 'defaultUserNickname'")
     private String nickname;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role;
+    private MemberRole role;
 
     @Column(nullable = true)
     private String profilepicture;
 
     @Builder
-    public Member(String email, String password, String gender, String birthday, String name, String nickname, String role, String profilepicture){
+    public Member(String email, String gender, String birthday, String name, String nickname, MemberRole role, String profilepicture){
         this.email = email;
-        this.password = password;
         this.gender = gender;
         this.birthday = birthday;
         this.name = name;
