@@ -7,6 +7,7 @@ import org.palpalmans.ollive_back.domain.member.model.dto.response.CustomOauth2U
 import org.palpalmans.ollive_back.domain.member.model.dto.response.GoogleResponse;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.Oauth2MemberResponse;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
+import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
 import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -65,12 +66,8 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
             //todo : 프로필 사진 넣기
             Member joinMember = Member.builder()
                     .email(email)
-                    .password("dd")
-                    .gender("male")
-                    .birthday("2020-03-01")
                     .name(name)
-                    .nickname("nick")
-                    .role("ROLE_NON_REGISTERED_MEMBER") // role 설정
+                    .role(MemberRole.ROLE_NON_REGISTERED_MEMBER) // role 설정
                     .profilepicture("picture")
                     .build();
 
