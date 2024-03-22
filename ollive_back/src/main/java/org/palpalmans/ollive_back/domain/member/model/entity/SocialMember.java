@@ -22,7 +22,13 @@ public class SocialMember extends Member{
     @Builder
     public SocialMember(String email, SocialType socialType, String gender, String birthday,
                         String name, String nickname, MemberRole role, String profilepicture) {
-        super(email, gender, birthday, name, nickname, role, profilepicture);
+        this.setEmail(email);
+        this.setGender(gender);
+        this.setBirthday(birthday);
+        this.setName(name);
+        this.setNickname(nickname);
+        this.setRole(role);
+        this.setProfilepicture(profilepicture);
         this.socialType = socialType;
     }
 }

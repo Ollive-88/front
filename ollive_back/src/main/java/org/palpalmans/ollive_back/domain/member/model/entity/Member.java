@@ -8,8 +8,9 @@ import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+@Setter(value = PROTECTED)
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 public class Member extends BaseTimeEntity {
@@ -40,15 +41,5 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = true)
     private String profilepicture;
 
-    @Builder
-    public Member(String email, String gender, String birthday, String name, String nickname, MemberRole role, String profilepicture){
-        this.email = email;
-        this.gender = gender;
-        this.birthday = birthday;
-        this.name = name;
-        this.nickname = nickname;
-        this.role = role;
-        this.profilepicture = profilepicture;
-    }
 
 }
