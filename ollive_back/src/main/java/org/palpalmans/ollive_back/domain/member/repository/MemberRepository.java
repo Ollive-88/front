@@ -1,7 +1,11 @@
 package org.palpalmans.ollive_back.domain.member.repository;
 
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
+import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
+import org.palpalmans.ollive_back.domain.member.model.entity.SocialMember;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -11,6 +15,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> { // JPA ë
     Optional<Member> getMemberById(long id);
 
     Optional<Member> getMemberByEmail(String email);
+
+    @Query("SELECT n FROM NormalMember n WHERE n.email = :email")
+    Optional<NormalMember> findNormalMemberByEmail(@Param("email") String email);
+
+    @Query("SELECT s FROM SocialMember s WHERE s.email = :email")
+    Optional<SocialMember> findSocialMemberByEmail(@Param("email") String email);
 
 
 }

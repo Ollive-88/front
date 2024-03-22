@@ -41,7 +41,11 @@ public class JoinService {
             return JoinRequestStatus.NULL_EXIST;
         }
 
-        //이미 존재하는 회원인지 체크
+        //이미 존재하는 회원인지 체크 //todo : 존재하면서 ROLE_REGISTERED_MEMBER 일때만
+        //todo : Boolean 값보다, 존재하는 멤버 정보를 가져와야겠다.
+        //소셜로그인만 하고, 추가정보는 기입하지 않은채로 가버리면 어떡하지
+        //그리고 그 소셜로그인 아이디로 일반 로그인으로 다시 가입하려하면?
+
         Boolean isExist = memberRepository.existsByEmail(email);
 
         if(isExist) return JoinRequestStatus.EMAIL_DUPLICATED;
@@ -61,6 +65,7 @@ public class JoinService {
                     .build();
 
             // todo : memberRepository에 알맞은 save 확인하기
+            memberRepository.save(socialMember);
 
 
         }else if(role == MemberRole.ROLE_REGISTERED_MEMBER){
