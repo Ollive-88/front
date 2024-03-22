@@ -47,6 +47,8 @@ dependencies:
   image_picker: ^1.0.7
   # 캐러셀 라이브러리
   carousel_slider: ^4.2.1
+  # 이미지 캐싱 라이브러리
+  flutter_cache_manager: ^3.3.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -62,40 +62,47 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
       child: Scaffold(
         backgroundColor: const Color(0xFFFFFFFC),
         appBar: AppBar(
-          toolbarHeight: MediaQuery.of(context).size.height / 10,
+          toolbarHeight: MediaQuery.of(context).size.height / 9,
           centerTitle: true,
           surfaceTintColor: const Color(0xFFFFFFFC),
           shadowColor: Colors.black,
           elevation: 0,
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
-          title: Container(
-            height: 40,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color(0xFFEBEBE9)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 4,
-              ),
-              // ignore: deprecated_member_use
-              child: RawKeyboardListener(
-                focusNode: _focusNode,
-                onKey: (event) {
-                  if (event.physicalKey.debugName == "Space") {
-                    subStringTags();
-                  }
-                },
-                child: TextField(
-                  controller: _inputController,
-                  onEditingComplete: onclickSearch,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    suffixIcon: Icon(Icons.search),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xFFEBEBE9)),
+                  child: RawKeyboardListener(
+                    focusNode: _focusNode,
+                    onKey: (event) {
+                      if (event.physicalKey.debugName == "Space") {
+                        subStringTags();
+                      }
+                    },
+                    child: TextField(
+                      controller: _inputController,
+                      onEditingComplete: onclickSearch,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        suffixIcon: Icon(Icons.search),
+                      ),
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
           shape: const Border(
             bottom: BorderSide(

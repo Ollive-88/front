@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ollive_front/models/board/board_detail_model.dart';
 import 'package:ollive_front/models/board/board_post_model.dart';
+import 'package:ollive_front/screens/board/board_detil_screen.dart';
 import 'package:ollive_front/service/board/board_service.dart';
 import 'package:ollive_front/widgets/board/board_image_widget.dart';
 import 'package:ollive_front/widgets/board/board_tag_widget.dart';
 
 class BoardWriteScreen extends StatefulWidget {
-  const BoardWriteScreen({super.key});
-
+  BoardWriteScreen({super.key, this.boadrDetail});
+  BoardDetailModel? boadrDetail;
   @override
   State<BoardWriteScreen> createState() => _BoardWriteScreenState();
 }
@@ -81,6 +84,19 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
     setState(() {});
   }
 
+  static Future<XFile> getImageXFileByUrl(String url) async {
+    var file = await DefaultCacheManager().getSingleFile(url);
+    return XFile(file.path);
+  }
+
+  void addImages() async {
+    for (var imgUrl in widget.boadrDetail!.imgUrls) {
+      XFile img = await getImageXFileByUrl(imgUrl);
+      _pickedImgs.add(img);
+    }
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
@@ -97,6 +113,14 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
         });
       }
     });
+
+    // 게시글 수정일 때 입력창 값들 초기화
+    if (widget.boadrDetail != null) {
+      _titleController.text = widget.boadrDetail!.title;
+      _contentController.text = widget.boadrDetail!.content;
+      tagNames.addAll(widget.boadrDetail!.tags);
+      addImages();
+    }
   }
 
   @override
@@ -127,20 +151,24 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   BoardPostModel postModel = BoardPostModel(
                       title: _titleController.text,
                       content: _contentController.text,
                       tags: tagNames,
                       imgs: _pickedImgs);
-                  Future<int> result = BoardService.postBoard(postModel);
-
+                  int result = widget.boadrDetail != null
+                      ? await BoardService.postBoard(postModel)
+                      : await BoardService.fatchBoard(postModel);
                   // ignore: unrelated_type_equality_checks
-                  if (result == 200) {
-                    Navigator.pop(context);
-                  } else {
-                    // 오류 모달 생성
-                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BoardDetailScreen(
+                        boardId: result,
+                      ),
+                    ),
+                  );
                 },
                 child: const Text(
                   "완료",

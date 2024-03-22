@@ -3,8 +3,9 @@ import 'package:ollive_front/models/user/user_simple_model.dart';
 
 class BoardDetailModel {
   final String title, content, createdAt;
-  final int boardId, viewCnt, likeCnt, commentCnt;
-  final bool isLiked, isMine;
+  final int boardId, viewCnt, commentCnt;
+  int likeCnt;
+  bool isLiked, isMine;
   final UserSimpleModel writer;
   final List<String> tags;
   final List<String> imgUrls;
