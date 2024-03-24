@@ -10,6 +10,8 @@ import java.util.List;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
@@ -36,5 +38,9 @@ public class Recipe {
     @OneToMany
     @JoinColumn(name = "recipe_id")
     List<RecipeProcess> recipeProcesses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipe")
+    @JsonManagedReference
+    List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
 }

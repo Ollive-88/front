@@ -1,12 +1,19 @@
 package org.palpalmans.ollive_back.domain.recipe.model.entity;
 
-import jakarta.persistence.*;
+import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.GenerationType.*;
+import static lombok.AccessLevel.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
@@ -21,9 +28,11 @@ public class RecipeIngredient {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "ingredient_id", nullable = false)
+    @JsonBackReference
     private Ingredient ingredient;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "recipe_id", nullable = false)
+    @JsonBackReference
     private Recipe recipe;
 }
