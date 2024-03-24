@@ -16,23 +16,19 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class RecipeService {
-    private final RecipeRepository recipeRepository;
+	private final RecipeRepository recipeRepository;
 
-    public RecipeDetailDto getRecipe(Long recipeId) {
-        //FIXME RuntimeException 변경 필요
-        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(() -> new RuntimeException("존재하지 않는 레시피입니다."));
-        RecipeDto recipeDto = RecipeMapper.toRecipeDto(recipe);
-        List<RecipeIngredientDto> recipeIngredientDtos = recipe.getRecipeIngredients().stream()
-            .map(
-				RecipeMapper::toRecipeIngredientDto
-            )
-            .toList();
+	public RecipeDetailDto getRecipe(Long recipeId) {
+		//FIXME RuntimeException 변경 필요
+		Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(() -> new RuntimeException("존재하지 않는 레시피입니다."));
+		RecipeDto recipeDto = RecipeMapper.toRecipeDto(recipe);
+		List<RecipeIngredientDto> recipeIngredientDtos = recipe.getRecipeIngredients().stream()
+			.map(RecipeMapper::toRecipeIngredientDto)
+			.toList();
 
-        List<RecipeProcessDto> recipeProcessDtos = recipe.getRecipeProcesses().stream()
-            .map(
-                RecipeMapper::toRecipeProcessDto
-            ).toList();
+		List<RecipeProcessDto> recipeProcessDtos = recipe.getRecipeProcesses().stream()
+			.map(RecipeMapper::toRecipeProcessDto).toList();
 
-        return RecipeMapper.toRecipeDetailDto(recipeDto, recipeIngredientDtos, recipeProcessDtos);
-    }
+		return RecipeMapper.toRecipeDetailDto(recipeDto, recipeIngredientDtos, recipeProcessDtos);
+	}
 }
