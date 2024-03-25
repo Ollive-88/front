@@ -125,220 +125,218 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xFFFFFFFC),
-        appBar: AppBar(
-          toolbarHeight: MediaQuery.of(context).size.height / 10,
-          centerTitle: true,
-          surfaceTintColor: const Color(0xFFFFFFFC),
-          shadowColor: Colors.black,
-          elevation: 0,
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center, // 수직 방향 중앙 정렬
-            children: [
-              const Expanded(
-                child: Text(
-                  "글쓰기",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              GestureDetector(
-                onTap: () async {
-                  BoardPostModel postModel = BoardPostModel(
-                      title: _titleController.text,
-                      content: _contentController.text,
-                      tags: tagNames,
-                      imgs: _pickedImgs);
-                  int result = widget.boadrDetail != null
-                      ? await BoardService.postBoard(postModel)
-                      : await BoardService.fatchBoard(postModel);
-                  // ignore: unrelated_type_equality_checks
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BoardDetailScreen(
-                        boardId: result,
-                      ),
-                    ),
-                  );
-                },
-                child: const Text(
-                  "완료",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-          ),
-          shape: const Border(
-            bottom: BorderSide(
-              width: 2,
-              color: Color(0xFFEBEBE9),
-            ),
-          ),
-        ),
-        body: Stack(
+    return Scaffold(
+      backgroundColor: const Color(0xFFFFFFFC),
+      appBar: AppBar(
+        toolbarHeight: MediaQuery.of(context).size.height / 10,
+        centerTitle: true,
+        surfaceTintColor: const Color(0xFFFFFFFC),
+        shadowColor: Colors.black,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center, // 수직 방향 중앙 정렬
           children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom / 4,
-                    right: 15,
-                    left: 15,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFormField(
-                        controller: _titleController,
-                        decoration: const InputDecoration(
-                          hintText: "제목을 입력하세요",
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 3,
-                              color: Color(0xFFEBEBE9),
-                            ),
-                          ),
-                          // 포커스를 받았을 때의 테두리 스타일
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 3,
-                              color: Color(0xFFEBEBE9),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              color: Color(0xFFEBEBE9), // 여기서 원하는 색상을 선택하세요
-                              width: 3, // 밑줄의 두께를 지정하세요
-                            ),
-                          ),
-                        ),
-                        height: MediaQuery.of(context).size.height / 2,
-                        child: TextFormField(
-                          controller: _contentController,
-                          maxLines: 100,
-                          decoration: const InputDecoration(
-                            hintText: "내용을 입력하세요",
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                        ),
-                      ),
-                      // ignore: deprecated_member_use
-                      RawKeyboardListener(
-                        focusNode: _focusNode,
-                        onKey: (event) {
-                          if (event.physicalKey.debugName == "Space") {
-                            subStringTags();
-                          }
-                        },
-                        child: TextFormField(
-                          controller: _inputController,
-                          decoration: const InputDecoration(
-                            hintText: "태그를 입력하세요",
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: SingleChildScrollView(
-                          controller: _scrollController,
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              for (int i = 0; i < tagNames.length; i++)
-                                Tag(
-                                  tagName: tagNames[i],
-                                  isSearch: true,
-                                  deleteTag: () => deleteTags(i),
-                                )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+            const Expanded(
+              child: Text(
+                "글쓰기",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
-            Positioned(
-              bottom: keyboardHeight,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.all(20.0),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFFFFC),
-                  border: Border(
-                    top: BorderSide(
-                      color: Color(0xFFEBEBE9),
-                      width: 3,
+            GestureDetector(
+              onTap: () async {
+                BoardPostModel postModel = BoardPostModel(
+                    title: _titleController.text,
+                    content: _contentController.text,
+                    tags: tagNames,
+                    imgs: _pickedImgs);
+                int result = widget.boadrDetail != null
+                    ? await BoardService.postBoard(postModel)
+                    : await BoardService.fatchBoard(postModel);
+                // ignore: unrelated_type_equality_checks
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BoardDetailScreen(
+                      boardId: result,
                     ),
                   ),
+                );
+              },
+              child: const Text(
+                "완료",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
                 ),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.image),
-                          color: Colors.black,
-                          onPressed: () {
-                            _pickImg();
-                          },
-                        ),
-                        SingleChildScrollView(
-                          child: Row(
-                            children: [
-                              for (var i = 0; i < _pickedImgs.length; i++)
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 5),
-                                  child: BoardImage(
-                                    image: _pickedImgs[i],
-                                    heght:
-                                        MediaQuery.of(context).size.height / 10,
-                                    deleteImage: () => deleteImage(i),
-                                  ),
-                                )
-                            ],
-                          ),
-                        )
-                      ],
-                    );
-                  },
-                ),
+                textAlign: TextAlign.center,
               ),
             ),
           ],
         ),
+        shape: const Border(
+          bottom: BorderSide(
+            width: 2,
+            color: Color(0xFFEBEBE9),
+          ),
+        ),
+      ),
+      body: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topCenter,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom / 4,
+                  right: 15,
+                  left: 15,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: _titleController,
+                      decoration: const InputDecoration(
+                        hintText: "제목을 입력하세요",
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 3,
+                            color: Color(0xFFEBEBE9),
+                          ),
+                        ),
+                        // 포커스를 받았을 때의 테두리 스타일
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 3,
+                            color: Color(0xFFEBEBE9),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Color(0xFFEBEBE9), // 여기서 원하는 색상을 선택하세요
+                            width: 3, // 밑줄의 두께를 지정하세요
+                          ),
+                        ),
+                      ),
+                      height: MediaQuery.of(context).size.height / 2,
+                      child: TextFormField(
+                        controller: _contentController,
+                        maxLines: 100,
+                        decoration: const InputDecoration(
+                          hintText: "내용을 입력하세요",
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // ignore: deprecated_member_use
+                    RawKeyboardListener(
+                      focusNode: _focusNode,
+                      onKey: (event) {
+                        if (event.physicalKey.debugName == "Space") {
+                          subStringTags();
+                        }
+                      },
+                      child: TextFormField(
+                        controller: _inputController,
+                        decoration: const InputDecoration(
+                          hintText: "태그를 입력하세요",
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            for (int i = 0; i < tagNames.length; i++)
+                              Tag(
+                                tagName: tagNames[i],
+                                isSearch: true,
+                                deleteTag: () => deleteTags(i),
+                              )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: keyboardHeight,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.all(20.0),
+              decoration: const BoxDecoration(
+                color: Color(0xFFFFFFFC),
+                border: Border(
+                  top: BorderSide(
+                    color: Color(0xFFEBEBE9),
+                    width: 3,
+                  ),
+                ),
+              ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.image),
+                        color: Colors.black,
+                        onPressed: () {
+                          _pickImg();
+                        },
+                      ),
+                      SingleChildScrollView(
+                        child: Row(
+                          children: [
+                            for (var i = 0; i < _pickedImgs.length; i++)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 5),
+                                child: BoardImage(
+                                  image: _pickedImgs[i],
+                                  heght:
+                                      MediaQuery.of(context).size.height / 10,
+                                  deleteImage: () => deleteImage(i),
+                                ),
+                              )
+                          ],
+                        ),
+                      )
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

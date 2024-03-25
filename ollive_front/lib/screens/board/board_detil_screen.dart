@@ -84,134 +84,368 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xFFFFFFFC),
-        appBar: AppBar(
-          toolbarHeight: MediaQuery.of(context).size.height / 10,
-          centerTitle: true,
-          surfaceTintColor: const Color(0xFFFFFFFC),
-          shadowColor: Colors.black,
-          elevation: 0,
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          shape: const Border(
-            bottom: BorderSide(
-              width: 7,
-              color: Color(0xFFEBEBE9),
-            ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFFFFFFC),
+      appBar: AppBar(
+        toolbarHeight: MediaQuery.of(context).size.height / 10,
+        centerTitle: true,
+        surfaceTintColor: const Color(0xFFFFFFFC),
+        shadowColor: Colors.black,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        shape: const Border(
+          bottom: BorderSide(
+            width: 7,
+            color: Color(0xFFEBEBE9),
           ),
-          title: boardDetail1.isMine
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Container(
-                              height: 130,
-                              width: MediaQuery.of(context).size.width,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFFFFFFFC),
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(0),
-                                  topRight: Radius.circular(0),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              BoardWriteScreen(
-                                            boadrDetail: boardDetail1,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 15,
-                                      ),
-                                      child: Text(
-                                        "수정",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const Divider(
-                                    thickness: 2,
-                                    height: 1,
-                                    color: Color(0xFFEBEBE9),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Future<int> response =
-                                          BoardService.deleteBoard(
-                                              boardDetail1.boardId);
-                                      if (response == 200) {
-                                        Navigator.pop(context);
-                                      } else {
-                                        // Todo : 오류 모달 생성
-                                      }
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 15,
-                                      ),
-                                      child: Text(
-                                        "삭제",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      icon: const Icon(Icons.more_vert),
-                    ),
-                  ],
-                )
-              : null,
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                child: Column(
-                  children: [
-                    // 글쓴이, 작성시간
-                    Container(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Color(0xFFEBEBE9),
-                            width: 2,
-                          ),
+        title: boardDetail1.isMine
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            height: 130,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFFFFFFC),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(0),
+                                topRight: Radius.circular(0),
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BoardWriteScreen(
+                                          boadrDetail: boardDetail1,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 15,
+                                    ),
+                                    child: Text(
+                                      "수정",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const Divider(
+                                  thickness: 2,
+                                  height: 1,
+                                  color: Color(0xFFEBEBE9),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Future<int> response =
+                                        BoardService.deleteBoard(
+                                            boardDetail1.boardId);
+                                    if (response == 200) {
+                                      Navigator.pop(context);
+                                    } else {
+                                      // Todo : 오류 모달 생성
+                                    }
+                                  },
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 15,
+                                    ),
+                                    child: Text(
+                                      "삭제",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    icon: const Icon(Icons.more_vert),
+                  ),
+                ],
+              )
+            : null,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: Column(
+                children: [
+                  // 글쓴이, 작성시간
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFEBEBE9),
+                          width: 2,
                         ),
                       ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipOval(
+                          child: Image.network(
+                            boardDetail1.writer.imgUrl,
+                            width: MediaQuery.of(context).size.width / 6,
+                            height: MediaQuery.of(context).size.width / 6,
+                            headers: const {
+                              "User-Agent":
+                                  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+                            },
+                            fit: BoxFit.fitHeight,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                boardDetail1.writer.nickName,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                BoardService.timeAgo(boardDetail1.createdAt),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black.withOpacity(0.7),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  //제목
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                    ),
+                    child: Text(
+                      boardDetail1.title,
+                      style: const TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  // 이미지
+                  Container(
+                    decoration: const BoxDecoration(),
+                    child: CarouselSlider(
+                      options: CarouselOptions(
+                        enableInfiniteScroll: false,
+                      ),
+                      items: boardDetail1.imgUrls
+                          .map(
+                            (imgUrl) => Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10), // 여기에 마진 추가
+
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: Image.network(
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.1,
+                                  height:
+                                      MediaQuery.of(context).size.width / 1.1,
+                                  imgUrl,
+                                  headers: const {
+                                    "User-Agent":
+                                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+                                  },
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  // 본문
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 15,
+                    ),
+                    child: Text(
+                      boardDetail1.content,
+                      style: const TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  // 태그
+                  Column(
+                    children: [
+                      Wrap(
+                        spacing: 8.0, // 가로 방향의 태그 사이 간격
+                        runSpacing: 4.0,
                         children: [
+                          for (var tag in boardDetail1.tags)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 10, bottom: 10),
+                              child: Tag(tagName: tag, isSearch: false),
+                            )
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  // 뷰카운트, 라이크카운트
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.remove_red_eye,
+                          size: 30,
+                        ),
+                        const SizedBox(
+                          width: 7,
+                        ),
+                        Text(
+                          "${boardDetail1.viewCnt}",
+                          style: const TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            // 하트 api 호출
+                            boardDetail1.isLiked = !boardDetail1.isLiked;
+                            if (boardDetail1.isLiked) {
+                              boardDetail1.likeCnt += 1;
+                            } else {
+                              boardDetail1.likeCnt -= 1;
+                            }
+
+                            BoardService.postLike(
+                              boardDetail1.boardId,
+                              boardDetail1.isLiked,
+                            );
+                            setState(() {});
+                          },
+                          icon: Icon(
+                            boardDetail1.isLiked
+                                ? Icons.heart_broken
+                                : Icons.heart_broken_outlined,
+                            size: 30,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 7,
+                        ),
+                        Text(
+                          "${boardDetail1.likeCnt}",
+                          style: const TextStyle(
+                            fontSize: 18,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // 댓글
+            const Divider(
+              thickness: 5,
+              height: 1,
+              color: Color(0xFFEBEBE9),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: Column(
+                children: [
+                  //  채팅 개수
+                  Row(
+                    children: [
+                      Image.asset(
+                        "assets/image/icons/comentIcon.png",
+                        fit: BoxFit.contain,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        boardDetail1.commentCnt.toString(),
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  // 채팅 목록
+                  for (var i = 0; i < boardDetail1.comments.length; i++)
+                    Container(
+                      decoration: i < boardDetail1.comments.length - 1
+                          ? const BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Color(0xFFEBEBE9),
+                                ),
+                              ),
+                            )
+                          : null,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        children: [
+                          // 프사
                           ClipOval(
                             child: Image.network(
-                              boardDetail1.writer.imgUrl,
+                              boardDetail1.comments[i].writer.imgUrl,
                               width: MediaQuery.of(context).size.width / 6,
                               height: MediaQuery.of(context).size.width / 6,
                               headers: const {
@@ -221,285 +455,46 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                               fit: BoxFit.fitHeight,
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  boardDetail1.writer.nickName,
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  BoardService.timeAgo(boardDetail1.createdAt),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black.withOpacity(0.7),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
 
-                    //제목
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                      ),
-                      child: Text(
-                        boardDetail1.title,
-                        style: const TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-
-                    const SizedBox(
-                      height: 20,
-                    ),
-
-                    // 이미지
-                    Container(
-                      decoration: const BoxDecoration(),
-                      child: CarouselSlider(
-                        options: CarouselOptions(
-                          enableInfiniteScroll: false,
-                        ),
-                        items: boardDetail1.imgUrls
-                            .map(
-                              (imgUrl) => Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 10), // 여기에 마진 추가
-
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(30),
-                                  child: Image.network(
-                                    width:
-                                        MediaQuery.of(context).size.width / 1.1,
-                                    height:
-                                        MediaQuery.of(context).size.width / 1.1,
-                                    imgUrl,
-                                    headers: const {
-                                      "User-Agent":
-                                          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
-                                    },
-                                    fit: BoxFit.fitHeight,
-                                  ),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ),
-
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    // 본문
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 15,
-                      ),
-                      child: Text(
-                        boardDetail1.content,
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(
-                      height: 20,
-                    ),
-
-                    // 태그
-                    Column(
-                      children: [
-                        Wrap(
-                          spacing: 8.0, // 가로 방향의 태그 사이 간격
-                          runSpacing: 4.0,
-                          children: [
-                            for (var tag in boardDetail1.tags)
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 10, bottom: 10),
-                                child: Tag(tagName: tag, isSearch: false),
-                              )
-                          ],
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(
-                      height: 20,
-                    ),
-
-                    // 뷰카운트, 라이크카운트
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.remove_red_eye,
-                            size: 30,
-                          ),
-                          const SizedBox(
-                            width: 7,
-                          ),
-                          Text(
-                            "${boardDetail1.viewCnt}",
-                            style: const TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
                           const SizedBox(
                             width: 15,
                           ),
-                          IconButton(
-                            onPressed: () {
-                              // 하트 api 호출
-                              boardDetail1.isLiked = !boardDetail1.isLiked;
-                              if (boardDetail1.isLiked) {
-                                boardDetail1.likeCnt += 1;
-                              } else {
-                                boardDetail1.likeCnt -= 1;
-                              }
 
-                              BoardService.postLike(
-                                boardDetail1.boardId,
-                                boardDetail1.isLiked,
-                              );
-                              setState(() {});
-                            },
-                            icon: Icon(
-                              boardDetail1.isLiked
-                                  ? Icons.heart_broken
-                                  : Icons.heart_broken_outlined,
-                              size: 30,
-                            ),
+                          // 닉네임, 작성시간, 댓글 내용
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                boardDetail1.comments[i].writer.nickName,
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                              Text(
+                                BoardService.timeAgo(
+                                    boardDetail1.comments[i].createdAt),
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black.withOpacity(0.7)),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                boardDetail1.comments[i].content,
+                                style: const TextStyle(fontSize: 17),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                            ],
                           ),
-                          const SizedBox(
-                            width: 7,
-                          ),
-                          Text(
-                            "${boardDetail1.likeCnt}",
-                            style: const TextStyle(
-                              fontSize: 18,
-                            ),
-                          )
                         ],
                       ),
                     ),
-                  ],
-                ),
+                ],
               ),
-              // 댓글
-              const Divider(
-                thickness: 5,
-                height: 1,
-                color: Color(0xFFEBEBE9),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                child: Column(
-                  children: [
-                    //  채팅 개수
-                    Row(
-                      children: [
-                        Image.asset(
-                          "assets/image/icons/comentIcon.png",
-                          fit: BoxFit.contain,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          boardDetail1.commentCnt.toString(),
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(
-                      height: 20,
-                    ),
-
-                    // 채팅 목록
-                    for (var i = 0; i < boardDetail1.comments.length; i++)
-                      Container(
-                        decoration: i < boardDetail1.comments.length - 1
-                            ? const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Color(0xFFEBEBE9),
-                                  ),
-                                ),
-                              )
-                            : null,
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          children: [
-                            // 프사
-                            ClipOval(
-                              child: Image.network(
-                                boardDetail1.comments[i].writer.imgUrl,
-                                width: MediaQuery.of(context).size.width / 6,
-                                height: MediaQuery.of(context).size.width / 6,
-                                headers: const {
-                                  "User-Agent":
-                                      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
-                                },
-                                fit: BoxFit.fitHeight,
-                              ),
-                            ),
-
-                            const SizedBox(
-                              width: 15,
-                            ),
-
-                            // 닉네임, 작성시간, 댓글 내용
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  boardDetail1.comments[i].writer.nickName,
-                                  style: const TextStyle(fontSize: 18),
-                                ),
-                                Text(
-                                  BoardService.timeAgo(
-                                      boardDetail1.comments[i].createdAt),
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.black.withOpacity(0.7)),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  boardDetail1.comments[i].content,
-                                  style: const TextStyle(fontSize: 17),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );

@@ -108,102 +108,99 @@ class _BoardScreenState extends State<BoardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xFFFFFFFC),
-        appBar: _isAppBarVisible
-            ? AppBar(
-                toolbarHeight: MediaQuery.of(context).size.height / 10,
-                centerTitle: true,
-                surfaceTintColor: const Color(0xFFFFFFFC),
-                shadowColor: Colors.black,
-                elevation: 0,
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black,
-                title: BoardAppBar(keyword: widget.keyword),
-                shape: const Border(
-                  bottom: BorderSide(
-                    width: 7,
-                    color: Color(0xFFEBEBE9),
-                  ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFFFFFFC),
+      appBar: _isAppBarVisible
+          ? AppBar(
+              toolbarHeight: MediaQuery.of(context).size.height / 10,
+              centerTitle: true,
+              surfaceTintColor: const Color(0xFFFFFFFC),
+              shadowColor: Colors.black,
+              elevation: 0,
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black,
+              title: BoardAppBar(keyword: widget.keyword),
+              shape: const Border(
+                bottom: BorderSide(
+                  width: 7,
+                  color: Color(0xFFEBEBE9),
                 ),
-              )
-            : null,
-        body: Column(
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: ListView.separated(
-                controller: _scrollController,
-                scrollDirection: Axis.vertical,
-                itemCount: boards2.length,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                itemBuilder: (context, index) {
-                  var boardModel = boards2[index];
-
-                  return BoardList(boardModel: boardModel);
-                },
-                separatorBuilder: (context, index) {
-                  return const Column(
-                    children: [
-                      Divider(
-                        thickness: 2,
-                        height: 1,
-                        color: Color(0xFFEEEEEC),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      )
-                    ],
-                  );
-                },
               ),
             )
-          ],
-        ),
-        floatingActionButton: GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/board/write');
-          },
-          child: SizedBox(
-            width: 100,
-            height: 45,
-            child: Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFD5D5),
-                borderRadius: BorderRadius.circular(23),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.shade200,
-                    offset: const Offset(2, 3),
+          : null,
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: ListView.separated(
+              controller: _scrollController,
+              scrollDirection: Axis.vertical,
+              itemCount: boards2.length,
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              itemBuilder: (context, index) {
+                var boardModel = boards2[index];
+
+                return BoardList(boardModel: boardModel);
+              },
+              separatorBuilder: (context, index) {
+                return const Column(
+                  children: [
+                    Divider(
+                      thickness: 2,
+                      height: 1,
+                      color: Color(0xFFEEEEEC),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    )
+                  ],
+                );
+              },
+            ),
+          )
+        ],
+      ),
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, '/board/write');
+        },
+        child: SizedBox(
+          width: 100,
+          height: 45,
+          child: Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFD5D5),
+              borderRadius: BorderRadius.circular(23),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade200,
+                  offset: const Offset(2, 3),
+                ),
+              ],
+            ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 13),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.add,
+                    size: 28,
+                  ),
+                  Text(
+                    "글쓰기",
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],
-              ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 13),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.add,
-                      size: 28,
-                    ),
-                    Text(
-                      "글쓰기",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
               ),
             ),
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
