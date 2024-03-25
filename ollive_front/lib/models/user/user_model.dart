@@ -29,7 +29,8 @@ class SignIn {
 }
 
 class UserIngredients {
-  final String ingredientName, expirationDate;
+  final String ingredientName;
+  var expirationDate;
 
   UserIngredients({
     required this.ingredientName,
@@ -37,21 +38,29 @@ class UserIngredients {
   });
 }
 
-final UserIngredientsList = [
+final userIngredientsList = [
   UserIngredients(
     ingredientName: '감자',
-    expirationDate: '5일전',
+    expirationDate: '2022-03-30',
   ),
   UserIngredients(
     ingredientName: '양파',
-    expirationDate: '7일전',
+    expirationDate: '2023-03-30',
   ),
   UserIngredients(
     ingredientName: '양배추',
-    expirationDate: '8일전',
+    expirationDate: '2024-03-30',
   ),
   UserIngredients(
     ingredientName: '고추',
-    expirationDate: '10일전',
+    expirationDate: '2024-04-30',
+  ),
+  UserIngredients(
+    ingredientName: '대추',
+    expirationDate: '2024-03-25',
+  ),
+  UserIngredients(
+    ingredientName: '카레',
+    expirationDate: '2022-03-30',
   ),
 ];
