@@ -32,7 +32,10 @@ public class Board extends BaseTimeEntity {
     @OneToMany(mappedBy = "board", cascade = PERSIST, orphanRemoval = true)
     private final List<Comment> comments = new ArrayList<>();
 
-    public Board(Long id, String title, String content, Long memberId) {
+    @OneToMany(mappedBy = "board", cascade = PERSIST, orphanRemoval = true)
+    private final List<BoardTag> boardTags = new ArrayList<>();
+
+    public Board(Long id, String title, Long memberId, String content) {
         this.id = id;
         this.title = title;
         this.content = content;
