@@ -17,10 +17,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> { // JPA ë
     Optional<Member> getMemberByEmail(String email);
 
     @Query("SELECT n FROM NormalMember n WHERE n.email = :email")
-    Optional<NormalMember> findNormalMemberByEmail(@Param("email") String email);
+    Optional<NormalMember> getNormalMemberByEmail(@Param("email") String email);
 
     @Query("SELECT s FROM SocialMember s WHERE s.email = :email")
-    Optional<SocialMember> findSocialMemberByEmail(@Param("email") String email);
+    Optional<SocialMember> getSocialMemberByEmail(@Param("email") String email);
 
 
 }

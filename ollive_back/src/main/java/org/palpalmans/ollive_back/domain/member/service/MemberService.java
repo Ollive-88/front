@@ -3,6 +3,8 @@ package org.palpalmans.ollive_back.domain.member.service;
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.MemberInfoResponse;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
+import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
+import org.palpalmans.ollive_back.domain.member.model.entity.SocialMember;
 import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,12 @@ public class MemberService {
         return memberRepository.getMemberByEmail(email);
     }
 
+    public Optional<NormalMember> getNormalMemberByEmail(String email){
+        return  memberRepository.getNormalMemberByEmail(email);
+    }
 
+    public Optional<SocialMember> getSocialMemberByEmail(String email){
+        return  memberRepository.getSocialMemberByEmail(email);
+    }
 
 }
