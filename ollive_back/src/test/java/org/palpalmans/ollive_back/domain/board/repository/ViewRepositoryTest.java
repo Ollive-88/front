@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.palpalmans.ollive_back.domain.board.model.entity.Board;
 import org.palpalmans.ollive_back.domain.board.model.entity.View;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
+import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -33,8 +34,7 @@ class ViewRepositoryTest {
                 .email("email")
                 .birthday("birthday")
                 .gender("gender")
-                .password("password")
-                .role("role")
+                .role(MemberRole.ROLE_REGISTERED_MEMBER)
                 .build();
 
         View view = viewRepository.save(new View(board, member));

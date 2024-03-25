@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.palpalmans.ollive_back.domain.board.model.entity.Board;
 import org.palpalmans.ollive_back.domain.board.model.entity.Like;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
+import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -35,8 +36,7 @@ class LikeRepositoryTest {
                 .email("email")
                 .birthday("birthday")
                 .gender("gender")
-                .password("password")
-                .role("role")
+                .role(MemberRole.ROLE_REGISTERED_MEMBER)
                 .build();
 
         Like like = likeRepository.save(new Like(board, member));
