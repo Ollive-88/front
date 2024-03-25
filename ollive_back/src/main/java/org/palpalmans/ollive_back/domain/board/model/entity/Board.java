@@ -47,4 +47,16 @@ public class Board extends BaseTimeEntity {
         this.content = content;
         this.memberId = memberId;
     }
+
+    @Override
+    public String toString() {
+        return "Board{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + (content.length() < 7 ? content : content.substring(0, 7) + "...") + '\'' +
+                ", memberId=" + memberId +
+                ", comments=" + comments +
+                ", boardTags=" + boardTags +
+                '}';
+    }
 }
