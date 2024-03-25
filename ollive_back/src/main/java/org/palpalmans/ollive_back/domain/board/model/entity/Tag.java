@@ -26,10 +26,6 @@ public class Tag extends BaseTimeEntity {
     @Column(length = 10, unique = true, nullable = false)
     private String name;
 
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "board_id")
-	private Board board;
-
     public Tag(Long id, String name) {
         this.id = id;
         this.name = name;
