@@ -52,7 +52,7 @@ public class JoinService {
             //ROLE_NON_REGISTERD_MEMBER 면 SocialMember Entity 이용해서 회원가입
             Member member = Member.builder()
                     .email(email)
-                    .gender(gender)
+                    .gender("undefined")
                     .birthday(birthday)
                     .name(name)
                     .nickname(nickname)

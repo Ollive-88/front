@@ -69,6 +69,9 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
             Member member = Member.builder()
                     .email(email)
                     .name(name)
+                    .gender("None")
+                    .nickname("None")
+                    .birthday("1000-10-10")
                     .role(MemberRole.ROLE_NON_REGISTERED_MEMBER) // role 설정
                     .profilepicture("picture")
                     .build();

@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.member.service;
+package org.palpalmans.ollive_back.domain.member.security.service;
 
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;

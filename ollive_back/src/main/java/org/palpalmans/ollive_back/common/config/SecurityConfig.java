@@ -1,7 +1,7 @@
 package org.palpalmans.ollive_back.common.config;
 
 import lombok.RequiredArgsConstructor;
-import org.palpalmans.ollive_back.domain.member.model.Handler.CustomSuccessHandler;
+import org.palpalmans.ollive_back.domain.member.security.Handler.CustomSuccessHandler;
 import org.palpalmans.ollive_back.domain.member.service.CustomOauth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

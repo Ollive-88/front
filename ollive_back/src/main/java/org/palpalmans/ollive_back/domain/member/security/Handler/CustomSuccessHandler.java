@@ -1,24 +1,20 @@
-package org.palpalmans.ollive_back.domain.member.model.Handler;
+package org.palpalmans.ollive_back.domain.member.security.Handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.palpalmans.ollive_back.domain.member.model.dto.request.JoinRequest;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.TokenCreateRequest;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.CustomOauth2User;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
-import org.palpalmans.ollive_back.domain.member.service.JoinService;
-import org.palpalmans.ollive_back.domain.member.service.JwtService;
+import org.palpalmans.ollive_back.domain.member.security.service.JwtService;
 import org.palpalmans.ollive_back.domain.member.service.MemberService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Component
