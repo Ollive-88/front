@@ -1,15 +1,15 @@
 package org.palpalmans.ollive_back.domain.recipe.model.dto;
 
-import java.util.List;
-
 import org.palpalmans.ollive_back.domain.recipe.model.entity.Recipe;
 import org.palpalmans.ollive_back.domain.recipe.model.entity.RecipeIngredient;
 import org.palpalmans.ollive_back.domain.recipe.model.entity.RecipeProcess;
 
+import java.util.List;
+
 public class RecipeMapper {
     public static RecipeDto toRecipeDto(Recipe recipe){
         return new RecipeDto(
-                recipe.getTitle(), recipe.getThumbnail_url(), recipe.getAmount(), recipe.getTime(), recipe.getDifficulty()
+                recipe.getId(), recipe.getTitle(), recipe.getThumbnail_url(), recipe.getAmount(), recipe.getTime(), recipe.getDifficulty()
         );
     }
 
