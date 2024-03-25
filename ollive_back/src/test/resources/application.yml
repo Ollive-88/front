@@ -48,3 +48,8 @@ spring:
       host: ${MONGO_HOST}
       port: ${MONGO_PORT}
       field-naming-strategy: org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy
+
+cloth:
+  weather:
+    baseUrl: ${WEATHER_URL}
+    serviceKey: ${WEATHER_SERVICE_KEY}

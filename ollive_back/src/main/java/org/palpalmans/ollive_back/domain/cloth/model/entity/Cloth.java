@@ -1,7 +1,6 @@
 package org.palpalmans.ollive_back.domain.cloth.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.palpalmans.ollive_back.common.BaseTimeEntity;
@@ -15,52 +14,61 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public class Cloth extends BaseTimeEntity {
     @Id
-    @Column(name = "cloth_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "cloth_name", length = 255)
-    private String name;
+    @Column(name = "product_name")
+    private String productName;
 
-    @Column(name = "cloth_brand", length = 100)
-    private String brandKor;
+    @Column(name = "brand")
+    private String brand;
 
-    @Column(name = "cloth_brand_english", length = 100)
-    private String brandEng;
+    @Column(name = "brand_english")
+    private String brandEnglish;
 
-    @Column(name = "cloth_release_year")
-    private Short year;
+    @Column(name = "release_year")
+    private Short releaseYear;
 
-    @Column(name = "cloth_release_quarter")
-    private Byte quarter;
+    @Column(name = "release_quarter", columnDefinition = "TINYINT")
+    private Short releaseQuarter;
 
-    @Column(name = "cloth_url", length = 255)
-    private String clothUrl;
+    @Column(name = "product_url")
+    private String productUrl;
 
-    @Column(name = "cloth_img_url", length = 255)
-    private String clothImgUrl;
+    @Column(name = "img_url")
+    private String imgUrl;
 
-    @OneToOne
-    @PrimaryKeyJoinColumn
-    private ClothCategory clothCategory;
+    @Column(name = "super_category")
+    String superCategory;
 
-    @OneToOne
-    @PrimaryKeyJoinColumn
-    private ClothSeason clothSeason;
+    @Column(name = "sub_category")
+    String subCategory;
 
-    @OneToOne
-    @PrimaryKeyJoinColumn
-    private ClothStyle clothStyle;
+    @Column(name = "detail_category")
+    String detailCategory;
 
-    @Builder
-    public Cloth(String name, String brandKor, String brandEng,
-                 Short year, Byte quarter, String clothUrl, String clothImgUrl) {
-        this.name = name;
-        this.brandKor = brandKor;
-        this.brandEng = brandEng;
-        this.year = year;
-        this.quarter = quarter;
-        this.clothUrl = clothUrl;
-        this.clothImgUrl = clothImgUrl;
-    }
+    @Column(name = "spring", columnDefinition = "TINYINT(1)")
+    private boolean spring;
+
+    @Column(name = "summer", columnDefinition = "TINYINT(1)")
+    private boolean summer;
+
+    @Column(name = "fall", columnDefinition = "TINYINT(1)")
+    private boolean fall;
+
+    @Column(name = "winter", columnDefinition = "TINYINT(1)")
+    private boolean winter;
+
+    @Column(name = "casual", nullable = false)
+    private double casual;
+
+    @Column(name = "formal", nullable = false)
+    private double formal;
+
+    @Column(name = "fancy", nullable = false)
+    private double fancy;
+
+    @Column(name = "sporty", nullable = false)
+    private double sporty;
 }

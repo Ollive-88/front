@@ -5,9 +5,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${TEST_DB_URL}
+    username: ${TEST_DB_USERNAME}
+    password: ${TEST_DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -43,3 +43,8 @@ spring:
       host: ${MONGO_HOST}
       port: ${MONGO_PORT}
       field-naming-strategy: org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy
+
+cloth:
+  weather:
+    baseUrl: ${WEATHER_URL}
+    serviceKey: ${WEATHER_SERVICE_KEY}
