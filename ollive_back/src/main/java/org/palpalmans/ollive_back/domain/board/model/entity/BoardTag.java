@@ -3,10 +3,9 @@ package org.palpalmans.ollive_back.domain.board.model.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import static jakarta.persistence.CascadeType.PERSIST;
 import org.palpalmans.ollive_back.common.BaseTimeEntity;
 
+import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -37,5 +36,14 @@ public class BoardTag extends BaseTimeEntity {
     public BoardTag(Board board, Tag tag) {
         this.board = board;
         this.tag = tag;
+    }
+
+    @Override
+    public String toString() {
+        return "BoardTag{" +
+                "id=" + id +
+                ", boardId=" + board.getId() +
+                ", tag=" + tag +
+                '}';
     }
 }
