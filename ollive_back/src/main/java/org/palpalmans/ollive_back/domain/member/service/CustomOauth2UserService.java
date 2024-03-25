@@ -66,13 +66,14 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
             // Builder 패턴 사용하여 객체 생성
             //todo : 프로필 사진 넣기
-            SocialMember joinMember = SocialMember.builder()
+            Member member = Member.builder()
                     .email(email)
                     .name(name)
                     .role(MemberRole.ROLE_NON_REGISTERED_MEMBER) // role 설정
                     .profilepicture("picture")
-                    .socialType(SocialType.GOOGLE)
                     .build();
+
+            SocialMember joinMember = new SocialMember(member, SocialType.GOOGLE);
 
             memberRepository.save(joinMember);
 
