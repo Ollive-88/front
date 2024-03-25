@@ -1,5 +1,6 @@
 package org.palpalmans.ollive_back.domain.recipe.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,6 @@ import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Getter
@@ -34,6 +33,9 @@ public class Recipe {
 
     @Column(length = 255)
     private String difficulty;
+
+    @Column(nullable = false)
+    private Double score;
 
     @OneToMany
     @JoinColumn(name = "recipe_id")

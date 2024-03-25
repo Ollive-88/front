@@ -9,7 +9,8 @@ import java.util.List;
 public class RecipeMapper {
     public static RecipeDto toRecipeDto(Recipe recipe){
         return new RecipeDto(
-                recipe.getId(), recipe.getTitle(), recipe.getThumbnail_url(), recipe.getAmount(), recipe.getTime(), recipe.getDifficulty()
+                recipe.getId(), recipe.getTitle(), recipe.getThumbnail_url(), recipe.getAmount(),
+                recipe.getTime(), recipe.getDifficulty(), recipe.getScore()
         );
     }
 
