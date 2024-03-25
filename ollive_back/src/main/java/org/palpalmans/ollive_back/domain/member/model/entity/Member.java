@@ -41,5 +41,16 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = true)
     private String profilepicture;
 
+    @Builder
+    public Member(String email, String gender, String birthday, String name,
+                  String nickname, MemberRole role, String profilepicture){
+        this.email = email;
+        this.gender = gender;
+        this.birthday = birthday;
+        this.name = name;
+        this.nickname = nickname;
+        this.role = role;
+        this.profilepicture = profilepicture;
+    }
 
 }
