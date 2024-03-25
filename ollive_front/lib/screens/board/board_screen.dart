@@ -117,7 +117,7 @@ class _BoardScreenState extends State<BoardScreen> {
               surfaceTintColor: const Color(0xFFFFFFFC),
               shadowColor: Colors.black,
               elevation: 0,
-              backgroundColor: Colors.white,
+              backgroundColor: const Color(0xFFFFFFFC),
               foregroundColor: Colors.black,
               title: BoardAppBar(keyword: widget.keyword),
               shape: const Border(
