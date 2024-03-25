@@ -14,4 +14,11 @@ public class NormalMember extends Member{
     @Column(nullable = false)
     private String password;
 
+    public NormalMember(Member member, String password) {
+        super(member.getEmail(), member.getGender(), member.getBirthday(),
+                member.getName(), member.getNickname(), member.getRole(),
+                member.getProfilepicture());
+        this.password = password;
+    }
+
 }

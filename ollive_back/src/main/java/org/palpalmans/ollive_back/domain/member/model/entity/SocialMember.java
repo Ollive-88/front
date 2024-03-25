@@ -17,4 +17,10 @@ public class SocialMember extends Member{
     @Column(nullable = false)
     private SocialType socialType;
 
+    public SocialMember(Member member, SocialType socialType) {
+        super(member.getEmail(), member.getGender(), member.getBirthday(),
+                member.getName(), member.getNickname(), member.getRole(),
+                member.getProfilepicture());
+        this.socialType = socialType;
+    }
 }
