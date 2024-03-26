@@ -3,12 +3,14 @@ package org.palpalmans.ollive_back.domain.board.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.board.model.dto.request.WriteBoardRequest;
+import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardsResponse;
 import org.palpalmans.ollive_back.domain.board.service.BoardService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
 
 import static java.net.URI.create;
 
@@ -19,7 +21,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping
-    public ResponseEntity<?> writeBoard(
+    public ResponseEntity<Void> writeBoard(
             HttpServletRequest httpServletRequest,
             @Validated
             WriteBoardRequest writeBoardRequest
@@ -29,5 +31,19 @@ public class BoardController {
         return ResponseEntity.created(
                 create(httpServletRequest.getRequestURI()).resolve(String.valueOf(boardId))
         ).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<GetBoardsResponse> getBoards(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false, defaultValue = "0") Long lastIndex,
+            @RequestParam(required = false, defaultValue = "10") int size,
+            @RequestParam(required = false) List<String> tags
+    ) {
+        if (keyword != null && keyword.isBlank())
+            throw new IllegalArgumentException("keyword는 공백일 수 없습니다!");
+        if (tags == null)
+            tags = Collections.emptyList();
+        return ResponseEntity.ok(boardService.getBoards(keyword, lastIndex, size, tags));
     }
 }
