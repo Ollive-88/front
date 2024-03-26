@@ -32,7 +32,6 @@ public class CustomMemberDetails implements UserDetails {
         return authorityList;
     }
 
-    //todo : normal member 일때만 password 가져오기로 고치기
     @Override
     public String getPassword() {
         return normalMember.getPassword();
