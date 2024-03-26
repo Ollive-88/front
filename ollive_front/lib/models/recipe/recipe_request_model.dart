@@ -1,6 +1,6 @@
 class RecipeRequestModel {
   final List<String> likeTagNames;
-  final List<String> hateTagNames;
+  final List<String>? hateTagNames;
   final int lastIndex, size;
 
   RecipeRequestModel(

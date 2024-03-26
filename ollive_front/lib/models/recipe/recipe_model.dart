@@ -1,11 +1,8 @@
-import 'dart:ffi';
-
 class RecipeModel {
-  final Long recipeId;
-  final String tltle, thumbnail;
+  final String recipeId, title, thumbnail;
 
   RecipeModel.fromJson(Map<String, dynamic> json)
       : recipeId = json['recipeId'],
-        tltle = json['tltle'],
+        title = json['title'],
         thumbnail = json['thumbnail'];
 }

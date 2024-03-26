@@ -1,30 +1,358 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:ollive_front/models/recipe/recipe_model.dart';
+import 'package:ollive_front/screens/recipe/recipe_detail_screen.dart';
 import 'package:ollive_front/service/recipe/recipe_service.dart';
 
-class RecipeListScreen extends StatelessWidget {
+class RecipeListScreen extends StatefulWidget {
   const RecipeListScreen({
     super.key,
     required this.likeTagNames,
     required this.hateTagNames,
-    required this.lastIndex,
-    required this.size,
   });
 
   final List<String> likeTagNames;
-  final List<String> hateTagNames;
-  final int lastIndex, size;
-  // String recipeCase, recipeKa;
+  final List<String>? hateTagNames;
 
-  // Future<List<RecipeModel>> recipes;
-  // RecipeService.getRecipeList(
-  //   likeTagNames,
-  //   hateTagNames,
-  //   0,
-  //   10,
-  // );
+  @override
+  State<RecipeListScreen> createState() => _RecipeListScreenState();
+}
+
+class _RecipeListScreenState extends State<RecipeListScreen> {
+  // 카테고리 대분류 리스트
+  final List<String> caseList = [
+    "추천별",
+    "종류별",
+    "상황별",
+    "방법별",
+  ];
+
+  // 카테고리 소분류 리스트
+  late List<List<String>> categotyList = [
+    categotyList1,
+    categotyList2,
+    categotyList3,
+    categotyList4
+  ];
+
+  // 추천별 리스트
+  final List<String> categotyList1 = [];
+
+  // 종류별 리스트
+  final List<String> categotyList2 = [
+    "전체",
+    "밑반찬",
+    "메인반찬",
+    "국/탕",
+    "찌개",
+    "디저트",
+    "면/만두",
+    "밥/죽/떡",
+    "퓨전",
+    "김치/젓갈/장류",
+    "양념/소스/잼",
+    "양식",
+    "샐러드",
+    "스프",
+    "빵",
+    "과자",
+    "차/음료/술",
+    "기타",
+  ];
+
+  // 상황별 리스트
+  final List<String> categotyList3 = [
+    "전체",
+    "일상",
+    "초스피드",
+    "손님접대",
+    "술안주",
+    "다이어트",
+    "도시락",
+    "영양식",
+    "간식",
+    "야식",
+    "푸드스타일링",
+    "해장",
+    "명절",
+    "이유식",
+    "기타",
+  ];
+
+  // 방법별 리스트
+  final List<String> categotyList4 = [
+    "전체",
+    "볶음",
+    '끓이기',
+    '부침',
+    "조림",
+    "무침",
+    "비빔",
+    "찜",
+    "절임",
+    "튀김",
+    "삶기",
+    "굽기",
+    "데치기",
+    '회',
+    "기타"
+  ];
+
+  // 대분류 선택한 항목
+  int seletedCase = 0;
+
+  // 소분류 선택 리스트
+  late List<int> seletedCategoty = [
+    seletedCategoty1,
+    seletedCategoty2,
+    seletedCategoty3,
+    seletedCategoty4,
+  ];
+  // 소분류 별 선택한 항목
+  int seletedCategoty1 = 0;
+  int seletedCategoty2 = 0;
+  int seletedCategoty3 = 0;
+  int seletedCategoty4 = 0;
+
+  // 유저가 선택한 대분류, 소분류
+  late String recipeCase, recipeCategory;
+
+  // 한번에 받을 레시피 개수
+  final int size = 10;
+  // 마지막 레시피 인덱스
+  int lastIndex = 0;
+
+  late Future<List<RecipeModel>> recipes;
+
+  // 대분류 선택 메서드
+  void onClickCase(int i) {
+    seletedCase = i;
+    recipeCase = caseList[i];
+
+    for (var i = 0; i < seletedCategoty.length; i++) {
+      seletedCategoty[i] = 0;
+    }
+
+    // 레시피 리스트 초기화
+    recipes = RecipeService.getRecipeList(
+      widget.likeTagNames,
+      widget.hateTagNames,
+      seletedCase == 0 ? "" : recipeCase,
+      "",
+      lastIndex,
+      size,
+    );
+
+    setState(() {});
+  }
+
+  // 소분류 선택 메서드
+  void onClickcategoty(int i) {
+    recipeCategory = categotyList[seletedCase][i];
+
+    for (var i = 0; i < seletedCategoty.length; i++) {
+      seletedCategoty[i] = 0;
+    }
+
+    seletedCategoty[seletedCase] = i;
+
+    // 레시피 리스트 초기화
+    recipes = RecipeService.getRecipeList(
+      widget.likeTagNames,
+      widget.hateTagNames,
+      recipeCase,
+      recipeCategory,
+      lastIndex,
+      size,
+    );
+
+    setState(() {});
+  }
+
+  // Todo : 나중에 지우기
+  RecipeModel recipeModel = RecipeModel.fromJson({
+    "recipeId": "1",
+    "title": "두부소보로덮밥 고소해서 자꾸 먹고 싶어지는 맛",
+    "thumbnail":
+        "https://recipe1.ezmember.co.kr/cache/recipe/2015/06/18/4536f2df3fb648d86c2aafc05cd077a11.jpg",
+  });
+  // Todo : 나중에 지우기
+  late List<RecipeModel> recipeModel2 = [
+    recipeModel,
+    recipeModel,
+    recipeModel,
+    recipeModel,
+    recipeModel,
+    recipeModel,
+    recipeModel,
+    recipeModel,
+    recipeModel,
+    recipeModel,
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    recipes = RecipeService.getRecipeList(
+      widget.likeTagNames,
+      widget.hateTagNames,
+      "",
+      "",
+      lastIndex,
+      size,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      backgroundColor: const Color(0xFFFFFFFC),
+      appBar: AppBar(
+        toolbarHeight: MediaQuery.of(context).size.height / 10,
+        centerTitle: true,
+        surfaceTintColor: const Color(0xFFFFFFFC),
+        shadowColor: Colors.black,
+        elevation: 0,
+        backgroundColor: const Color(0xFFFFFFFC),
+        foregroundColor: Colors.black,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // 대분류
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  for (var i = 0; i < caseList.length; i++)
+                    GestureDetector(
+                      onTap: () {
+                        onClickCase(i);
+                      },
+                      child: Text(
+                        caseList[i],
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: seletedCase == i
+                                ? FontWeight.bold
+                                : FontWeight.normal),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+
+            // 소분류
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 5,
+                ),
+                decoration: const BoxDecoration(color: Color(0xFFEBEBE9)),
+                child: Row(
+                  children: [
+                    for (var i = 0; i < categotyList[seletedCase].length; i++)
+                      GestureDetector(
+                        onTap: () {
+                          onClickcategoty(i);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            categotyList[seletedCase][i],
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: seletedCategoty[seletedCase] == i
+                                    ? FontWeight.bold
+                                    : FontWeight.normal),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+
+            // 레시피 리스트
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 10,
+              ),
+              child: Wrap(
+                spacing: 20.0,
+                runSpacing: 5.0,
+                children: [
+                  for (int i = 0; i < recipeModel2.length; i++)
+                    Container(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width / 2.3),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 5,
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade300,
+                                  offset: const Offset(4, 3), // 그림자 위치
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RecipeDetailScreen(
+                                      recipeId: recipeModel2[i].recipeId,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: Image.network(
+                                  width:
+                                      MediaQuery.of(context).size.width / 2.3,
+                                  height:
+                                      MediaQuery.of(context).size.width / 2.3,
+                                  recipeModel2[i].thumbnail,
+                                  headers: const {
+                                    "User-Agent":
+                                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+                                  },
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            recipeModel2[i].title,
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                            maxLines: 2, // 최대 줄 수를 2로 설정
+                            overflow:
+                                TextOverflow.ellipsis, // 내용이 넘칠 때 '...'으로 표시
+                          ),
+                        ],
+                      ),
+                    )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -8,6 +8,7 @@ import 'package:ollive_front/service/board/board_service.dart';
 import 'package:ollive_front/widgets/board/board_image_widget.dart';
 import 'package:ollive_front/widgets/board/board_tag_widget.dart';
 
+// ignore: must_be_immutable
 class BoardWriteScreen extends StatefulWidget {
   BoardWriteScreen({super.key, this.boadrDetail});
   BoardDetailModel? boadrDetail;
@@ -161,6 +162,7 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                     : await BoardService.fatchBoard(postModel);
                 // ignore: unrelated_type_equality_checks
                 Navigator.push(
+                  // ignore: use_build_context_synchronously
                   context,
                   MaterialPageRoute(
                     builder: (context) => BoardDetailScreen(

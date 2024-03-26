@@ -11,6 +11,7 @@ class RecipeTag extends StatelessWidget {
 
   String tagName;
   bool isSelected;
+  // ignore: prefer_typing_uninitialized_variables
   final select;
 
   @override

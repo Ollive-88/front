@@ -79,6 +79,7 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: const Color(0xFFEBEBE9)),
+                // ignore: deprecated_member_use
                 child: RawKeyboardListener(
                   focusNode: _focusNode,
                   onKey: (event) {

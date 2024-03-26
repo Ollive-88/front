@@ -154,6 +154,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                     Future<int> response =
                                         BoardService.deleteBoard(
                                             boardDetail1.boardId);
+                                    // ignore: unrelated_type_equality_checks
                                     if (response == 200) {
                                       Navigator.pop(context);
                                     } else {

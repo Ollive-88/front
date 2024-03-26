@@ -423,14 +423,12 @@ class _RecipeScreenState extends State<RecipeScreen> {
                   // 검색 버튼
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => RecipeListScreen(
                             likeTagNames: likeTagNames,
                             hateTagNames: hateTagNames,
-                            lastIndex: 0,
-                            size: 10,
                           ),
                         ),
                       );

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:ollive_front/models/board/board_detail_model.dart';
-import 'package:ollive_front/models/board/board_post_model.dart';
+import 'package:ollive_front/models/recipe/recipe_detail_model.dart';
 import 'package:ollive_front/models/recipe/recipe_model.dart';
 import 'package:ollive_front/models/recipe/recipe_request_model.dart';
 import 'package:ollive_front/util/dio/dio_service.dart';
@@ -10,8 +9,13 @@ class RecipeService {
   static final Dio _dio = DioService().authDio;
 
   // 레시피 조회
-  static Future<List<RecipeModel>> getRecipeList(List<String> likeTagNames,
-      List<String> hateTagNames, int lastIndex, int size) async {
+  static Future<List<RecipeModel>> getRecipeList(
+      List<String> likeTagNames,
+      List<String>? hateTagNames,
+      String recipeCase,
+      String recipeCategory,
+      int lastIndex,
+      int size) async {
     final List<RecipeModel> boards = [];
 
     RecipeRequestModel request = RecipeRequestModel(
@@ -38,7 +42,7 @@ class RecipeService {
   }
 
   // 게시글 상세 조회
-  static Future<BoardDetailModel> getBoardDetail(int recipeId) async {
+  static Future<RecipeDetailModel> getRecipeDetail(String recipeId) async {
     final response = await _dio.post(
       "/recipes/$recipeId",
     );
@@ -46,7 +50,7 @@ class RecipeService {
     if (response.statusCode == 200) {
       dynamic data = jsonDecode(response.data);
 
-      final instance = BoardDetailModel.fromJson(data);
+      final instance = RecipeDetailModel.fromJson(data);
 
       return instance;
     }
