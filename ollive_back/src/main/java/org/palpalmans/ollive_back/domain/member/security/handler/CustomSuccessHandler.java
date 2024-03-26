@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.member.security.Handler;
+package org.palpalmans.ollive_back.domain.member.security.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
