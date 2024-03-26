@@ -4,6 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.palpalmans.ollive_back.domain.member.model.dto.GeneratedToken;
+import org.palpalmans.ollive_back.domain.member.model.dto.request.TokenCreateRequest;
 import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.member.security.service.JwtService;
 import org.springframework.lang.Nullable;
@@ -14,6 +16,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -63,8 +66,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         CustomMemberDetails customMemberDetails = (CustomMemberDetails) authentication.getPrincipal();
 
-        long memberId = customMemberDetails.getMemberId();
-        String memberLoginId = customMemberDetails.getUsername();
+        long id = customMemberDetails.getId();
+        String email = customMemberDetails.getUsername();
 
         //role 값 뽑아내기
         log.info("LoginFilter.successfulAuthentication() authentication = {}", authentication);
@@ -76,22 +79,32 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String role = auth.getAuthority();
         log.info("role = {}", role);
 
-        //토큰생성 access+refresh
-//        GeneratedToken token = jwtUtil.generateToken(memberId, memberLoginId, role);
-//
-//        String accessToken = token.getAccessToken();
-//        String refreshToken = token.getRefreshToken();
-//        log.info("accessToken = {}", accessToken);
-//        log.info("refreshToken = {}", refreshToken);
-//
-//        response.addHeader("Authorization", "Bearer " + accessToken);
-//        response.addHeader("Refresh", "Bearer " + refreshToken);
+//        토큰생성 access+refresh
+        TokenCreateRequest tokenCreateRequest = new TokenCreateRequest();
+        tokenCreateRequest.setId(id);
+        tokenCreateRequest.setEmail(email);
+        tokenCreateRequest.setRole(role);
+
+        GeneratedToken token = jwtService.generateToken(tokenCreateRequest);
+
+        String accessToken = token.getAccessToken();
+        String refreshToken = token.getRefreshToken();
+        log.info("accessToken = {}", accessToken);
+        log.info("refreshToken = {}", refreshToken);
+
+        response.addHeader("Authorization", "Bearer " + accessToken);
+        response.addHeader("Refresh", "Bearer " + refreshToken);
 
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
         response.setStatus(409);
+        try {
+            response.getWriter().write("로그인이 실패했습니다.");
+        } catch (IOException e) {
+            logger.error("Error writing to response", e);
+        }
     }
 
 }
