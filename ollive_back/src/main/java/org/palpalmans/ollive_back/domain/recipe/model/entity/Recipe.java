@@ -1,48 +1,57 @@
 package org.palpalmans.ollive_back.domain.recipe.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-@Entity
+@Document(collection = "recipes")
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 public class Recipe {
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(length = 255, nullable = false)
-    private String title;
-
-    @Column(length = 255, nullable = false)
-    private String thumbnail_url;
-
-    @Column(length = 255)
     private String amount;
-
-    @Column(length = 255)
-    private String time;
-
-    @Column(length = 255)
+    private List<Category> categories;
     private String difficulty;
 
-    @Column(nullable = false)
+    @Field("id")
+    private Long recipeId;
+
+    private List<Ingredient> ingredients;
+    private List<ProcessStep> process;
     private Double score;
+    private String thumbnailUrl;
+    private String time;
+    private String title;
 
-    @OneToMany
-    @JoinColumn(name = "recipe_id")
-    List<RecipeProcess> recipeProcesses = new ArrayList<>();
+    @Getter
+    @NoArgsConstructor(access = PROTECTED)
+    public static class Category {
+        private String name;
+        private int category_id;
+        private int recipe_case_id;
+        private String recipe_case_name;
+    }
 
-    @OneToMany(mappedBy = "recipe")
-    @JsonManagedReference
-    List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+    @Getter
+    @NoArgsConstructor(access = PROTECTED)
+    public static class Ingredient {
+        private String name;
+        private String amount;
+    }
 
+    @Getter
+    @NoArgsConstructor(access = PROTECTED)
+    public static class ProcessStep {
+        private String content;
+        private String imageUrl;
+        private int cookOrder;
+    }
 }

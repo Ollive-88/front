@@ -1,7 +1,10 @@
 package org.palpalmans.ollive_back.domain.recipe.repository;
 
 import org.palpalmans.ollive_back.domain.recipe.model.entity.Recipe;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface RecipeRepository extends JpaRepository<Recipe, Long> {
+import java.util.Optional;
+
+public interface RecipeRepository extends MongoRepository<Recipe, Long> {
+    Optional<Recipe> findByRecipeId(Long recipeId);
 }
