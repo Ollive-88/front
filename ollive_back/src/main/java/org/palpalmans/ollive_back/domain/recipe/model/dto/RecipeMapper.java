@@ -9,4 +9,10 @@ public class RecipeMapper {
                 recipe.getTime(), recipe.getDifficulty(), recipe.getScore(), recipe.getCategories(), recipe.getIngredients(), recipe.getProcess()
         );
     }
+
+    public static RecipeSummaryDto toRecipeSummaryDto(Recipe recipe){
+        return new RecipeSummaryDto(
+                recipe.getRecipeId(), recipe.getTitle(), recipe.getThumbnailUrl()
+        );
+    }
 }
