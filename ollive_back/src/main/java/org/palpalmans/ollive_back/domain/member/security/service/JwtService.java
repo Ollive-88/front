@@ -2,6 +2,7 @@ package org.palpalmans.ollive_back.domain.member.security.service;
 
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
+import org.palpalmans.ollive_back.domain.member.model.dto.GeneratedToken;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.TokenCreateRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,17 @@ public class JwtService {
 
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
+
+    public GeneratedToken generateToken(TokenCreateRequest tokenCreateRequest){
+        String accessToken = generateAccessToken(tokenCreateRequest);
+        String refreshToken = generateRefreshToken(tokenCreateRequest);
+
+        return GeneratedToken.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
 
     //AccessToken 생성
     public String generateAccessToken(TokenCreateRequest tokenCreateRequest) {
@@ -57,6 +69,11 @@ public class JwtService {
 
     public long getMemberId(String token){
        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("id", Integer.class);
+    }
+
+    public Boolean isExpired(String token) {
+
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
 }
