@@ -3,6 +3,7 @@ package org.palpalmans.ollive_back.domain.member.security.details;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
+import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,10 +15,10 @@ import java.util.List;
 @ToString
 public class CustomMemberDetails implements UserDetails {
 
-    private final Member member;
+    private final NormalMember normalMember;
 
-    public CustomMemberDetails(Member member){
-        this.member = member;
+    public CustomMemberDetails(NormalMember normalMember){
+        this.normalMember = normalMember;
     }
 
     //유저 권한 가져오기
@@ -26,23 +27,23 @@ public class CustomMemberDetails implements UserDetails {
 
         List<GrantedAuthority> authorityList = new ArrayList<>();
 
-        log.debug("login user role = {}", member.getRole());
-        authorityList.add(new SimpleGrantedAuthority(member.getRole().name()));
+        log.debug("login user role = {}", normalMember.getRole());
+        authorityList.add(new SimpleGrantedAuthority(normalMember.getRole().name()));
         return authorityList;
     }
 
     //todo : normal member 일때만 password 가져오기로 고치기
     @Override
     public String getPassword() {
-        return member.getName();
+        return normalMember.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return member.getName();
+        return normalMember.getName();
     }
 
-    public long getMemberId(){ return  member.getId(); }
+    public long getMemberId(){ return  normalMember.getId(); }
 
     @Override
     public boolean isAccountNonExpired() {
