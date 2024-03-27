@@ -3,7 +3,6 @@ package org.palpalmans.ollive_back.domain.member.model.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.*;
-import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
 
 @Entity
 @Getter
@@ -17,7 +16,7 @@ public class NormalMember extends Member{
     public NormalMember(Member member, String password) {
         super(member.getEmail(), member.getGender(), member.getBirthday(),
                 member.getName(), member.getNickname(), member.getRole(),
-                member.getProfilepicture());
+                member.getProfilePicture());
         this.password = password;
     }
 

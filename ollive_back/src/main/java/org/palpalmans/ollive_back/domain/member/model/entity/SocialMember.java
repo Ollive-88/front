@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
-import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
 import org.palpalmans.ollive_back.domain.member.model.status.SocialType;
 
 @Entity
@@ -20,7 +19,7 @@ public class SocialMember extends Member{
     public SocialMember(Member member, SocialType socialType) {
         super(member.getEmail(), member.getGender(), member.getBirthday(),
                 member.getName(), member.getNickname(), member.getRole(),
-                member.getProfilepicture());
+                member.getProfilePicture());
         this.socialType = socialType;
     }
 }
