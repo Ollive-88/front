@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.board.model.dto.request.WriteBoardRequest;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardsResponse;
 import org.palpalmans.ollive_back.domain.board.service.BoardService;
+import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +40,11 @@ public class BoardController {
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false, defaultValue = "0") Long lastIndex,
             @RequestParam(required = false, defaultValue = "10") int size,
-            @RequestParam(required = false) List<String> tags
+            @RequestParam(required = false) List<String> tags,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
     ) {
+        System.out.println("customMemberDetails = " + customMemberDetails);
+
         if (keyword != null && keyword.isBlank())
             throw new IllegalArgumentException("keyword는 공백일 수 없습니다!");
         if (tags == null)
