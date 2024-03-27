@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/screens/user/fridge_inventory_screen.dart';
+import 'package:ollive_front/screens/user/hate_inventory_screen.dart';
 
 class MyPageScreen extends StatelessWidget {
   MyPageScreen({super.key});
@@ -13,6 +14,16 @@ class MyPageScreen extends StatelessWidget {
     ['clothesIcon.png', '최근 본 의류'],
     ['myBoardIcon.png', '내 게시글'],
     ['settingIcon.png', '설정'],
+  ];
+
+  final List<Widget> pages = [
+    const FridgeInventoryScreen(),
+    const FridgeInventoryScreen(),
+    const HateInventoryScreen(),
+    const FridgeInventoryScreen(),
+    const FridgeInventoryScreen(),
+    const FridgeInventoryScreen(),
+    const FridgeInventoryScreen(),
   ];
 
   @override
@@ -68,8 +79,7 @@ class MyPageScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      const FridgeInventoryScreen()));
+                                  builder: (context) => pages[i]));
                         },
                       ),
                       // 마지막에는 생성 X
