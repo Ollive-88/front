@@ -33,3 +33,13 @@ spring:
             scope:
               - profile
               - email
+
+  data:
+    mongodb:
+      database: ${MONGO_DATABASE}
+      authentication-database: ${MONGO_AUTHENTICATION_DATABASE}
+      username: ${MONGO_USERNAME}
+      password: ${MONGO_PASSWORD}
+      host: ${MONGO_HOST}
+      port: ${MONGO_PORT}
+      field-naming-strategy: org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy
