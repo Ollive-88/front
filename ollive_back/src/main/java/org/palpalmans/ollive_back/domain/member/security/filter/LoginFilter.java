@@ -82,6 +82,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         TokenCreateRequest tokenCreateRequest = new TokenCreateRequest();
         tokenCreateRequest.setId(id);
         tokenCreateRequest.setRole(role);
+        log.info("LoginFilter.TokenCreateRequest.Id = {}", id);
+
 
         GeneratedToken token = jwtService.generateToken(tokenCreateRequest);
 

@@ -40,7 +40,7 @@ public class MemberController {
 
         //access token이 존재하지 않는 경우는 jwt filter에서 처리됨
         String atc = accessToken.split(" ")[1]; //"Bearer" Header 제거
-        long id = jwtService.getMemberId(atc);
+        long id = jwtService.getId(atc);
 
         MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(id); //존재하지 않는 경우는 respository에서 예외처리
 

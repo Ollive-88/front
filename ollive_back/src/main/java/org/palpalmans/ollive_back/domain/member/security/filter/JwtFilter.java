@@ -66,13 +66,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
         }
 
-        String email = jwtService.getEmail(token);
+        long memberId = jwtService.getId(token);
         String memberRole = jwtService.getRole(token);
 
         MemberRole role = MemberRole.valueOf(memberRole);
 
         Member member = Member.builder()
-                .email(email)
+                .id(memberId)
                 .role(role)
                 .build();
 
