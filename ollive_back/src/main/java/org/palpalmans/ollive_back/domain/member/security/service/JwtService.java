@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.palpalmans.ollive_back.domain.member.model.dto.GeneratedToken;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.TokenCreateRequest;
+import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +70,14 @@ public class JwtService {
 
     public long getMemberId(String token){
        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("id", Integer.class);
+    }
+
+    public String getEmail(String token){
+        return  Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
+    }
+
+    public MemberRole getRole(String token){
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", MemberRole.class);
     }
 
     public Boolean isExpired(String token) {
