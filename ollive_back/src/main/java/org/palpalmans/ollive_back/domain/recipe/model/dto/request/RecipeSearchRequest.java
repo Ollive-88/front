@@ -15,6 +15,7 @@ public record RecipeSearchRequest(
         int size,
         @NotEmpty
         List<String> havingIngredients,
+        @NotNull
         List<String> dislikeIngredients
 ) {
 }
