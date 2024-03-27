@@ -48,15 +48,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 tokenCreateRequest.setRole(role);
 
                 GeneratedToken generatedToken = jwtService.generateToken(tokenCreateRequest);
-                String atc = generatedToken.getAccessToken();
-                String rtc = generatedToken.getRefreshToken();
+                String accessToken = generatedToken.getAccessToken();
+                String refreshToken = generatedToken.getRefreshToken();
 
 
-
-
-                response.addHeader("Authorization", "Bearer " + atc);
-                response.addHeader("Refresh", "Bearer " + rtc);
-                response.addCookie(createCookie("Refresh", rtc));
+                response.addHeader("Authorization", "Bearer " + accessToken);
+                response.addCookie(createCookie("Refresh", refreshToken));
 
             }
         }

@@ -1,6 +1,7 @@
 package org.palpalmans.ollive_back.domain.member.security.filter;
 
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -55,8 +56,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
         log.info("authToken = {}",authToken);
-        //token에 담은 검증을 위한 AuthenticationManager로 전달
-        //authenticationManager가 검증 해줍니다.
+
         return authenticationManager.authenticate(authToken);
 
     }
@@ -93,7 +93,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         log.info("refreshToken = {}", refreshToken);
 
         response.addHeader("Authorization", "Bearer " + accessToken);
-        response.addHeader("Refresh", "Bearer " + refreshToken);
+        response.addCookie(createCookie("Refresh", refreshToken));
 
     }
 
@@ -105,6 +105,17 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         } catch (IOException e) {
             logger.error("Error writing to response", e);
         }
+    }
+
+    private Cookie createCookie(String key, String value) {
+
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(60*60*60);
+        //cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+
+        return cookie;
     }
 
 }
