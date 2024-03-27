@@ -9,17 +9,22 @@ import 'package:ollive_front/widgets/recipe/recipe_score_widget.dart';
 import 'package:ollive_front/widgets/recipe/recipe_thumbnail_widget.dart';
 
 // ignore: must_be_immutable
-class RecipeDetailScreen extends StatelessWidget {
+class RecipeDetailScreen extends StatefulWidget {
   RecipeDetailScreen({super.key, required this.recipeId});
 
   String recipeId;
 
+  @override
+  State<RecipeDetailScreen> createState() => _RecipeDetailScreenState();
+}
+
+class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   late Future<RecipeDetailModel> recipeDetail =
-      RecipeService.getRecipeDetail(recipeId);
+      RecipeService.getRecipeDetail(widget.recipeId);
 
   // Todo : 나중에 지우기
   RecipeDetailModel recipeDetail1 = RecipeDetailModel.fromJson({
-    "id": "1",
+    "id": 1,
     "title": "새송이버섯소고기볶음 끼니마다 가족들이 이것만 찾아요~ ‼️",
     "thumbnail_url":
         "https://recipe1.ezmember.co.kr/cache/recipe/2023/10/04/5461e570361e2a662f7ea5abb73e96c01.jpg",
@@ -27,6 +32,7 @@ class RecipeDetailScreen extends StatelessWidget {
     "time": "15분 이내",
     "difficulty": "초급",
     "score": 0.0,
+    "isFavorite": true,
     "categories": [
       {
         "name": "밑반찬",
@@ -120,6 +126,30 @@ class RecipeDetailScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: const Color(0xFFFFFFFC),
         foregroundColor: Colors.black,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              icon: recipeDetail1.isFavorite
+                  ? const Icon(
+                      Icons.bookmark,
+                      color: Colors.amber,
+                      size: 40,
+                    )
+                  : const Icon(
+                      Icons.bookmark_border,
+                      size: 40,
+                    ),
+              onPressed: () {
+                recipeDetail1.isFavorite = !recipeDetail1.isFavorite;
+
+                setState(() {});
+
+                RecipeService.postFavorit(recipeDetail1.recipeId);
+              },
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -244,6 +274,7 @@ class RecipeDetailScreen extends StatelessWidget {
 
                   // 별점
                   RecipeScore(
+                    recipeId: recipeDetail1.recipeId,
                     score: recipeDetail1.score,
                   ),
                 ],

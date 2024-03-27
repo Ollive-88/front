@@ -1,10 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ollive_front/service/recipe/recipe_service.dart';
 
 // ignore: must_be_immutable
 class RecipeScore extends StatelessWidget {
-  RecipeScore({super.key, required this.score});
+  RecipeScore({super.key, required this.recipeId, required this.score});
 
+  int recipeId;
   double score;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -17,8 +21,13 @@ class RecipeScore extends StatelessWidget {
               for (int i = 0; i < score.toInt(); i++)
                 Row(
                   children: [
-                    Image.asset(
-                      "assets/image/icons/star_fullIcon.png",
+                    IconButton(
+                      icon: Image.asset(
+                        "assets/image/icons/star_fullIcon.png",
+                      ),
+                      onPressed: () {
+                        RecipeService.postStar(recipeId, i);
+                      },
                     ),
                     const SizedBox(
                       width: 10,
@@ -28,8 +37,13 @@ class RecipeScore extends StatelessWidget {
               for (int i = 0; i < 5 - score.toInt(); i++)
                 Row(
                   children: [
-                    Image.asset(
-                      "assets/image/icons/star_emptyIcon.png",
+                    IconButton(
+                      icon: Image.asset(
+                        "assets/image/icons/star_emptyIcon.png",
+                      ),
+                      onPressed: () {
+                        RecipeService.postStar(recipeId, i);
+                      },
                     ),
                     const SizedBox(
                       width: 10,

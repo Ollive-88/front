@@ -2,46 +2,72 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:ollive_front/models/recipe/recipe_detail_model.dart';
 import 'package:ollive_front/models/recipe/recipe_model.dart';
-import 'package:ollive_front/models/recipe/recipe_request_model.dart';
 import 'package:ollive_front/util/dio/dio_service.dart';
+import 'package:ollive_front/util/error/error_service.dart';
 
 class RecipeService {
   static final Dio _dio = DioService().authDio;
 
+  // 레시피 추천 조회
+  static Future<List<RecipeModel>> getRecommendRecipeList(
+    List<String> havingIngredients,
+    List<String>? dislikeIngredients,
+  ) async {
+    final List<RecipeModel> recommendrecipes = [];
+
+    final response = await _dio.post(
+      "/recipes/recommends",
+      data: {
+        "havingIngredients": havingIngredients,
+        "dislikeIngredients": dislikeIngredients,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.data);
+
+      for (var recipe in data) {
+        recommendrecipes.add(RecipeModel.fromJson(recipe));
+      }
+    }
+
+    return recommendrecipes;
+  }
+
   // 레시피 조회
   static Future<List<RecipeModel>> getRecipeList(
-      List<String> likeTagNames,
-      List<String>? hateTagNames,
+      List<String> havingIngredients,
+      List<String>? dislikeIngredients,
       String recipeCase,
       String recipeCategory,
       int lastIndex,
       int size) async {
-    final List<RecipeModel> boards = [];
-
-    RecipeRequestModel request = RecipeRequestModel(
-      likeTagNames: likeTagNames,
-      hateTagNames: hateTagNames,
-      lastIndex: lastIndex,
-      size: size,
-    );
+    final List<RecipeModel> recipes = [];
 
     final response = await _dio.post(
       "/recipes",
       data: {
-        "request": request,
+        "havingIngredients": havingIngredients,
+        "dislikeIngredients": dislikeIngredients,
+        "lastIndex": lastIndex,
+        "size": size,
+        "recipeCase": recipeCase,
+        "recipeCategory": recipeCategory,
       },
     );
 
-    List<dynamic> data = jsonDecode(response.data);
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.data);
 
-    for (var recipe in data) {
-      boards.add(RecipeModel.fromJson(recipe));
+      for (var recipe in data) {
+        recipes.add(RecipeModel.fromJson(recipe));
+      }
     }
 
-    return boards;
+    return recipes;
   }
 
-  // 게시글 상세 조회
+  // 레시피 상세 조회
   static Future<RecipeDetailModel> getRecipeDetail(String recipeId) async {
     final response = await _dio.post(
       "/recipes/$recipeId",
@@ -55,20 +81,22 @@ class RecipeService {
       return instance;
     }
 
+    ErrorService.showToast(response.data.masege);
+
     throw Error();
   }
 
-  // 게시글 삭제
-  static Future<int> deleteBoard(int boardId) async {
-    final response =
-        await _dio.post("boards", queryParameters: {"boardId": boardId});
-    return response.statusCode!;
+  // 즐겨찾기 생성/삭제
+  static void postFavorit(int recipeId) async {
+    await _dio.post("recipes/favorit", data: {"recipeId": recipeId});
   }
 
-  // 좋아요 생성/삭제
-  static void postLike(int boardId, bool isLiked) async {
-    await _dio.post("boards",
-        queryParameters: {"boardId": boardId, "isLiked": isLiked});
+  // 별점 부여 생성/삭제
+  static void postStar(int recipeId, int score) async {
+    await _dio.post("recipes/star", data: {
+      "recipeId": recipeId,
+      "score": score,
+    });
   }
 
   // 시간 계산

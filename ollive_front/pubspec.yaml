@@ -50,6 +50,9 @@ dependencies:
   # 이미지 캐싱 라이브러리
   flutter_cache_manager: ^3.3.1
 
+  # 에러 공통 토스트
+  fluttertoast: ^8.2.4
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

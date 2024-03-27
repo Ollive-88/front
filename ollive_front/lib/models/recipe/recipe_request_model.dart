@@ -1,11 +1,11 @@
 class RecipeRequestModel {
-  final List<String> likeTagNames;
-  final List<String>? hateTagNames;
+  final List<String> havingIngredients;
+  final List<String>? dislikeIngredients;
   final int lastIndex, size;
 
   RecipeRequestModel(
-      {required this.likeTagNames,
-      required this.hateTagNames,
+      {required this.havingIngredients,
+      required this.dislikeIngredients,
       required this.lastIndex,
       required this.size});
 }

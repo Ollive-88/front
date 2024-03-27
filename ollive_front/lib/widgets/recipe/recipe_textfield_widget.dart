@@ -6,9 +6,9 @@ import '../board/board_tag_widget.dart';
 
 // ignore: must_be_immutable
 class RecipeTextField extends StatefulWidget {
-  RecipeTextField({super.key, required this.tagNames});
+  RecipeTextField({super.key, required this.ingredients});
 
-  List<String> tagNames;
+  List<String> ingredients;
 
   @override
   State<RecipeTextField> createState() => _RecipeTextFieldState();
@@ -27,7 +27,7 @@ class _RecipeTextFieldState extends State<RecipeTextField> {
 
     for (var match in matches) {
       text = text.replaceFirst(match.group(0)!, '');
-      widget.tagNames.add(match.group(0)!);
+      widget.ingredients.add(match.group(0)!);
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -82,13 +82,13 @@ class _RecipeTextFieldState extends State<RecipeTextField> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    for (var i = 0; i < widget.tagNames.length; i++)
+                    for (var i = 0; i < widget.ingredients.length; i++)
                       Row(
                         children: [
                           Tag(
-                            tagName: widget.tagNames[i],
+                            tagName: widget.ingredients[i],
                             isSearch: true,
-                            deleteTag: () => deleteTags(i, widget.tagNames),
+                            deleteTag: () => deleteTags(i, widget.ingredients),
                           ),
                           const SizedBox(
                             width: 5,

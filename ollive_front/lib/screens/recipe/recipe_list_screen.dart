@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:ollive_front/models/recipe/recipe_model.dart';
 import 'package:ollive_front/screens/recipe/recipe_detail_screen.dart';
 import 'package:ollive_front/service/recipe/recipe_service.dart';
+import 'package:ollive_front/util/error/error_service.dart';
 
 class RecipeListScreen extends StatefulWidget {
   const RecipeListScreen({
     super.key,
     required this.likeTagNames,
     required this.hateTagNames,
+    required this.recommendrecipes,
   });
 
   final List<String> likeTagNames;
   final List<String>? hateTagNames;
+  final List<RecipeModel> recommendrecipes;
 
   @override
   State<RecipeListScreen> createState() => _RecipeListScreenState();
@@ -121,42 +124,48 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
   // 마지막 레시피 인덱스
   int lastIndex = 0;
 
-  late Future<List<RecipeModel>> recipes;
+  late List<RecipeModel> recipes;
 
   // 대분류 선택 메서드
-  void onClickCase(int i) {
-    seletedCase = i;
-    recipeCase = caseList[i];
+  void onClickCase(int i) async {
+    if (i == 0) {
+      seletedCase = i;
+      recipeCase = caseList[i];
 
-    for (var i = 0; i < seletedCategoty.length; i++) {
-      seletedCategoty[i] = 0;
+      for (var i = 0; i < seletedCategoty.length; i++) {
+        seletedCategoty[i] = 0;
+      }
+
+      recipes = widget.recommendrecipes;
+    } else {
+      seletedCase = i;
+      recipeCase = caseList[i];
+
+      for (var i = 0; i < seletedCategoty.length; i++) {
+        seletedCategoty[i] = 0;
+      }
+
+      // 레시피 리스트 초기화
+      List<RecipeModel> temp = await RecipeService.getRecipeList(
+        widget.likeTagNames,
+        widget.hateTagNames,
+        seletedCase == 0 ? "" : recipeCase,
+        "",
+        lastIndex,
+        size,
+      );
+      if (temp.isEmpty) {
+        ErrorService.showToast("잘못된 요청입니다.");
+      } else {
+        recipes = temp;
+        setState(() {});
+      }
     }
-
-    // 레시피 리스트 초기화
-    recipes = RecipeService.getRecipeList(
-      widget.likeTagNames,
-      widget.hateTagNames,
-      seletedCase == 0 ? "" : recipeCase,
-      "",
-      lastIndex,
-      size,
-    );
-
-    setState(() {});
   }
 
   // 소분류 선택 메서드
-  void onClickcategoty(int i) {
-    recipeCategory = categotyList[seletedCase][i];
-
-    for (var i = 0; i < seletedCategoty.length; i++) {
-      seletedCategoty[i] = 0;
-    }
-
-    seletedCategoty[seletedCase] = i;
-
-    // 레시피 리스트 초기화
-    recipes = RecipeService.getRecipeList(
+  void onClickcategoty(int i) async {
+    List<RecipeModel> temp = await RecipeService.getRecipeList(
       widget.likeTagNames,
       widget.hateTagNames,
       recipeCase,
@@ -164,8 +173,21 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
       lastIndex,
       size,
     );
+    if (temp.isEmpty) {
+      ErrorService.showToast("잘못된 요청입니다.");
+    } else {
+      recipeCategory = categotyList[seletedCase][i];
 
-    setState(() {});
+      for (var i = 0; i < seletedCategoty.length; i++) {
+        seletedCategoty[i] = 0;
+      }
+
+      seletedCategoty[seletedCase] = i;
+
+      // 레시피 리스트 초기화
+      recipes = temp;
+      setState(() {});
+    }
   }
 
   // Todo : 나중에 지우기
@@ -192,14 +214,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
   @override
   void initState() {
     super.initState();
-    recipes = RecipeService.getRecipeList(
-      widget.likeTagNames,
-      widget.hateTagNames,
-      "",
-      "",
-      lastIndex,
-      size,
-    );
+    recipes = widget.recommendrecipes;
   }
 
   @override
