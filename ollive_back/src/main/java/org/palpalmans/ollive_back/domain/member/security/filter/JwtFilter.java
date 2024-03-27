@@ -76,7 +76,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 .role(role)
                 .build();
 
-        log.info("member.email = {}", member.getEmail());
         log.info("member.role ={}", member.getRole().name());
 
         NormalMember nm = new NormalMember(member, "hack");
@@ -85,7 +84,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         Authentication auth = new UsernamePasswordAuthenticationToken(customMemberDetails, null, customMemberDetails.getAuthorities());
 
-        //todo : security contextHolder에 id 담기
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         filterChain.doFilter(request, response);

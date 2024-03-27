@@ -10,7 +10,6 @@ import lombok.ToString;
 public class TokenCreateRequest {
 
     private Long id;
-    private String email;
     private String role;
 
 }

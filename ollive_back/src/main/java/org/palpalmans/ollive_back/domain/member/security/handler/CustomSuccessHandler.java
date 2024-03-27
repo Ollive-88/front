@@ -44,7 +44,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 TokenCreateRequest tokenCreateRequest = new TokenCreateRequest();
 
                 tokenCreateRequest.setId(isExist.get().getId());
-                tokenCreateRequest.setEmail(isExist.get().getEmail());
                 tokenCreateRequest.setRole(role);
 
                 GeneratedToken generatedToken = jwtService.generateToken(tokenCreateRequest);

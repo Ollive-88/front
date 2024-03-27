@@ -4,7 +4,6 @@ import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.palpalmans.ollive_back.domain.member.model.dto.GeneratedToken;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.TokenCreateRequest;
-import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -55,12 +54,10 @@ public class JwtService {
 
     private String makeToken(TokenCreateRequest tokenCreateRequest, long tokenPeriod) {
         long id = tokenCreateRequest.getId();
-        String email = tokenCreateRequest.getEmail();
         String role = tokenCreateRequest.getRole();
 
         return Jwts.builder()
                 .claim("id", id)
-                .claim("email", email) //멤버 이름
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + tokenPeriod))

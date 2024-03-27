@@ -62,7 +62,6 @@ public class JoinService {
 
             SocialMember joinMember = new SocialMember(member, SocialType.GOOGLE);
 
-            // todo : memberRepository에 알맞은 save 확인하기
             memberRepository.save(joinMember);
 
 
