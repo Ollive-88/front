@@ -75,7 +75,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                     .nickname(nickname)
                     .birthday(new Date())
                     .role(MemberRole.ROLE_NON_REGISTERED_MEMBER) // role 설정
-                    .profilepicture(picture)
+                    .profilePicture(picture)
                     .build();
 
             SocialMember joinMember = new SocialMember(member, SocialType.GOOGLE);
