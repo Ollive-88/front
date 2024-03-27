@@ -67,7 +67,9 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String email = jwtService.getEmail(token);
-        MemberRole role = jwtService.getRole(token);
+        String memberRole = jwtService.getRole(token);
+
+        MemberRole role = MemberRole.valueOf(memberRole);
 
         Member member = Member.builder()
                 .email(email)
@@ -75,13 +77,15 @@ public class JwtFilter extends OncePerRequestFilter {
                 .build();
 
         log.info("member.email = {}", member.getEmail());
-        log.info("member.role ={}", member.getRole());
+        log.info("member.role ={}", member.getRole().name());
 
+        NormalMember nm = new NormalMember(member, "hack");
 
-        CustomMemberDetails customMemberDetails = new CustomMemberDetails((NormalMember) member);
+        CustomMemberDetails customMemberDetails = new CustomMemberDetails(nm);
 
         Authentication auth = new UsernamePasswordAuthenticationToken(customMemberDetails, null, customMemberDetails.getAuthorities());
 
+        //todo : security contextHolder에 id 담기
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         filterChain.doFilter(request, response);
