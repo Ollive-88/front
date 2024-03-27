@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +35,7 @@ class LikeRepositoryTest {
                 .name("name")
                 .nickname("nickname")
                 .email("email")
-                .birthday("birthday")
+                .birthday(new Date())
                 .gender("gender")
                 .role(MemberRole.ROLE_REGISTERED_MEMBER)
                 .build();
