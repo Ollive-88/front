@@ -5,6 +5,8 @@ import lombok.*;
 import org.palpalmans.ollive_back.common.BaseTimeEntity;
 import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
 
+import java.util.Date;
+
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -26,7 +28,7 @@ public class Member extends BaseTimeEntity {
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private String birthday;
+    private Date birthday;
 
     @Column(nullable = false)
     private String name;
@@ -42,7 +44,7 @@ public class Member extends BaseTimeEntity {
     private String profilepicture;
 
     @Builder
-    public Member(String email, String gender, String birthday, String name,
+    public Member(String email, String gender, Date birthday, String name,
                   String nickname, MemberRole role, String profilepicture){
         this.email = email;
         this.gender = gender;

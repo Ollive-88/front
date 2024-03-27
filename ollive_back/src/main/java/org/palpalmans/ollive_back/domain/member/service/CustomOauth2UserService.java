@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -60,6 +61,8 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         Optional<Member> isExist = memberService.getMemberInfo(googleResponse.getEmail());
         if(isExist.isEmpty()){
             // 유저 정보가 없다면 ROLE_NON_REGISTERED_MEMBER 회원가입 진행
+            // todo : 유저가 숫자로 닉네임 설정 못하도록 막기 : nickname Unique
+            String nickname = googleResponse.getProviderId();
             String email = googleResponse.getEmail();
             String name = googleResponse.getName();
             String picture = googleResponse.getPicture();
@@ -68,9 +71,9 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
             Member member = Member.builder()
                     .email(email)
                     .name(name)
-                    .gender("None")
-                    .nickname("None")
-                    .birthday("1000-10-10")
+                    .gender("Male")
+                    .nickname(nickname)
+                    .birthday(new Date())
                     .role(MemberRole.ROLE_NON_REGISTERED_MEMBER) // role 설정
                     .profilepicture(picture)
                     .build();
