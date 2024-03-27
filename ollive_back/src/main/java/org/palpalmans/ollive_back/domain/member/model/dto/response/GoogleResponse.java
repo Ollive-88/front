@@ -37,4 +37,8 @@ public class GoogleResponse{
 
         return attribute.get("name").toString();
     }
+
+    public String getPicture() {
+        return attribute.get("picture").toString();
+    }
 }
