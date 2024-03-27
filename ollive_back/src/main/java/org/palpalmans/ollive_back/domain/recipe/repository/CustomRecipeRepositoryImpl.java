@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,18 +27,20 @@ public class CustomRecipeRepositoryImpl implements CustomRecipeRepository {
         List<String> dislikeIngredients = recipeSearchRequest.dislikeIngredients();
         int size = recipeSearchRequest.size();
 
-        // 기본 조건
-        Criteria criteria = Criteria.where("recipeId").gt(lastRecipeId)
-                .and("categories").elemMatch(Criteria.where("recipe_case_name").is(recipeCase).and("name").is(recipeCategory));
+        Criteria criteria = Criteria.where("recipeId").gt(lastRecipeId);
+        Criteria categoryCriteria = Criteria.where("recipe_case_name").is(recipeCase);
 
-        List<Criteria> andCriteriaList = new ArrayList<>();
-
-        // 필수 재료 포함
-        if (!havingIngredients.isEmpty()) {
-            andCriteriaList.addAll(havingIngredients.stream()
-                    .map(ingredient -> Criteria.where("ingredients.name").regex(Pattern.quote(ingredient), "i"))
-                    .collect(Collectors.toList()));
+        if (!recipeCategory.isEmpty()) {
+            categoryCriteria = categoryCriteria.and("name").is(recipeCategory);
         }
+
+        criteria = criteria.and("categories").elemMatch(categoryCriteria);
+
+
+        List<Criteria> andCriteriaList = new ArrayList<>(havingIngredients.stream()
+                .map(ingredient -> Criteria.where("ingredients.name").regex(Pattern.quote(ingredient), "i"))
+                .toList());
+
 
         // 제외 재료 필터링
         if (!dislikeIngredients.isEmpty()) {
