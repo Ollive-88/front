@@ -29,14 +29,30 @@ class SignIn {
 }
 
 class UserIngredients {
-  final String ingredientName;
-  var expirationDate;
+  String ingredientName;
+  String expirationDate;
 
   UserIngredients({
     required this.ingredientName,
     required this.expirationDate,
   });
 }
+
+class HateIngredients {
+  final String ingredientName;
+
+  HateIngredients({
+    required this.ingredientName,
+  });
+}
+
+final hateIngredientList = [
+  '감자',
+  '양배추',
+  '고추',
+  '대추',
+  '부추',
+];
 
 final userIngredientsList = [
   UserIngredients(
