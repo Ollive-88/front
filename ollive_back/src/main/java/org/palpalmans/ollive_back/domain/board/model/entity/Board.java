@@ -26,7 +26,7 @@ public class Board extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column
+    @Column(nullable = false)
     private Long memberId;
 
     @OneToMany(mappedBy = "board", cascade = PERSIST, orphanRemoval = true)
