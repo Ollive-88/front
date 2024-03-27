@@ -1,5 +1,6 @@
 package org.palpalmans.ollive_back.domain.recipe.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.RecipeDto;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.RecipeMapper;
@@ -17,7 +18,7 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
 
 	public RecipeDto getRecipe(Long recipeId) {
-		Recipe recipe = recipeRepository.findByRecipeId(recipeId).orElseThrow(() -> new RuntimeException("존재하지 않는 레시피 입니다."));
+		Recipe recipe = recipeRepository.findByRecipeId(recipeId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 레시피 입니다."));
 		return RecipeMapper.toRecipeDto(recipe);
 	}
 
