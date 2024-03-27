@@ -32,7 +32,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        log.info("oAuth2User = {}",oAuth2User);
+        log.info("oAuth2User = {}",oAuth2User.getAttributes());
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
@@ -60,12 +60,11 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         Optional<Member> isExist = memberService.getMemberInfo(googleResponse.getEmail());
         if(isExist.isEmpty()){
             // 유저 정보가 없다면 ROLE_NON_REGISTERED_MEMBER 회원가입 진행
-            //todo : 프로필 사진 가져오기
             String email = googleResponse.getEmail();
             String name = googleResponse.getName();
+            String picture = googleResponse.getPicture();
 
             // Builder 패턴 사용하여 객체 생성
-            //todo : 프로필 사진 넣기
             Member member = Member.builder()
                     .email(email)
                     .name(name)
@@ -73,7 +72,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                     .nickname("None")
                     .birthday("1000-10-10")
                     .role(MemberRole.ROLE_NON_REGISTERED_MEMBER) // role 설정
-                    .profilepicture("picture")
+                    .profilepicture(picture)
                     .build();
 
             SocialMember joinMember = new SocialMember(member, SocialType.GOOGLE);
