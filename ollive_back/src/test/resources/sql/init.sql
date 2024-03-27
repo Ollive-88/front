@@ -14,15 +14,15 @@ DROP TABLE IF EXISTS `image`;
 CREATE TABLE member
 (
     id              BIGINT AUTO_INCREMENT PRIMARY KEY,
-    birthday        VARCHAR(255)                                                                NOT NULL,
-    email           VARCHAR(255)                                                                NOT NULL,
-    gender          VARCHAR(255)                                                                NOT NULL,
-    name            VARCHAR(255)                                                                NOT NULL,
-    nickname        VARCHAR(255)                                                                         DEFAULT 'DEFAULTUSERNICKNAME' NOT NULL,
-    profile_picture VARCHAR(255)                                                                NULL,
+    birthday        DATETIME(6) NOT NULL,
+    email           VARCHAR(255) NOT NULL,
+    gender          VARCHAR(255) NOT NULL,
+    name            VARCHAR(255) NOT NULL,
+    nickname        VARCHAR(255)          DEFAULT 'DEFAULTUSERNICKNAME' NOT NULL,
+    profile_picture VARCHAR(255) NULL,
     role            ENUM ('ROLE_ADMIN', 'ROLE_REGISTERED_MEMBER', 'ROLE_NON_REGISTERED_MEMBER') NOT NULL,
-    created_at      DATETIME                                                                    NOT NULL DEFAULT NOW(),
-    updated_at      DATETIME                                                                    NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    created_at      DATETIME     NOT NULL DEFAULT NOW(),
+    updated_at      DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW(),
     CONSTRAINT UNIQUE (name)
 );
 
@@ -30,10 +30,10 @@ CREATE TABLE member
 -- social member
 CREATE TABLE social_member
 (
-    id          BIGINT                   NOT NULL PRIMARY KEY,
+    id          BIGINT   NOT NULL PRIMARY KEY,
     social_type ENUM ('GOOGLE', 'KAKAO') NOT NULL,
-    created_at  DATETIME                 NOT NULL DEFAULT NOW(),
-    updated_at  DATETIME                 NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    created_at  DATETIME NOT NULL DEFAULT NOW(),
+    updated_at  DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),
     CONSTRAINT FK_SOCIAL_MEMBER_MEMBER_ID FOREIGN KEY (id) REFERENCES member (id) ON DELETE CASCADE
 );
 
@@ -65,9 +65,9 @@ CREATE TABLE board
 CREATE TABLE comments
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    board_id   BIGINT   NULL,
-    member_id  BIGINT   NULL,
-    content    TEXT     NULL,
+    board_id   BIGINT NULL,
+    member_id  BIGINT NULL,
+    content    TEXT NULL,
     created_at DATETIME NOT NULL DEFAULT NOW(),
     updated_at DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),
     CONSTRAINT FK_COMMENTS_BOARD_ID FOREIGN KEY (board_id) REFERENCES board (id) ON DELETE CASCADE,
@@ -115,8 +115,8 @@ CREATE TABLE tag
 CREATE TABLE board_tag
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    tag_id     BIGINT   NULL,
-    board_id   BIGINT   NULL,
+    tag_id     BIGINT NULL,
+    board_id   BIGINT NULL,
     created_at DATETIME NOT NULL DEFAULT NOW(),
     updated_at DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),
     CONSTRAINT FK_BOARD_TAG_ID FOREIGN KEY (tag_id) REFERENCES tag (id),
@@ -127,9 +127,9 @@ CREATE TABLE board_tag
 CREATE TABLE image
 (
     id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-    reference_id BIGINT         NOT NULL,
-    address      VARCHAR(255)   NULL,
+    reference_id BIGINT   NOT NULL,
+    address      VARCHAR(255) NULL,
     image_type   ENUM ('BOARD') NULL,
-    created_at   DATETIME       NOT NULL DEFAULT NOW(),
-    updated_at   DATETIME       NOT NULL DEFAULT NOW() ON UPDATE NOW()
+    created_at   DATETIME NOT NULL DEFAULT NOW(),
+    updated_at   DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW()
 );
