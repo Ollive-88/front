@@ -1,10 +1,12 @@
 package org.palpalmans.ollive_back.domain.member.security.handler;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.palpalmans.ollive_back.domain.member.model.dto.GeneratedToken;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.TokenCreateRequest;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.CustomOauth2User;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
@@ -45,9 +47,16 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 tokenCreateRequest.setEmail(isExist.get().getEmail());
                 tokenCreateRequest.setRole(role);
 
-                String accessToken = jwtService.generateAccessToken(tokenCreateRequest);
+                GeneratedToken generatedToken = jwtService.generateToken(tokenCreateRequest);
+                String atc = generatedToken.getAccessToken();
+                String rtc = generatedToken.getRefreshToken();
 
-                response.addHeader("Authorization", "Bearer " + accessToken);
+
+
+
+                response.addHeader("Authorization", "Bearer " + atc);
+                response.addHeader("Refresh", "Bearer " + rtc);
+                response.addCookie(createCookie("Refresh", rtc));
 
             }
         }
@@ -56,6 +65,15 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         super.onAuthenticationSuccess(request, response, authentication);
     }
+    private Cookie createCookie(String key, String value) {
 
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(60*60*60);
+        //cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+
+        return cookie;
+    }
 
 }
