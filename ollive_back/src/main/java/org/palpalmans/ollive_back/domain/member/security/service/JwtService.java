@@ -38,7 +38,7 @@ public class JwtService {
 
     //AccessToken 생성
     public String generateAccessToken(TokenCreateRequest tokenCreateRequest) {
-        long tokenPeriod = 1000L * 60L * 10L; // 10분
+        long tokenPeriod = 1000L * 60L * 100L; // 100분
 //        long tokenPeriod = 1000L * 60L * 60L * 24L * 14; // 2주
 
         return makeToken(tokenCreateRequest, tokenPeriod);
@@ -76,8 +76,8 @@ public class JwtService {
         return  Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
     }
 
-    public MemberRole getRole(String token){
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", MemberRole.class);
+    public String getRole(String token){
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 
     public Boolean isExpired(String token) {
