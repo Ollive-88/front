@@ -6,7 +6,6 @@ import org.palpalmans.ollive_back.domain.member.model.dto.response.MemberInfoRes
 import org.palpalmans.ollive_back.domain.member.model.status.JoinRequestStatus;
 import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.member.service.JoinService;
-import org.palpalmans.ollive_back.domain.member.security.service.JwtService;
 import org.palpalmans.ollive_back.domain.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
