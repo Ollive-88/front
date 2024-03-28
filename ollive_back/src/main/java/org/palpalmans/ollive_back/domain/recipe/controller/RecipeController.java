@@ -2,11 +2,14 @@ package org.palpalmans.ollive_back.domain.recipe.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.RecipeDto;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.RecipeSummaryDto;
+import org.palpalmans.ollive_back.domain.recipe.model.dto.request.RecipeScoreRequest;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.request.RecipeSearchRequest;
 import org.palpalmans.ollive_back.domain.recipe.service.RecipeService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,4 +32,12 @@ public class RecipeController {
         return ResponseEntity.ok().body(recipeService.getRecipesByCategory(recipeSearchRequest));
     }
 
+    @PostMapping("/scores")
+    public ResponseEntity<Integer> generateOrUpdateScore(
+            @Valid @RequestBody RecipeScoreRequest recipeScoreRequest,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
+    ) {
+        Long memberId = customMemberDetails.getId();
+        return ResponseEntity.ok().body(recipeService.generateOrUpdateScore(memberId, recipeScoreRequest));
+    }
 }
