@@ -2,6 +2,8 @@ package org.palpalmans.ollive_back.domain.board.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,12 +11,18 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.palpalmans.ollive_back.domain.board.model.entity.Board;
 import org.palpalmans.ollive_back.domain.board.model.entity.BoardTag;
+import org.palpalmans.ollive_back.domain.board.model.entity.Comment;
 import org.palpalmans.ollive_back.domain.board.model.entity.Tag;
 import org.palpalmans.ollive_back.domain.board.repository.*;
+import org.palpalmans.ollive_back.domain.member.model.entity.Member;
+import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
+import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +31,12 @@ import org.springframework.util.MultiValueMap;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
+import static org.palpalmans.ollive_back.domain.member.model.status.MemberRole.ROLE_ADMIN;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -43,7 +55,13 @@ class BoardControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
+    MemberRepository memberRepository;
+
+    @Autowired
     BoardRepository boardRepository;
+
+    @Autowired
+    CommentRepository commentRepository;
 
     @Autowired
     BoardTagRepository boardTagRepository;
@@ -56,6 +74,30 @@ class BoardControllerTest {
 
     @Autowired
     ViewRepository viewRepository;
+
+    Member member;
+    NormalMember normalMember;
+
+    @BeforeEach
+    void setUp() {
+        member = Member.builder()
+                .email("test@naver.com")
+                .name("name")
+                .nickname("nickname")
+                .birthday(new Date())
+                .profilePicture("profilePicture")
+                .role(ROLE_ADMIN)
+                .gender("male")
+                .build();
+
+        normalMember = new NormalMember(member, "1234");
+        memberRepository.save(normalMember);
+    }
+
+    @AfterEach
+    void tearDown() {
+        memberRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("write board controller test")
@@ -102,7 +144,6 @@ class BoardControllerTest {
         boardTagRepository.save(new BoardTag(board2, tag3));
         boardTagRepository.save(new BoardTag(board3, tag1));
         boardTagRepository.save(new BoardTag(board3, tag3));
-
     }
 
     @Transactional
@@ -157,5 +198,52 @@ class BoardControllerTest {
                 .andDo(print());
 
         getBoardsTearDown(boardList, tagList);
+    }
+
+    @Transactional
+    void getBoardDetailSetup(Board board, List<Comment> comments) {
+        board = boardRepository.save(board);
+
+        Comment comment1 = new Comment("content1", board, normalMember.getId());
+        Comment comment2 = new Comment("content2", board, normalMember.getId());
+        Comment comment3 = new Comment("content3", board, normalMember.getId());
+        Comment comment4 = new Comment("content4", board, normalMember.getId());
+        comments.add(comment1);
+        comments.add(comment2);
+        comments.add(comment3);
+        comments.add(comment4);
+        commentRepository.saveAll(comments);
+    }
+
+    @Test
+    @DisplayName("board detail controller success test")
+    @Transactional(propagation = SUPPORTS)
+    @WithUserDetails(value = "test@naver.com",
+            userDetailsServiceBeanName = "customMemberDetailsService",
+            setupBefore = TestExecutionEvent.TEST_EXECUTION
+    )
+    void getBoardDetail() throws Exception {
+        // when
+        Board savedBoard = new Board("title", "content", 1L);
+        List<Comment> comments = new ArrayList<>();
+        getBoardDetailSetup(savedBoard, comments);
+        comments.sort(Comparator.comparing(Comment::getCreatedAt));
+
+        // given
+        mockMvc.perform(get("/api/v1/boards/" + savedBoard.getId())
+                        .contentType(APPLICATION_JSON)
+                )
+                // then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(savedBoard.getTitle()))
+                .andExpect(jsonPath("$.content").value(savedBoard.getContent()))
+                .andExpect(jsonPath("$.likeCount").value(0))
+                .andExpect(jsonPath("$.viewCount").value(0))
+                .andExpect(jsonPath("$.comments").isArray())
+                .andExpect(jsonPath("$.comments[0].commentId").value(comments.get(0).getId()))
+                .andExpect(jsonPath("$.comments[1].commentId").value(comments.get(1).getId()))
+                .andExpect(jsonPath("$.comments[2].commentId").value(comments.get(2).getId()))
+                .andExpect(jsonPath("$.comments[3].commentId").value(comments.get(3).getId()))
+                .andDo(print());
     }
 }
