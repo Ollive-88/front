@@ -3,7 +3,7 @@ package org.palpalmans.ollive_back.domain.board.model.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.palpalmans.ollive_back.domain.member.model.entity.Member;
+import org.palpalmans.ollive_back.common.BaseTimeEntity;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "comments")
 @NoArgsConstructor(access = PROTECTED)
-public class Comment {
+public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -25,9 +25,21 @@ public class Comment {
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @Column(nullable = false)
+    private Long memberId;
+
+    public Comment(Long id, String content, Board board, Long memberId) {
+        this.id = id;
+        this.content = content;
+        this.board = board;
+        this.memberId = memberId;
+    }
+
+    public Comment(String content, Board board, Long memberId) {
+        this.content = content;
+        this.board = board;
+        this.memberId = memberId;
+    }
 
     @Override
     public String toString() {
@@ -35,7 +47,7 @@ public class Comment {
                 "id=" + id +
                 ", content='" + content + '\'' +
                 ", boardId=" + board.getId() +
-                ", memberId=" + member.getId() +
+                ", memberId=" + memberId +
                 '}';
     }
 }
