@@ -1,5 +1,6 @@
 package org.palpalmans.ollive_back.domain.member.security.details;
 
+import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
@@ -14,8 +15,7 @@ import java.util.List;
 @Slf4j
 @ToString
 public class CustomMemberDetails implements UserDetails {
-
-//    private final NormalMember normalMember;
+    @Getter
     private final Member member;
 
     public CustomMemberDetails(Member member){
