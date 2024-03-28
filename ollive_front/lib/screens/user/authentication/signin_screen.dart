@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/models/user/user_model.dart';
+import 'package:ollive_front/service/user/user_service.dart';
 import 'package:ollive_front/widgets/user/user_info_widget.dart';
 
 class SigninScreen extends StatefulWidget {
@@ -77,7 +78,7 @@ class _SigninScreenState extends State<SigninScreen> {
                               color: Colors.grey,
                             ),
                             keyboardType: TextInputType.emailAddress,
-                            onSaved: (String? val) => _userInfo.userId = val!,
+                            onSaved: (String? val) => _userInfo.email = val!,
                             validator: (String? val) {
                               if (val!.isEmpty) {
                                 return '아이디: 필수 정보입니다.';
@@ -109,13 +110,12 @@ class _SigninScreenState extends State<SigninScreen> {
                           ),
                           CustomTextFormField(
                             hint: '이름',
-                            obscureText: true,
                             prefixIcon: const Icon(
                               Icons.account_circle_outlined,
                               color: Colors.grey,
                             ),
                             keyboardType: TextInputType.name,
-                            onSaved: (String? val) => _userInfo.userName = val!,
+                            onSaved: (String? val) => _userInfo.name = val!,
                             validator: (String? val) {
                               if (val!.isEmpty) {
                                 return '이름: 필수 정보입니다.';
@@ -128,13 +128,13 @@ class _SigninScreenState extends State<SigninScreen> {
                           ),
                           CustomTextFormField(
                             hint: '생년월일 8자리',
-                            obscureText: true,
                             prefixIcon: const Icon(
                               Icons.perm_contact_calendar_outlined,
                               color: Colors.grey,
                             ),
                             keyboardType: TextInputType.datetime,
-                            onSaved: (String? val) => _userInfo.birth = val!,
+                            onSaved: (String? val) =>
+                                _userInfo.birthday = formatBirthDate(val!),
                             validator: (String? val) {
                               if (val!.isEmpty) {
                                 return '생년월일: 필수 정보입니다.';
@@ -220,12 +220,11 @@ class _SigninScreenState extends State<SigninScreen> {
                                         _gender != null) {
                                       _formKey.currentState!.save();
                                       _userInfo.gender = _gender!;
+                                      _userInfo.role =
+                                          'ROLE_NON_REGISTERED_MEMBER';
 
                                       // 회원가입 요청 보내기
-                                      // SignInAction(
-                                      //   _userInfo.userId,
-                                      //   _userInfo.password,
-                                      // );
+                                      UserService().registerUser(_userInfo);
 
                                       // 다음 페이지로 이동시키기 (pushedName으로 바꾸기)
                                       Navigator.pop(context);
@@ -261,6 +260,16 @@ class _SigninScreenState extends State<SigninScreen> {
         ),
       ),
     );
+  }
+
+  String formatBirthDate(String input) {
+    // 입력 문자열을 연도, 월, 일로 분리
+    String year = input.substring(0, 4);
+    String month = input.substring(4, 6);
+    String day = input.substring(6);
+
+    // 생년월일 형식으로 조합하여 반환
+    return '$year-$month-$day';
   }
 
   // _asyncMethod() async {
