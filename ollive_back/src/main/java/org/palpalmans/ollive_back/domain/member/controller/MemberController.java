@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.JoinRequest;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.MemberInfoResponse;
 import org.palpalmans.ollive_back.domain.member.model.status.JoinRequestStatus;
+import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.member.service.JoinService;
 import org.palpalmans.ollive_back.domain.member.security.service.JwtService;
 import org.palpalmans.ollive_back.domain.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -36,11 +38,9 @@ public class MemberController {
     }
 
     @GetMapping("/memberinfo")
-    public ResponseEntity<MemberInfoResponse> getMyInfo(@RequestHeader(name = "Authorization") String accessToken){
+    public ResponseEntity<MemberInfoResponse> getMyInfo(@AuthenticationPrincipal CustomMemberDetails customMemberDetails){
 
-        //access token이 존재하지 않는 경우는 jwt filter에서 처리됨
-        String atc = accessToken.split(" ")[1]; //"Bearer" Header 제거
-        long id = jwtService.getId(atc);
+        long id = customMemberDetails.getId();
 
         MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(id); //존재하지 않는 경우는 respository에서 예외처리
 
