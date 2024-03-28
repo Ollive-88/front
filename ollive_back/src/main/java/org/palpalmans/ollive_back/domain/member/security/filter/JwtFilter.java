@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
-import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
 import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
 import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.member.security.service.JwtService;

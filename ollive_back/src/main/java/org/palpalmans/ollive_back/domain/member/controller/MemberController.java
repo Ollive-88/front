@@ -19,7 +19,6 @@ public class MemberController {
 
     private final JoinService joinService;
     private final MemberService memberService;
-    private final JwtService jwtService;
 
 
     @PostMapping("/join")
