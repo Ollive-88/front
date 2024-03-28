@@ -184,7 +184,7 @@ CREATE TABLE recipe_score
 (
     id        BIGINT AUTO_INCREMENT PRIMARY KEY,
     member_id bigint  NOT NULL,
-    score     tinyint NOT NULL,
+    score     int NOT NULL,
     recipe_id bigint  NOT NULL,
     CONSTRAINT FK_RECIPE_SCORE_MEMBER
         FOREIGN KEY (member_id) REFERENCES member (id)
