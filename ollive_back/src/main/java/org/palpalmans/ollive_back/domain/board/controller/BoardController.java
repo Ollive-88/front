@@ -3,6 +3,7 @@ package org.palpalmans.ollive_back.domain.board.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.board.model.dto.request.WriteBoardRequest;
+import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardDetailResponse;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardsResponse;
 import org.palpalmans.ollive_back.domain.board.service.BoardService;
 import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
@@ -40,13 +41,20 @@ public class BoardController {
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false, defaultValue = "0") Long lastIndex,
             @RequestParam(required = false, defaultValue = "10") int size,
-            @RequestParam(required = false) List<String> tags,
-            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
+            @RequestParam(required = false) List<String> tags
     ) {
         if (keyword != null && keyword.isBlank())
             throw new IllegalArgumentException("keyword는 공백일 수 없습니다!");
         if (tags == null)
             tags = Collections.emptyList();
         return ResponseEntity.ok(boardService.getBoards(keyword, lastIndex, size, tags));
+    }
+
+    @GetMapping("/{boardId}")
+    public ResponseEntity<GetBoardDetailResponse> getBoardDetail(
+            @PathVariable(value = "boardId") Long boardId,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
+    ) {
+        return ResponseEntity.ok(boardService.getBoardDetail(boardId, customMemberDetails));
     }
 }
