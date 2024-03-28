@@ -18,14 +18,16 @@ class Login {
 }
 
 class SignIn {
-  late String userName, password, userId, birth, gender;
+  late String name, password, email, birthday, gender, nickname, role;
 
   SignIn.fromUserInput()
-      : userId = '',
+      : email = '',
         password = '',
-        userName = '',
-        birth = '',
-        gender = '';
+        gender = '',
+        birthday = '',
+        name = '',
+        nickname = '',
+        role = '';
 }
 
 class UserIngredients {
