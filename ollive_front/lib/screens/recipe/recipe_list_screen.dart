@@ -117,12 +117,16 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
   int seletedCategoty4 = 0;
 
   // 유저가 선택한 대분류, 소분류
-  late String recipeCase, recipeCategory;
-
+  late String recipeCase;
+  late String recipeCategory = "";
   // 한번에 받을 레시피 개수
   final int size = 10;
   // 마지막 레시피 인덱스
   int lastIndex = 0;
+  // 라스트 인덱스 업데이트 메서드
+  void updateLastIndex(int index) {
+    lastIndex = index;
+  }
 
   late List<RecipeModel> recipes;
 
@@ -149,15 +153,17 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
       List<RecipeModel> temp = await RecipeService.getRecipeList(
         widget.likeTagNames,
         widget.hateTagNames,
-        seletedCase == 0 ? "" : recipeCase,
+        recipeCase,
         "",
-        lastIndex,
+        0,
         size,
       );
+
       if (temp.isEmpty) {
         ErrorService.showToast("잘못된 요청입니다.");
       } else {
         recipes = temp;
+        updateLastIndex(recipes[recipes.length - 1].recipeId);
         setState(() {});
       }
     }
@@ -165,6 +171,8 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
 
   // 소분류 선택 메서드
   void onClickcategoty(int i) async {
+    recipeCategory = categotyList[seletedCase][i];
+
     List<RecipeModel> temp = await RecipeService.getRecipeList(
       widget.likeTagNames,
       widget.hateTagNames,
@@ -176,8 +184,6 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
     if (temp.isEmpty) {
       ErrorService.showToast("잘못된 요청입니다.");
     } else {
-      recipeCategory = categotyList[seletedCase][i];
-
       for (var i = 0; i < seletedCategoty.length; i++) {
         seletedCategoty[i] = 0;
       }
@@ -186,35 +192,53 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
 
       // 레시피 리스트 초기화
       recipes = temp;
+      updateLastIndex(recipes[recipes.length - 1].recipeId);
+
       setState(() {});
     }
   }
 
-  // Todo : 나중에 지우기
-  RecipeModel recipeModel = RecipeModel.fromJson({
-    "recipeId": "1",
-    "title": "두부소보로덮밥 고소해서 자꾸 먹고 싶어지는 맛",
-    "thumbnail":
-        "https://recipe1.ezmember.co.kr/cache/recipe/2015/06/18/4536f2df3fb648d86c2aafc05cd077a11.jpg",
-  });
-  // Todo : 나중에 지우기
-  late List<RecipeModel> recipeModel2 = [
-    recipeModel,
-    recipeModel,
-    recipeModel,
-    recipeModel,
-    recipeModel,
-    recipeModel,
-    recipeModel,
-    recipeModel,
-    recipeModel,
-    recipeModel,
-  ];
+  // 무한 스크롤 감지 컨트롤러
+  final ScrollController _scrollController = ScrollController();
+
+  void _scrollListener() async {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange &&
+        seletedCase > 0) {
+      List<RecipeModel> temp = await RecipeService.getRecipeList(
+        widget.likeTagNames,
+        widget.hateTagNames,
+        recipeCase,
+        recipeCategory,
+        lastIndex,
+        size,
+      );
+
+      if (temp.isEmpty) {
+        ErrorService.showToast("마지막 페이지 입니다.");
+      } else {
+        // 레시피 리스트 초기화
+        recipes.addAll(temp);
+        updateLastIndex(recipes[recipes.length - 1].recipeId);
+
+        setState(() {});
+      }
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     recipes = widget.recommendrecipes;
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -231,6 +255,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
         foregroundColor: Colors.black,
       ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           children: [
             // 대분류
@@ -299,7 +324,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
                 spacing: 20.0,
                 runSpacing: 5.0,
                 children: [
-                  for (int i = 0; i < recipeModel2.length; i++)
+                  for (int i = 0; i < recipes.length; i++)
                     Container(
                       constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width / 2.3),
@@ -325,7 +350,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => RecipeDetailScreen(
-                                      recipeId: recipeModel2[i].recipeId,
+                                      recipeId: recipes[i].recipeId,
                                     ),
                                   ),
                                 );
@@ -337,12 +362,12 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
                                       MediaQuery.of(context).size.width / 2.3,
                                   height:
                                       MediaQuery.of(context).size.width / 2.3,
-                                  recipeModel2[i].thumbnail,
+                                  recipes[i].thumbnail,
                                   headers: const {
                                     "User-Agent":
                                         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
                                   },
-                                  fit: BoxFit.fitHeight,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
@@ -351,7 +376,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
                             height: 5,
                           ),
                           Text(
-                            recipeModel2[i].title,
+                            recipes[i].title,
                             style: const TextStyle(
                               fontSize: 18,
                             ),

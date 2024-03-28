@@ -1,20 +1,20 @@
 class RecipeDetailModel {
-  int recipeId;
+  int id;
   String title, thumbnailUrl, amount, time, difficulty;
+  // bool isFavorite;
   double score;
-  bool isFavorite;
   List<IngredientModel> ingredients;
   List<ProcesseModel> processes;
 
   RecipeDetailModel.fromJson(Map<String, dynamic> json)
-      : recipeId = json["id"],
+      : id = json["id"],
         title = json['title'],
         thumbnailUrl = json['thumbnail_url'],
         amount = json['amount'],
         time = json['time'],
         difficulty = json['difficulty'],
         score = json['score'],
-        isFavorite = json['isFavorite'],
+        // isFavorite = json['isFavorite'],
         ingredients = (json['ingredients'] as List<dynamic>)
             .map((ingredient) => IngredientModel.fromJson(ingredient))
             .toList(),

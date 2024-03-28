@@ -15,18 +15,18 @@ class DioService {
   }
 
   DioService._internal() {
-    _authDio = Dio(BaseOptions(baseUrl: "https://j10a508.p.ssafy.io"));
+    _authDio = Dio(BaseOptions(baseUrl: "http://j10a508.p.ssafy.io"));
     _authDio!.options.headers['userAgent'] =
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Whale/3.23.214.17 Safari/537.36';
     _authDio!.options.headers['Content-Type'] = 'application/json';
 
     _authDio!.interceptors.clear();
+
     _authDio!.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final token = Get.find<StatusController>().token;
           if (token.accessToken == null) {
-            options.headers["Authorization"] = "";
             return handler.next(options);
           }
 
@@ -49,7 +49,7 @@ class DioService {
 
             try {
               var refreshDio =
-                  Dio(BaseOptions(baseUrl: "https://j10a508.p.ssafy.io"));
+                  Dio(BaseOptions(baseUrl: "http://j10a508.p.ssafy.io"));
               final response = await refreshDio.post(
                 "/api/auth/token/refresh",
                 data: jsonEncode(
@@ -72,6 +72,8 @@ class DioService {
             } catch (error) {
               // moveToLoginScreen();
             }
+          } else {
+            handler.next(error);
           }
         },
       ),

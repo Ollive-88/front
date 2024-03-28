@@ -9,26 +9,45 @@ class BoardService {
   static final Dio _dio = DioService().authDio;
 
   // 게시글 조회
-  static Future<List<BoardModel>> getBoardList(
+  static Future<dynamic> getBoardList(
       List<String>? tags, String? keyword, int lastIndex, int size) async {
     final List<BoardModel> boards = [];
 
-    final response = await _dio.get(
-      "/boards",
-      queryParameters: {
-        "tags": tags,
-        "keyword": keyword,
-        "lastIndex": lastIndex,
-        "size": size,
-      },
-    );
-    List<dynamic> data = jsonDecode(response.data);
+    try {
+      final Response response;
+      if (keyword == null) {
+        response = await _dio.get(
+          "/api/v1/boards",
+          queryParameters: {
+            "lastIndex": lastIndex,
+            "size": size,
+          },
+        );
+      } else {
+        response = await _dio.get(
+          "/api/v1/boards",
+          queryParameters: {
+            "tags": tags,
+            "keyword": keyword,
+            "lastIndex": lastIndex,
+            "size": size,
+          },
+        );
+      }
 
-    for (var board in data) {
-      boards.add(BoardModel.fromJson(board));
+      print(response);
+
+      List<dynamic> data = jsonDecode(response.data);
+
+      for (var board in data) {
+        boards.add(BoardModel.fromJson(board));
+      }
+
+      return boards;
+    } catch (e) {
+      print(e);
+      return e.toString();
     }
-
-    return boards;
   }
 
   // 게시글 생성

@@ -67,11 +67,20 @@ class _BoardScreenState extends State<BoardScreen> {
     );
   }
 
+  void initBoards() async {
+    dynamic result =
+        await BoardService.getBoardList(widget.tagNames, widget.keyword, 0, 10);
+
+    if (result is String) {
+    } else {
+      boards = result;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    boards = BoardService.getBoardList(widget.tagNames, widget.keyword, 0, 10);
-
+    initBoards();
     if (widget.boardScrollController == null) {
       // 컨트롤러 초기화 후 addListener로 동작 감지 설정
       _scrollController = ScrollController();
