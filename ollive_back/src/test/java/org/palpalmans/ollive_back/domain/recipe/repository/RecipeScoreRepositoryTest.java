@@ -51,7 +51,7 @@ public class RecipeScoreRepositoryTest {
         RecipeScore recipeScore = RecipeScore.builder()
                 .score(1)
                 .recipeId(1L)
-                .memberId(1L)
+                .memberId(normalMember.getId())
                 .build();
 
         RecipeScore oldRecipeScore = recipeScoreRepository.save(recipeScore);
