@@ -104,6 +104,12 @@ class SettingScreen extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
+        actionsPadding: const EdgeInsets.only(
+          top: 0,
+          bottom: 10,
+          right: 10,
+          left: 10,
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         backgroundColor: Colors.white,
         title: Text(
@@ -113,10 +119,10 @@ class SettingScreen extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
+        content: SizedBox(
+          height: 100,
+          child: Center(
+            child: Expanded(
               child: TextField(
                 autofocus: true,
                 obscureText: isObscure,
@@ -133,8 +139,8 @@ class SettingScreen extends StatelessWidget {
                       borderSide: BorderSide(color: Color(0xFF30AF98))),
                 ),
               ),
-            )
-          ],
+            ),
+          ),
         ),
         actions: [
           TextButton(
