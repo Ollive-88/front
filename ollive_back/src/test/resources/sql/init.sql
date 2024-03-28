@@ -29,7 +29,7 @@ CREATE TABLE member
     role            ENUM ('ROLE_ADMIN', 'ROLE_REGISTERED_MEMBER', 'ROLE_NON_REGISTERED_MEMBER') NOT NULL,
     created_at      DATETIME     NOT NULL DEFAULT NOW(),
     updated_at      DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW(),
-    CONSTRAINT UNIQUE (name)
+    CONSTRAINT UNIQUE (email)
 );
 
 
