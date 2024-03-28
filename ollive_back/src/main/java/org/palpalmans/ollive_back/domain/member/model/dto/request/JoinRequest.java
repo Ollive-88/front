@@ -14,10 +14,8 @@ public class JoinRequest {
 
     private String email;
     private String password;
-    private String gender;
-    private Date birthday;
     private String name;
-    private String nickname;
-    private String profilepicture;
+    private Date birthday;
+    private String gender;
     private String role;
 }
