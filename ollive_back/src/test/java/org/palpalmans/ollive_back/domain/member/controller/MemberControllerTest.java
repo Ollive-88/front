@@ -43,7 +43,6 @@ public class MemberControllerTest {
         joinRequest.setEmail("test@test.com");
         joinRequest.setName("testUser");
         joinRequest.setGender("Male");
-        joinRequest.setNickname("testtestnick");
         joinRequest.setBirthday(new Date());
         joinRequest.setRole("ROLE_REGISTERED_MEMBER");
     }
