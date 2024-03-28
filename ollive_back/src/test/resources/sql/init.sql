@@ -1,13 +1,19 @@
+DROP TABLE IF EXISTS `dislike_ingredient`;
+DROP TABLE IF EXISTS `fridge_ingredient`;
+DROP TABLE IF EXISTS `recipe_favorite`;
+DROP TABLE IF EXISTS `recipe_score`;
+
+DROP TABLE IF EXISTS `image`;
 DROP TABLE IF EXISTS `views`;
 DROP TABLE IF EXISTS `likes`;
 DROP TABLE IF EXISTS `comments`;
 DROP TABLE IF EXISTS `board_tag`;
 DROP TABLE IF EXISTS `tag`;
+
 DROP TABLE IF EXISTS `board`;
 DROP TABLE IF EXISTS `normal_member`;
 DROP TABLE IF EXISTS `social_member`;
 DROP TABLE IF EXISTS `member`;
-DROP TABLE IF EXISTS `image`;
 
 
 -- member
@@ -48,6 +54,9 @@ CREATE TABLE normal_member
     CONSTRAINT FK_NORMAL_MEMBER_MEMBER_ID FOREIGN KEY (ID) REFERENCES member (ID) ON DELETE CASCADE
 );
 
+-- ###################
+-- about board
+-- ###################
 
 -- board
 CREATE TABLE board
@@ -132,4 +141,52 @@ CREATE TABLE image
     image_type   ENUM ('BOARD') NULL,
     created_at   DATETIME NOT NULL DEFAULT NOW(),
     updated_at   DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW()
+);
+
+-- ###################
+-- about recipe
+-- ###################
+
+CREATE TABLE dislike_ingredient
+(
+    id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+    member_id BIGINT      NOT NULL,
+    name      VARCHAR(50) NOT NULL,
+    CONSTRAINT FK_DISLIKE_INGREDIENT_MEMBER
+        FOREIGN KEY (member_id) REFERENCES member (id)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE fridge_ingredient
+(
+    id        BIGINT AUTO_INCREMENT
+        PRIMARY KEY,
+    member_id BIGINT      NOT NULL,
+    end_at    TIMESTAMP   NOT NULL,
+    name      VARCHAR(50) NOT NULL,
+    CONSTRAINT FK_FRIDGE_INGREDIENT_MEMBER
+        FOREIGN KEY (member_id) REFERENCES member (id)
+            ON DELETE CASCADE
+);
+
+
+CREATE TABLE recipe_favorite
+(
+    id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+    member_id BIGINT NOT NULL,
+    recipe_id BIGINT NOT NULL,
+    CONSTRAINT FK_RECIPE_FAVORITE_MEMBER
+        FOREIGN KEY (member_id) REFERENCES member (id)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE recipe_score
+(
+    id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+    member_id bigint  NOT NULL,
+    score     tinyint NOT NULL,
+    recipe_id bigint  NOT NULL,
+    CONSTRAINT FK_RECIPE_SCORE_MEMBER
+        FOREIGN KEY (member_id) REFERENCES member (id)
+            ON DELETE CASCADE
 );
