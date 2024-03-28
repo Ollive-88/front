@@ -25,7 +25,7 @@ public class BoardQueryRepository {
                 .select(qBoard)
                 .from(qBoard)
                 .leftJoin(qBoardTag).on(qBoard.eq(qBoardTag.board)).fetchJoin()
-                .join(qTag).on(qBoardTag.tag.eq(qTag)).fetchJoin().fetchJoin()
+                .leftJoin(qTag).on(qBoardTag.tag.eq(qTag)).fetchJoin().fetchJoin()
                 .where(qBoard.id.gt(lastIndex)
                         .and(keyword == null ? null : qBoard.title.contains(keyword))
                         .and(tagNames.isEmpty() ? null : qTag.name.in(tagNames)))
