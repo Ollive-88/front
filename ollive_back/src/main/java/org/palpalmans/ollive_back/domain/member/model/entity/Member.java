@@ -10,6 +10,7 @@ import java.util.Date;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+@ToString
 @Setter(value = PROTECTED)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -33,7 +34,7 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nickname;
 
     @Enumerated(EnumType.STRING)

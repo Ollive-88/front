@@ -28,7 +28,6 @@ public class JoinService {
         String gender = joinRequest.getGender();
         Date birthday = joinRequest.getBirthday();
         String name = joinRequest.getName();
-        String nickname = joinRequest.getNickname();
         MemberRole role;
         try {
             role = MemberRole.valueOf(joinRequest.getRole().toUpperCase());
@@ -37,16 +36,14 @@ public class JoinService {
             return JoinRequestStatus.INVALID_ROLE;
         }
 
-        if(email == null || birthday == null || name == null){
-            return JoinRequestStatus.NULL_EXIST;
-        }
 
-        //todo : Boolean 값보다, 존재하는 멤버 정보를 가져와야겠다.
 
         Boolean isExist = memberRepository.existsByEmail(email);
-        //todo : 검색된 멤버가 ROLE_NON_REGISTERED_MEMBER 이고, 가입한지 2일이 지났으면 삭제하고 회원가입 진행
         if(isExist) return JoinRequestStatus.EMAIL_DUPLICATED;
 
+        //컬럼들이 notnull
+        //정보를 무조건 가져와야하는건 일반회원가입멤버
+        //소셜은 충분한 정보 없을 수 있음
 
         if(role == MemberRole.ROLE_NON_REGISTERED_MEMBER){
             //ROLE_NON_REGISTERD_MEMBER 면 SocialMember Entity 이용해서 회원가입
@@ -55,9 +52,9 @@ public class JoinService {
                     .gender("undefined")
                     .birthday(birthday)
                     .name(name)
-                    .nickname(nickname)
+                    .nickname("띠디딩딩")
                     .role(role) // role 설정
-                    .profilePicture("picture")
+                    .profilePicture("src/main/java/org/palpalmans/ollive_back/domain/member/images/yuna.jpg")
                     .build();
 
             SocialMember joinMember = new SocialMember(member, SocialType.GOOGLE);
@@ -66,15 +63,19 @@ public class JoinService {
 
 
         }else if(role == MemberRole.ROLE_REGISTERED_MEMBER){
+
+            if(email == null || birthday == null || name == null){
+                return JoinRequestStatus.NULL_EXIST;
+            }
             //ROLE_REGISTERED_MEMBER 면 NormalMember Entity 이용해서 회원가입
             Member member = Member.builder()
                     .email(email)
                     .gender(gender)
                     .birthday(birthday)
                     .name(name)
-                    .nickname(nickname)
+                    .nickname("띠디딩딩")
                     .role(role) // role 설정
-                    .profilePicture("picture")
+                    .profilePicture("src/main/java/org/palpalmans/ollive_back/domain/member/images/yuna.jpg")
                     .build();
 
             String encodedPass = bCryptPasswordEncoder.encode(password);
@@ -84,29 +85,7 @@ public class JoinService {
             //멤버 가입시키기
             memberRepository.save(joinMember);
 
-        }else if(role == MemberRole.ROLE_ADMIN){
-            // ROLE_ADMIN 이면 Normal Entity 이용해서 회원가입
-            // Builder 패턴 사용하여 객체 생성
-            Member member = Member.builder()
-                    .email(email)
-                    .gender(gender)
-                    .birthday(birthday)
-                    .name(name)
-                    .nickname(nickname)
-                    .role(role) // role 설정
-                    .profilePicture("picture")
-                    .build();
-
-            String encodedPass = bCryptPasswordEncoder.encode(password);
-
-            NormalMember admin = new NormalMember(member, encodedPass);
-            //멤버 가입시키기
-            memberRepository.save(admin);
         }
-
-
-
-
 
         //모든 과정이 끝나면 성공 반환
         return JoinRequestStatus.JOIN_SUCCESS;
