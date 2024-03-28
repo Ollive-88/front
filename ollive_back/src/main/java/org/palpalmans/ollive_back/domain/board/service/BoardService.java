@@ -1,13 +1,16 @@
 package org.palpalmans.ollive_back.domain.board.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.board.model.dto.request.WriteBoardRequest;
+import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardDetailResponse;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardResponse;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardsResponse;
 import org.palpalmans.ollive_back.domain.board.model.entity.Board;
 import org.palpalmans.ollive_back.domain.board.repository.BoardQueryRepository;
 import org.palpalmans.ollive_back.domain.board.repository.BoardRepository;
 import org.palpalmans.ollive_back.domain.image.service.ImageService;
+import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.member.service.MemberService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.palpalmans.ollive_back.common.error.ErrorMessage.BOARD_NOT_FOUND;
+import static org.palpalmans.ollive_back.domain.board.model.BoardMapper.toGetBoardDetailResponse;
 import static org.palpalmans.ollive_back.domain.board.model.BoardMapper.toGetBoardResponse;
 import static org.palpalmans.ollive_back.domain.image.model.ImageType.BOARD;
 
@@ -63,6 +68,19 @@ public class BoardService {
             );
         }
         return new GetBoardsResponse(getBoardResponseList, boards.size() < size);
+    }
+
+    @Transactional(readOnly = true)
+    public GetBoardDetailResponse getBoardDetail(Long boardId, CustomMemberDetails customMemberDetails) {
+        Board board = boardRepository.findByIdWithComments(boardId)
+                .orElseThrow(() -> new EntityNotFoundException(BOARD_NOT_FOUND.getMessage()));
+        int viewCount = viewService.getViewCount(board);
+        int likeCount = likeService.getLikeCount(board);
+
+        //TODO imageService 구현 완료시 이미지 조회 해오기
+        // imageService.getImage();
+        List<String> images = new ArrayList<>();
+        return toGetBoardDetailResponse(board, customMemberDetails.getMember(), viewCount, likeCount, images);
     }
 
     private Board writeBoard(String title, String content, Long memberId) {
