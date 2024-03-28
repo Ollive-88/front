@@ -1,12 +1,13 @@
 package org.palpalmans.ollive_back.domain.recipe.model.dto.request;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 public record RecipeScoreRequest(
         @NotNull
         Long recipeId,
-        @Positive
+        @Min(1)@Max(5)
         int score
 ) {
 }
