@@ -43,8 +43,6 @@ public class BoardController {
             @RequestParam(required = false) List<String> tags,
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails
     ) {
-        System.out.println("customMemberDetails = " + customMemberDetails);
-
         if (keyword != null && keyword.isBlank())
             throw new IllegalArgumentException("keyword는 공백일 수 없습니다!");
         if (tags == null)
