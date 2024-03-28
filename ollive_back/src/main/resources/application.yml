@@ -5,9 +5,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${TEST_DB_URL}
-    username: ${TEST_DB_USERNAME}
-    password: ${TEST_DB_PASSWORD}
+    url: ${LOCAL_DB_URL}
+    username: ${LOCAL_DB_USERNAME}
+    password: ${LOCAL_DB_PASSWORD}
 
   jpa:
     hibernate:
