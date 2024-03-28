@@ -176,7 +176,7 @@ class RecipeControllerTest {
         RecipeScore recipeScore = RecipeScore.builder()
                 .score(5)
                 .recipeId(1L)
-                .memberId(1L)
+                .memberId(normalMember.getId())
                 .build();
 
         recipeScoreRepository.save(recipeScore);
