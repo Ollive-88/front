@@ -15,10 +15,11 @@ import java.util.List;
 @ToString
 public class CustomMemberDetails implements UserDetails {
 
-    private final NormalMember normalMember;
+//    private final NormalMember normalMember;
+    private final Member member;
 
-    public CustomMemberDetails(NormalMember normalMember){
-        this.normalMember = normalMember;
+    public CustomMemberDetails(Member member){
+        this.member = member;
     }
 
     //유저 권한 가져오기
@@ -27,22 +28,22 @@ public class CustomMemberDetails implements UserDetails {
 
         List<GrantedAuthority> authorityList = new ArrayList<>();
 
-        log.debug("login user role = {}", normalMember.getRole());
-        authorityList.add(new SimpleGrantedAuthority(normalMember.getRole().name()));
+        log.debug("login user role = {}", member.getRole());
+        authorityList.add(new SimpleGrantedAuthority(member.getRole().name()));
         return authorityList;
     }
 
     @Override
     public String getPassword() {
-        return normalMember.getPassword();
+        return ((NormalMember) member).getPassword();
     }
 
     @Override
     public String getUsername() {
-        return normalMember.getEmail();
+        return member.getEmail();
     }
 
-    public long getId(){ return  normalMember.getId(); }
+    public long getId(){ return  member.getId(); }
 
     @Override
     public boolean isAccountNonExpired() {

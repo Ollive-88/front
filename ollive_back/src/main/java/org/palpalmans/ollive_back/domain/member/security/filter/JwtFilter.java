@@ -78,9 +78,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         log.info("member.role ={}", member.getRole().name());
 
-        NormalMember nm = new NormalMember(member, "hack");
-
-        CustomMemberDetails customMemberDetails = new CustomMemberDetails(nm);
+        CustomMemberDetails customMemberDetails = new CustomMemberDetails(member);
 
         Authentication auth = new UsernamePasswordAuthenticationToken(customMemberDetails, null, customMemberDetails.getAuthorities());
 
