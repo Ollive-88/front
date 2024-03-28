@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/screens/user/fridge_inventory_screen.dart';
 import 'package:ollive_front/screens/user/hate_inventory_screen.dart';
+import 'package:ollive_front/screens/user/setting/setting_screen.dart';
 
 class MyPageScreen extends StatelessWidget {
   MyPageScreen({super.key});
@@ -23,7 +24,7 @@ class MyPageScreen extends StatelessWidget {
     const FridgeInventoryScreen(),
     const FridgeInventoryScreen(),
     const FridgeInventoryScreen(),
-    const FridgeInventoryScreen(),
+    SettingScreen(),
   ];
 
   @override
