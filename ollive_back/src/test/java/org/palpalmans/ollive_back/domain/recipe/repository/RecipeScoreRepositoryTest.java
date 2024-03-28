@@ -1,8 +1,10 @@
 package org.palpalmans.ollive_back.domain.recipe.repository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
+import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
 import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
 import org.palpalmans.ollive_back.domain.recipe.model.entity.RecipeScore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.palpalmans.ollive_back.domain.member.model.status.MemberRole.ROLE_REGISTERED_MEMBER;
+import static org.palpalmans.ollive_back.domain.member.model.status.MemberRole.ROLE_ADMIN;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @ExtendWith(SpringExtension.class)
@@ -26,24 +28,26 @@ public class RecipeScoreRepositoryTest {
     @Autowired
     private RecipeScoreRepository recipeScoreRepository;
 
-    private Member member() {
-        return Member.builder()
-                .id(1)
-                .email("doongdang@mevc.com")
-                .gender("Male")
+    private Member member;
+    private NormalMember normalMember;
+    @BeforeEach
+    void setUp() {
+        member = Member.builder()
+                .email("test@naver.com")
+                .name("name")
+                .nickname("nickname")
                 .birthday(new Date())
-                .name("조석현")
-                .nickname("조석현")
-                .role(ROLE_REGISTERED_MEMBER)
+                .profilePicture("profilePicture")
+                .role(ROLE_ADMIN)
+                .gender("male")
                 .build();
-    }
 
+        normalMember = new NormalMember(member, "1234");
+        memberRepository.save(normalMember);
+    }
     @Test
     void updateRecipeScoreTest() {
         //given
-        Member member = member();
-        memberRepository.save(member);
-
         RecipeScore recipeScore = RecipeScore.builder()
                 .score(1)
                 .recipeId(1L)
@@ -58,5 +62,6 @@ public class RecipeScoreRepositoryTest {
 
         //then
         assertThat(newRecipeScore.getScore()).isEqualTo(5);
+        memberRepository.deleteAll();
     }
 }
