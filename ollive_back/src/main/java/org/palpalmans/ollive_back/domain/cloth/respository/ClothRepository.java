@@ -8,4 +8,5 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public interface ClothRepository extends JpaRepository<Cloth, Long> {
+    List<Cloth> findClothesBySuperCategory(String superCategory);
 }

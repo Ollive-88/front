@@ -2,44 +2,50 @@ package org.palpalmans.ollive_back.domain.cloth.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.palpalmans.ollive_back.domain.cloth.config.FastApiProperties;
 import org.palpalmans.ollive_back.domain.cloth.model.dto.request.ClothRecommendationRequest;
+import org.palpalmans.ollive_back.domain.cloth.model.dto.request.ClothRecommendationRequestToData;
 import org.palpalmans.ollive_back.domain.cloth.model.dto.request.WeatherRequest;
 import org.palpalmans.ollive_back.domain.cloth.model.dto.response.ClothRecommendationResponse;
-import org.palpalmans.ollive_back.domain.cloth.model.dto.response.ClothResponse;
-import org.palpalmans.ollive_back.domain.cloth.model.entity.Cloth;
-import org.palpalmans.ollive_back.domain.cloth.respository.ClothRepository;
+import org.springframework.boot.web.client.ClientHttpRequestFactories;
+import org.springframework.boot.web.client.ClientHttpRequestFactorySettings;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Duration;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ClothService {
     private final WeatherService weatherService;
-    private final ClothRepository clothRepository;
+    private final FastApiProperties fastApiProperties;
 
     public ClothRecommendationResponse recommendCloth(ClothRecommendationRequest clothRecommendationRequest) throws Exception {
-        String text = clothRecommendationRequest.text();
-
         WeatherRequest weatherRequest = clothRecommendationRequest.extractWeatherRequest();
         double temperature = weatherService.getTemperatureFromKMA(weatherRequest);
+        log.info("현재 기온: {}", temperature);
 
-        long before = System.currentTimeMillis();
-
-        List<Cloth> clothList = clothRepository.findAll();
-
-        long after = System.currentTimeMillis();
-        log.info("쿼리 호출에 걸린 시간: {}ms", (after - before));
-
-        return new ClothRecommendationResponse(
-                doRecommend("아우터", text, temperature),
-                doRecommend("상의", text, temperature),
-                doRecommend("하의", text, temperature),
-                doRecommend("신발", text, temperature));
+        return doRecommend(new ClothRecommendationRequestToData(
+                clothRecommendationRequest.text(),
+                temperature));
     }
-    public List<ClothResponse> doRecommend(String categoryOfCloth, String text, double temperature) {
-        return new ArrayList<>();
+
+    public ClothRecommendationResponse doRecommend(ClothRecommendationRequestToData clothRecommendationRequestToData) {
+        RestClient restClient = RestClient
+                .builder()
+                .baseUrl(fastApiProperties.getBaseUrl())
+                .requestFactory(ClientHttpRequestFactories
+                        .get(ClientHttpRequestFactorySettings.DEFAULTS
+                                .withConnectTimeout(Duration.ofSeconds(3))
+                                .withReadTimeout(Duration.ofSeconds(3))))
+                .build();
+
+        return restClient
+                .post()
+                .uri("/cloth/recommendation")
+                .body(clothRecommendationRequestToData)
+                .retrieve()
+                .body(ClothRecommendationResponse.class);
     }
 }

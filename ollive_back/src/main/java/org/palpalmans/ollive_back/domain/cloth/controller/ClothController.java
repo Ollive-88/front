@@ -7,6 +7,7 @@ import org.palpalmans.ollive_back.domain.cloth.model.dto.response.ClothRecommend
 import org.palpalmans.ollive_back.domain.cloth.service.ClothService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,10 +19,7 @@ public class ClothController {
     private final ClothService clothService;
 
     @PostMapping("/recommendation")
-    public ResponseEntity<ClothRecommendationResponse> recommendCloth(ClothRecommendationRequest clothRecommendationRequest) throws Exception {
-        log.info("text: {}", clothRecommendationRequest.text());
-        log.info("latitude: {}", clothRecommendationRequest.latitude());
-        log.info("longitude: {}", clothRecommendationRequest.longitude());
+    public ResponseEntity<ClothRecommendationResponse> recommendCloth(@RequestBody ClothRecommendationRequest clothRecommendationRequest) throws Exception {
         return ResponseEntity.ok(clothService.recommendCloth(clothRecommendationRequest));
     }
 }

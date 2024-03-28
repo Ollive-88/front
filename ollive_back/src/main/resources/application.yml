@@ -48,6 +48,8 @@ cloth:
   weather:
     baseUrl: ${WEATHER_URL}
     serviceKey: ${WEATHER_SERVICE_KEY}
+  fastapi:
+    baseUrl: ${FASTAPI_URL}
 
 minio:
   url: ${MINIO_URL}

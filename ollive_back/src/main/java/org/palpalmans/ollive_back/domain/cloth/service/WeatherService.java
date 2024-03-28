@@ -27,13 +27,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @RequiredArgsConstructor
 public class WeatherService {
     private final WeatherApiProperties weatherApiProperties;
+
     public double getTemperatureFromKMA(WeatherRequest weatherRequest) throws Exception {
         RestClient restClient = RestClient
                 .builder()
                 .requestFactory(ClientHttpRequestFactories
                         .get(ClientHttpRequestFactorySettings.DEFAULTS
-                        .withConnectTimeout(Duration.ofSeconds(3))
-                        .withReadTimeout(Duration.ofSeconds(3))))
+                                .withConnectTimeout(Duration.ofSeconds(3))
+                                .withReadTimeout(Duration.ofSeconds(3))))
                 .build();
 
 
@@ -55,7 +56,7 @@ public class WeatherService {
                     .filter(item -> item.category().equals("T1H"))
                     .map(item -> Double.parseDouble(item.obsrValue()))
                     .findFirst().orElseThrow();
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             throw new Exception("유효하지 않은 기상 정보입니다.");
         }
     }
@@ -79,8 +80,8 @@ public class WeatherService {
                 .build(true)
                 .toUri();
     }
-    public WeatherRequest convertFromCoordinateToGrid(WeatherRequest weatherRequest)
-    {
+
+    public WeatherRequest convertFromCoordinateToGrid(WeatherRequest weatherRequest) {
         double RE = 6371.00877; // 지구 반경(km)
         double GRID = 5.0; // 격자 간격(km)
         double SLAT1 = 30.0; // 투영 위도1(degree)
