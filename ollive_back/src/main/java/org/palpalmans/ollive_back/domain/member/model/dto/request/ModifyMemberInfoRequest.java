@@ -10,10 +10,8 @@ import java.util.Date;
 @Getter
 @Setter
 public class ModifyMemberInfoRequest {
-
-    private Date birthday;
+    private String password;
     private String gender;
     private String profilePicture;
     private String nickname;
-
 }
