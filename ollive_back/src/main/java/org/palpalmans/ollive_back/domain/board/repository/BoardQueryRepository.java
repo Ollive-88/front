@@ -1,5 +1,6 @@
 package org.palpalmans.ollive_back.domain.board.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.board.model.entity.Board;
@@ -26,12 +27,17 @@ public class BoardQueryRepository {
                 .from(qBoard)
                 .leftJoin(qBoardTag).on(qBoard.eq(qBoardTag.board)).fetchJoin()
                 .leftJoin(qTag).on(qBoardTag.tag.eq(qTag)).fetchJoin().fetchJoin()
-                .where(qBoard.id.gt(lastIndex)
-                        .and(keyword == null ? null : qBoard.title.contains(keyword))
-                        .and(tagNames.isEmpty() ? null : qTag.name.in(tagNames)))
+                .where(boardListCondition(keyword, lastIndex, tagNames))
                 .groupBy(qBoard.id)
                 .orderBy(qBoard.id.count().desc(), qBoard.createdAt.desc())
                 .limit(size)
                 .fetch();
+    }
+
+    private static BooleanExpression boardListCondition(String keyword, Long lastIndex, List<String> tagNames) {
+        BooleanExpression indexCondition = lastIndex == 0 ? qBoard.id.gt(lastIndex) : qBoard.id.lt(lastIndex);
+        return indexCondition
+                .and(keyword == null ? null : qBoard.title.contains(keyword))
+                .and(tagNames.isEmpty() ? null : qTag.name.in(tagNames));
     }
 }
