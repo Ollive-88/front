@@ -77,9 +77,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
         Member member = Member.builder()
                 .id(memberId)
+                .nickname(memberInfoResponse.getNickname())
                 .email(memberInfoResponse.getEmail())
                 .gender(memberInfoResponse.getGender())
                 .birthday(memberInfoResponse.getBirthday())
+                .profilePicture("defaultPicture")
                 .role(role)
                 .build();
 
