@@ -44,6 +44,5 @@ public class MemberControllerTest {
         joinRequest.setName("testUser");
         joinRequest.setGender("Male");
         joinRequest.setBirthday(new Date());
-        joinRequest.setRole("ROLE_REGISTERED_MEMBER");
     }
 }

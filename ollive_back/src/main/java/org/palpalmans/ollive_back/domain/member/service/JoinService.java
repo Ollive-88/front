@@ -28,13 +28,7 @@ public class JoinService {
         String gender = joinRequest.getGender();
         Date birthday = joinRequest.getBirthday();
         String name = joinRequest.getName();
-        MemberRole role;
-        try {
-            role = MemberRole.valueOf(joinRequest.getRole().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            // role 문자열이 MemberRole에 없는 경우 예외 처리
-            return JoinRequestStatus.INVALID_ROLE;
-        }
+        MemberRole role = MemberRole.ROLE_REGISTERED_MEMBER;
 
 
 
