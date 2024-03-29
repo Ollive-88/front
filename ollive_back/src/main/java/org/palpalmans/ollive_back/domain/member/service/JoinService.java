@@ -47,7 +47,7 @@ public class JoinService {
                     .name(name)
                     .nickname("띠디딩딩")
                     .role(role) // role 설정
-                    .profilePicture("src/main/java/org/palpalmans/ollive_back/domain/member/images/yuna.jpg")
+                    .profilePicture("https://cdn.spotvnews.co.kr/news/photo/202104/418112_528907_5918.jpg")
                     .build();
 
             SocialMember joinMember = new SocialMember(member, SocialType.GOOGLE);
@@ -68,7 +68,7 @@ public class JoinService {
                     .name(name)
                     .nickname("띠디딩딩")
                     .role(role) // role 설정
-                    .profilePicture("src/main/java/org/palpalmans/ollive_back/domain/member/images/yuna.jpg")
+                    .profilePicture("https://cdn.spotvnews.co.kr/news/photo/202104/418112_528907_5918.jpg")
                     .build();
 
             String encodedPass = bCryptPasswordEncoder.encode(password);
