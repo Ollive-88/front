@@ -24,6 +24,7 @@ public class MemberService {
 
         MemberInfoResponse memberInfoResponse = new MemberInfoResponse();
 
+        memberInfoResponse.setProfilePicture(member.getProfilePicture());
         memberInfoResponse.setNickname(member.getNickname());
         memberInfoResponse.setName(member.getName());
         memberInfoResponse.setGender(member.getGender());

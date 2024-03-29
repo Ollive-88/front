@@ -16,5 +16,6 @@ public class MemberInfoResponse {
     private Date birthday;
     private String name;
     private String nickname;
+    private String profilePicture;
 
 }
