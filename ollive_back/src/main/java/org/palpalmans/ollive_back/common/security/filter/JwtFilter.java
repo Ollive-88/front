@@ -33,7 +33,15 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String atc= request.getHeader("Authorization");
+        String rtc = request.getHeader("Refresh");
         log.info("atc is {}", atc);
+        log.info("rtc is {}", rtc);
+
+        if (StringUtils.hasText(rtc)){
+            log.info("Refresh token detected");
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (!StringUtils.hasText(atc)) {
             log.info("Authorization head is blank");
@@ -48,7 +56,6 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        log.info("atc = {} ", atc);
 
         String token = atc.split(" ")[1];
 
@@ -56,12 +63,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (jwtService.isExpired(token)) {
             log.info("access token expired");
-
-            if(request.getHeader("Refresh") != null){
-
-                filterChain.doFilter(request, response);
-                return;
-            }
 
             response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
             return;
