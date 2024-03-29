@@ -1,6 +1,7 @@
 package org.palpalmans.ollive_back.domain.recipe.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.palpalmans.ollive_back.domain.recipe.model.dto.request.RecipeRecommendRequest;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.request.RecipeSearchRequest;
 import org.palpalmans.ollive_back.domain.recipe.model.entity.Recipe;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -36,25 +37,51 @@ public class CustomRecipeRepositoryImpl implements CustomRecipeRepository {
 
         criteria = criteria.and("categories").elemMatch(categoryCriteria);
 
-
         List<Criteria> andCriteriaList = new ArrayList<>(havingIngredients.stream()
                 .map(ingredient -> Criteria.where("ingredients.name").regex(Pattern.quote(ingredient), "i"))
                 .toList());
 
-
-        // 제외 재료 필터링
         if (!dislikeIngredients.isEmpty()) {
             Criteria notCriteria = Criteria.where("ingredients.name").nin(dislikeIngredients);
             andCriteriaList.add(notCriteria);
         }
 
-        // andCriteriaList에 조건이 있다면, criteria에 추가
         if (!andCriteriaList.isEmpty()) {
             criteria = criteria.andOperator(andCriteriaList.toArray(new Criteria[0]));
         }
 
 
         Query query = Query.query(criteria).limit(size);
+        return mongoTemplate.find(query, Recipe.class);
+    }
+
+    @Override
+    public List<Recipe> findRecipesByIngredientsAndScoredRecipeIds(RecipeRecommendRequest request, List<Long> scoredRecipeIds){
+        List<String> havingIngredients = request.havingIngredients();
+        List<String> dislikeIngredients = request.dislikeIngredients();
+
+        Criteria criteria = new Criteria();
+
+        List<Criteria> andCriteriaList = new ArrayList<>(havingIngredients.stream()
+                .map(ingredient -> Criteria.where("ingredients.name").regex(Pattern.quote(ingredient), "i"))
+                .toList());
+
+
+        if (!dislikeIngredients.isEmpty()) {
+            Criteria notCriteria = Criteria.where("ingredients.name").nin(dislikeIngredients);
+            andCriteriaList.add(notCriteria);
+        }
+
+        if (!scoredRecipeIds.isEmpty()) {
+            Criteria excludeCriteria = new Criteria("recipeId").nin(scoredRecipeIds);
+            andCriteriaList.add(excludeCriteria);
+        }
+
+        if (!andCriteriaList.isEmpty()) {
+            criteria = criteria.andOperator(andCriteriaList.toArray(new Criteria[0]));
+        }
+
+        Query query = Query.query(criteria).limit(20);
         return mongoTemplate.find(query, Recipe.class);
     }
 }
