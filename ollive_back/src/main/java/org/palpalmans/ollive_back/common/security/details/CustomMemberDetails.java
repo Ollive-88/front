@@ -12,10 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Slf4j
 @ToString
 public class CustomMemberDetails implements UserDetails {
-    @Getter
     private final Member member;
 
     public CustomMemberDetails(Member member){
