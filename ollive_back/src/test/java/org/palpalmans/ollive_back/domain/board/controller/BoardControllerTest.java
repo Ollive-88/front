@@ -228,7 +228,7 @@ class BoardControllerTest {
     )
     void getBoardDetail() throws Exception {
         // when
-        Board savedBoard = new Board("title", "content", 1L);
+        Board savedBoard = new Board("title", "content", normalMember.getId());
         List<Comment> comments = new ArrayList<>();
         getBoardDetailSetup(savedBoard, comments);
 
