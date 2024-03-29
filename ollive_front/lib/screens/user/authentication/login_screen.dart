@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/models/user/user_model.dart';
+import 'package:ollive_front/provider/provider.dart';
 import 'package:ollive_front/widgets/user/user_info_widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -28,6 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
   late FocusNode passwordFocusNode;
   Color idIconColor = Colors.grey;
   Color passwordIconColor = Colors.grey;
+
+  bool isSuccess = false;
 
   // static const storage =
   //     FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
@@ -120,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     idFocusNode.requestFocus();
                                   },
                                 ),
-                          onSaved: (String? val) => _userInfo.userId = val!,
+                          onSaved: (String? val) => _userInfo.email = val!,
                         ),
                         const SizedBox(
                           height: 10,
@@ -145,8 +148,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     passwordFocusNode.requestFocus();
                                   },
                                 ),
-                          keyboardType: TextInputType.emailAddress,
-                          onSaved: (String? val) => _userInfo.userId = val!,
+                          keyboardType: TextInputType.visiblePassword,
+                          onSaved: (String? val) => _userInfo.password = val!,
                         ),
                         _isEmpty
                             ? const Column(
@@ -180,31 +183,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ? () {
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();
-                                          // 나중에 로그인 실패 시로 코드 옮기기
+                                          // 로그인 요청 보내기
+                                          UserController().login(_userInfo);
+
+                                          // 로그인 실패하면 에러메시지 띄우기
                                           setState(() {
                                             _isEmpty = true;
                                           });
-
-                                          // 게시판 페이지로 이동
-                                          Navigator.of(context)
-                                              .pushNamedAndRemoveUntil(
-                                                  "/home", (route) => false);
-
                                           // 모든 포커스 해제
                                           FocusScope.of(context).unfocus();
-                                          // loginAction(
-                                          //   _userInfo.userId,
-                                          //   _userInfo.password,
-                                          // );
-
-                                          // 다음 페이지로 이동시키기 (pushedName으로 바꾸기)
-                                          // Navigator.pop(context);
                                         }
-                                        //   else {
-                                        //     // 비밀번호 값 초기화 후 포커스 이동시키기
-                                        //   //   FocusScope.of(context)
-                                        //   //       .requestFocus(focusNode);
-                                        //   // }
                                       }
                                     // 폼이 변하지 않았다면 버튼 비활성화
                                     : null,
@@ -268,6 +256,9 @@ class _LoginScreenState extends State<LoginScreen> {
           // _formChanged에 의존하는 위젯을 다시 그리도록 지시
           _formChanged = true;
         });
+      } else if (_idController.text.isEmpty ||
+          _passwordController.text.isEmpty) {
+        setState(() {});
       }
     }
   }
