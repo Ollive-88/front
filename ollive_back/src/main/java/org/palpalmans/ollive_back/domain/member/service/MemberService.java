@@ -33,17 +33,104 @@ public class MemberService {
         return memberInfoResponse;
     }
 
+    //이메일로 정보 불러오기
     public Optional<Member> getMemberInfo(String email){
 
         return memberRepository.getMemberByEmail(email);
     }
 
+    //이메일로 패스워드 포함 멤버 불러오기
     public Optional<NormalMember> getNormalMemberByEmail(String email){
         return  memberRepository.getNormalMemberByEmail(email);
     }
 
+    public Optional<NormalMember> getNormalMemberById(long id){
+        return memberRepository.getNormalMemberById(id);
+    }
+
     public Optional<SocialMember> getSocialMemberByEmail(String email){
         return  memberRepository.getSocialMemberByEmail(email);
+    }
+
+    public Boolean modifyPassword(long id, String password){
+
+        Optional<NormalMember> nm = memberRepository.getNormalMemberById(id);
+
+        if(nm.isPresent()){
+           nm.get().setPassword(password);
+           memberRepository.save(nm.get());
+           return true;
+        }
+        return false;
+    }
+
+    public Boolean modifyGender(long id, String gender){
+
+        Optional<Member> member = memberRepository.getMemberById(id);
+
+        if(member.isPresent()){
+            Member now = member.get();
+
+            Member update = Member.builder()
+                    .id(now.getId())
+                    .email(now.getEmail())
+                    .gender(gender)
+                    .birthday(now.getBirthday())
+                    .name(now.getName())
+                    .nickname(now.getNickname())
+                    .role(now.getRole())
+                    .profilePicture(now.getProfilePicture())
+                    .build();
+            memberRepository.save(update);
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean modifyProfilePicture(long id, String profilePicture){
+
+        Optional<Member> member = memberRepository.getMemberById(id);
+
+        if(member.isPresent()){
+            Member now = member.get();
+
+            Member update = Member.builder()
+                    .id(now.getId())
+                    .email(now.getEmail())
+                    .gender(now.getGender())
+                    .birthday(now.getBirthday())
+                    .name(now.getName())
+                    .nickname(now.getNickname())
+                    .role(now.getRole())
+                    .profilePicture(profilePicture)
+                    .build();
+            memberRepository.save(update);
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean modifyNickname(long id, String nickname){
+
+        Optional<Member> member = memberRepository.getMemberById(id);
+
+        if(member.isPresent()){
+            Member now = member.get();
+
+            Member update = Member.builder()
+                    .id(now.getId())
+                    .email(now.getEmail())
+                    .gender(now.getGender())
+                    .birthday(now.getBirthday())
+                    .name(now.getName())
+                    .nickname(nickname)
+                    .role(now.getRole())
+                    .profilePicture(now.getProfilePicture())
+                    .build();
+            memberRepository.save(update);
+            return true;
+        }
+        return false;
     }
 
 }
