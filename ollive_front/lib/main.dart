@@ -13,6 +13,8 @@ void main() {
   runApp(const App());
 }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class App extends StatefulWidget {
   const App({super.key});
 
@@ -35,6 +37,7 @@ class _AppState extends State<App> {
         '/login': (context) => const LoginScreen(),
         '/signin': (context) => const SigninScreen(),
       },
+      navigatorKey: navigatorKey,
       // 한글 사용 설정
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
