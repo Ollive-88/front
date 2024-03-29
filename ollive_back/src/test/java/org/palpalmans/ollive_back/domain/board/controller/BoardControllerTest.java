@@ -242,6 +242,8 @@ class BoardControllerTest {
                 .andExpect(jsonPath("$.content").value(savedBoard.getContent()))
                 .andExpect(jsonPath("$.likeCount").value(0))
                 .andExpect(jsonPath("$.viewCount").value(0))
+                .andExpect(jsonPath("$.isMine").value(true))
+                .andExpect(jsonPath("$.isLiked").value(false))
                 .andExpect(jsonPath("$.comments").isArray())
                 .andDo(print());
     }
