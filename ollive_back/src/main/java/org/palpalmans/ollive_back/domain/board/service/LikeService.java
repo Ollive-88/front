@@ -14,12 +14,17 @@ public class LikeService {
     private final LikeRepository likeRepository;
 
     @Transactional
-    public void saveLike(Board board, Member memeber) {
-        likeRepository.save(new Like(board, memeber));
+    public void saveLike(Board board, Member member) {
+        likeRepository.save(new Like(board, member));
     }
 
     @Transactional(readOnly = true)
     public int getLikeCount(Board board) {
         return likeRepository.countLikesByBoard(board);
+    }
+
+   @Transactional(readOnly = true)
+    public boolean isLikedMember(Board board, Member member) {
+        return likeRepository.existsLikeByBoardAndMember(board, member);
     }
 }
