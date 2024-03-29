@@ -66,8 +66,6 @@ public class MemberController {
         log.info("profilePicture = {}", profilePicture);
         log.info("nickname = {}", nickname);
 
-        //todo : save 관련 오류 수정하기
-
         // 패스워드값이 있으면 normalmember 가져와서 수정
         if (password != null) {
             String Pass = bCryptPasswordEncoder.encode(password);
@@ -93,8 +91,7 @@ public class MemberController {
             log.info("nickname isDone = {}", isDone);
         }
 
-
-        //업데이트 완료되면 상태에 따라서 다른 값 반환
+        //todo : 업데이트 완료되면 상태에 따라서 다른 값 반환
 
 
 
