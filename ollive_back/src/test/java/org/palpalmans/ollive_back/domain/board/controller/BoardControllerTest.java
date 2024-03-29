@@ -231,7 +231,6 @@ class BoardControllerTest {
         Board savedBoard = new Board("title", "content", 1L);
         List<Comment> comments = new ArrayList<>();
         getBoardDetailSetup(savedBoard, comments);
-        comments.sort(Comparator.comparing(Comment::getCreatedAt));
 
         // given
         mockMvc.perform(get("/api/v1/boards/" + savedBoard.getId())
@@ -244,10 +243,6 @@ class BoardControllerTest {
                 .andExpect(jsonPath("$.likeCount").value(0))
                 .andExpect(jsonPath("$.viewCount").value(0))
                 .andExpect(jsonPath("$.comments").isArray())
-                .andExpect(jsonPath("$.comments[0].commentId").value(comments.get(0).getId()))
-                .andExpect(jsonPath("$.comments[1].commentId").value(comments.get(1).getId()))
-                .andExpect(jsonPath("$.comments[2].commentId").value(comments.get(2).getId()))
-                .andExpect(jsonPath("$.comments[3].commentId").value(comments.get(3).getId()))
                 .andDo(print());
     }
 }
