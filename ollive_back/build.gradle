@@ -45,6 +45,10 @@ dependencies {
 	implementation 'com.google.code.findbugs:jsr305:3.0.2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	//minio
+	implementation 'io.minio:minio:8.5.9'
+
+
 	//lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
