@@ -6,10 +6,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.palpalmans.ollive_back.domain.member.model.dto.response.MemberInfoResponse;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
 import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.common.security.service.JwtService;
+import org.palpalmans.ollive_back.domain.member.service.MemberService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +27,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final MemberService memberService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -70,8 +73,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
         MemberRole role = MemberRole.valueOf(memberRole);
 
+        MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(memberId);
+
         Member member = Member.builder()
                 .id(memberId)
+                .email(memberInfoResponse.getEmail())
+                .gender(memberInfoResponse.getGender())
+                .birthday(memberInfoResponse.getBirthday())
                 .role(role)
                 .build();
 
