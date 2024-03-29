@@ -1,19 +1,19 @@
 class Login {
-  late String userName, password, userId;
+  late String name, password, email, token, refreshToken;
 
-  Login.fromJson(Map<String?, dynamic> json)
-      : userName = json['userName'],
+  Login.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
         password = json['password'],
-        userId = json['userId'];
+        email = json['email'];
 
   Login.fromUserInput()
-      : userId = '',
+      : email = '',
         password = '';
 
   Map<String, dynamic> toJson() => {
-        'userName': userName,
+        'name': name,
         'password': password,
-        'userId': userId,
+        'email': email,
       };
 }
 
@@ -26,8 +26,23 @@ class SignIn {
         gender = '',
         birthday = '',
         name = '',
-        nickname = '',
-        role = '';
+        nickname = '';
+}
+
+class ResponseDTO {
+  int? code;
+  String? msg;
+  String? token, refreshToken;
+
+  ResponseDTO({
+    this.code,
+    this.msg,
+  });
+
+  ResponseDTO.fromJson()
+      : code = 1,
+        token = '',
+        refreshToken = '';
 }
 
 class UserIngredients {
