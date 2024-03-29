@@ -220,9 +220,6 @@ class _SigninScreenState extends State<SigninScreen> {
                                         _gender != null) {
                                       _formKey.currentState!.save();
                                       _userInfo.gender = _gender!;
-                                      _userInfo.role =
-                                          'ROLE_NON_REGISTERED_MEMBER';
-
                                       // 회원가입 요청 보내기
                                       UserService().registerUser(_userInfo);
 
