@@ -204,10 +204,10 @@ class BoardControllerTest {
     void getBoardDetailSetup(Board board, List<Comment> comments) {
         board = boardRepository.save(board);
 
-        Comment comment1 = new Comment("content1", board, normalMember.getId());
-        Comment comment2 = new Comment("content2", board, normalMember.getId());
-        Comment comment3 = new Comment("content3", board, normalMember.getId());
-        Comment comment4 = new Comment("content4", board, normalMember.getId());
+        Comment comment1 = new Comment("content1", board, normalMember);
+        Comment comment2 = new Comment("content2", board, normalMember);
+        Comment comment3 = new Comment("content3", board, normalMember);
+        Comment comment4 = new Comment("content4", board, normalMember);
         comments.add(comment1);
         comments.add(comment2);
         comments.add(comment3);

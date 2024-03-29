@@ -80,7 +80,17 @@ public class BoardService {
         //TODO imageService 구현 완료시 이미지 조회 해오기
         // imageService.getImage();
         List<String> images = new ArrayList<>();
-        return toGetBoardDetailResponse(board, customMemberDetails.getMember(), viewCount, likeCount, images);
+
+        List<String> tags = board.getBoardTags()
+                .stream()
+                .map(boardTag -> boardTag.getTag().getName())
+                .toList();
+
+        return toGetBoardDetailResponse(
+                board, customMemberDetails.getMember(),
+                viewCount, likeCount,
+                images, tags
+        );
     }
 
     private Board writeBoard(String title, String content, Long memberId) {

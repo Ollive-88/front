@@ -7,12 +7,16 @@ import java.util.List;
 
 @Builder
 public record GetBoardDetailResponse(
+        Long boardId,
         String title,
         String content,
-        LocalDateTime createdAt,
         int viewCount,
         int likeCount,
+        boolean isMine,
+        Writer writer,
         List<String> images,
+        List<String> tags,
+        LocalDateTime createdAt,
         List<GetCommentResponse> comments
 ) {
 }

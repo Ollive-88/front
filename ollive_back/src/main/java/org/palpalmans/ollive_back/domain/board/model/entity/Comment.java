@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.palpalmans.ollive_back.common.BaseTimeEntity;
+import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -25,20 +26,22 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @Column(nullable = false)
-    private Long memberId;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-    public Comment(Long id, String content, Board board, Long memberId) {
+
+    public Comment(Long id, String content, Board board, Member member) {
         this.id = id;
         this.content = content;
         this.board = board;
-        this.memberId = memberId;
+        this.member = member;
     }
 
-    public Comment(String content, Board board, Long memberId) {
+    public Comment(String content, Board board, Member member) {
         this.content = content;
         this.board = board;
-        this.memberId = memberId;
+        this.member = member;
     }
 
     @Override
@@ -47,7 +50,7 @@ public class Comment extends BaseTimeEntity {
                 "id=" + id +
                 ", content='" + content + '\'' +
                 ", boardId=" + board.getId() +
-                ", memberId=" + memberId +
+                ", memberId=" + member.getId() +
                 '}';
     }
 }
