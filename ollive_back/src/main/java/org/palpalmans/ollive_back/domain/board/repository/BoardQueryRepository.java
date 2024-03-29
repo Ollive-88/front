@@ -30,7 +30,7 @@ public class BoardQueryRepository {
                         .and(keyword == null ? null : qBoard.title.contains(keyword))
                         .and(tagNames.isEmpty() ? null : qTag.name.in(tagNames)))
                 .groupBy(qBoard.id)
-                .orderBy(qBoard.id.count().desc(), qBoard.id.asc())
+                .orderBy(qBoard.id.count().desc(), qBoard.createdAt.desc())
                 .limit(size)
                 .fetch();
     }
