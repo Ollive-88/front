@@ -70,18 +70,8 @@ public class MemberService {
 
         if(member.isPresent()){
             Member now = member.get();
-
-            Member update = Member.builder()
-                    .id(now.getId())
-                    .email(now.getEmail())
-                    .gender(gender)
-                    .birthday(now.getBirthday())
-                    .name(now.getName())
-                    .nickname(now.getNickname())
-                    .role(now.getRole())
-                    .profilePicture(now.getProfilePicture())
-                    .build();
-            memberRepository.save(update);
+            now.changeGender(gender);
+            memberRepository.save(now);
             return true;
         }
         return false;
@@ -93,18 +83,8 @@ public class MemberService {
 
         if(member.isPresent()){
             Member now = member.get();
-
-            Member update = Member.builder()
-                    .id(now.getId())
-                    .email(now.getEmail())
-                    .gender(now.getGender())
-                    .birthday(now.getBirthday())
-                    .name(now.getName())
-                    .nickname(now.getNickname())
-                    .role(now.getRole())
-                    .profilePicture(profilePicture)
-                    .build();
-            memberRepository.save(update);
+            now.changeProfilePicture(profilePicture);
+            memberRepository.save(now);
             return true;
         }
         return false;
@@ -116,18 +96,8 @@ public class MemberService {
 
         if(member.isPresent()){
             Member now = member.get();
-
-            Member update = Member.builder()
-                    .id(now.getId())
-                    .email(now.getEmail())
-                    .gender(now.getGender())
-                    .birthday(now.getBirthday())
-                    .name(now.getName())
-                    .nickname(nickname)
-                    .role(now.getRole())
-                    .profilePicture(now.getProfilePicture())
-                    .build();
-            memberRepository.save(update);
+            now.changeNickname(nickname);
+            memberRepository.save(now);
             return true;
         }
         return false;
