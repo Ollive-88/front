@@ -23,6 +23,7 @@ public class BoardMapper {
             Board board, int views, int likes
     ) {
         return GetBoardResponse.builder()
+                .boardId(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .thumbnailAddress("thumbnailAddress") // TODO imageService 구현시 수정
