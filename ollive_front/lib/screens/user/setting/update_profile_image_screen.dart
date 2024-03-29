@@ -24,7 +24,8 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
 
   // 이미지 피커
   final ImagePicker _picker = ImagePicker();
-  XFile pickedImg = XFile('');
+  XFile? _pickedImg;
+  bool _pickInProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +52,9 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
                   ),
                   Center(
                     child: ClipOval(
-                      child: Image.network(
-                        'https://i.ytimg.com/vi/gpFSXXhonVk/maxresdefault.jpg',
+                      child: Image.asset(
+                        // 'https://i.ytimg.com/vi/gpFSXXhonVk/maxresdefault.jpg',
+                        'assets/image/icons/basic_profile_img.png',
                         width: 250,
                         height: 250,
                         fit: BoxFit.cover,
@@ -155,6 +157,12 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
 
   // 이미지 선택 메서드
   Future<void> _pickImg() async {
+    // 이중클릭 방지
+    if (_pickInProgress) {
+      return;
+    }
+    _pickInProgress = true;
+
     // 이미지(XFile)을 받아오고 상태갱신
     XFile? image = await _picker.pickImage(
       source: ImageSource.gallery,
@@ -163,9 +171,10 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
 
     if (image != null) {
       setState(() {
-        pickedImg = image;
+        _pickedImg = image;
       });
     }
+    _pickInProgress = false;
   }
 
   // 이미지 지우는 메서드
