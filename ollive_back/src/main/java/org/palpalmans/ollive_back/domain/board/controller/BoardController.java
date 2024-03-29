@@ -1,12 +1,12 @@
 package org.palpalmans.ollive_back.domain.board.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.board.model.dto.request.WriteBoardRequest;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardDetailResponse;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardsResponse;
+import org.palpalmans.ollive_back.domain.board.model.dto.response.WriteBoardResponse;
 import org.palpalmans.ollive_back.domain.board.service.BoardService;
-import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 
-import static java.net.URI.create;
+import static org.palpalmans.ollive_back.domain.board.model.BoardMapper.toWriteBoardResponse;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("/api/v1/boards")
@@ -24,16 +25,16 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping
-    public ResponseEntity<Void> writeBoard(
-            HttpServletRequest httpServletRequest,
+    public ResponseEntity<WriteBoardResponse> writeBoard(
             @Validated
-            WriteBoardRequest writeBoardRequest
+            WriteBoardRequest writeBoardRequest,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
     ) {
-        //TODO 로그인 완료시 member 조회 하기
-        Long boardId = boardService.writeBoard(writeBoardRequest, 1L);
-        return ResponseEntity.created(
-                create(httpServletRequest.getRequestURI()).resolve(String.valueOf(boardId))
-        ).build();
+        Long boardId = boardService.writeBoard(
+                writeBoardRequest, customMemberDetails.getMember()
+        );
+        return ResponseEntity.status(CREATED)
+                .body(toWriteBoardResponse(boardId));
     }
 
     @GetMapping

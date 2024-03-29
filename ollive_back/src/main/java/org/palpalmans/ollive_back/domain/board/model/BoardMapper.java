@@ -1,10 +1,7 @@
 package org.palpalmans.ollive_back.domain.board.model;
 
 import org.palpalmans.ollive_back.domain.board.model.dto.request.WriteBoardRequest;
-import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardDetailResponse;
-import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardResponse;
-import org.palpalmans.ollive_back.domain.board.model.dto.response.GetCommentResponse;
-import org.palpalmans.ollive_back.domain.board.model.dto.response.Writer;
+import org.palpalmans.ollive_back.domain.board.model.dto.response.*;
 import org.palpalmans.ollive_back.domain.board.model.entity.Board;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 
@@ -14,8 +11,12 @@ import java.util.List;
 public class BoardMapper {
     public static Board toBoard(WriteBoardRequest writeBoardRequest, Long memberId) {
         return new Board(
-                writeBoardRequest.title(), writeBoardRequest.content(), memberId
+                writeBoardRequest.getTitle(), writeBoardRequest.getContent(), memberId
         );
+    }
+
+    public static WriteBoardResponse toWriteBoardResponse(Long boardId) {
+        return new WriteBoardResponse(boardId);
     }
 
     public static GetBoardResponse toGetBoardResponse(
