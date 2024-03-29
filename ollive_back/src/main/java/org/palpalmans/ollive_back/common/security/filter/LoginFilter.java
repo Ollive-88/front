@@ -1,14 +1,14 @@
-package org.palpalmans.ollive_back.domain.member.security.filter;
+package org.palpalmans.ollive_back.common.security.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.palpalmans.ollive_back.common.security.service.JwtService;
 import org.palpalmans.ollive_back.domain.member.model.dto.GeneratedToken;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.TokenCreateRequest;
-import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
-import org.palpalmans.ollive_back.domain.member.security.service.JwtService;
+import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

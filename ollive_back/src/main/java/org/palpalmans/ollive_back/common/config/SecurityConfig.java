@@ -2,10 +2,10 @@ package org.palpalmans.ollive_back.common.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.palpalmans.ollive_back.domain.member.security.handler.CustomSuccessHandler;
-import org.palpalmans.ollive_back.domain.member.security.filter.LoginFilter;
-import org.palpalmans.ollive_back.domain.member.security.service.JwtService;
-import org.palpalmans.ollive_back.domain.member.service.CustomOauth2UserService;
+import org.palpalmans.ollive_back.common.security.handler.CustomSuccessHandler;
+import org.palpalmans.ollive_back.common.security.filter.LoginFilter;
+import org.palpalmans.ollive_back.common.security.service.JwtService;
+import org.palpalmans.ollive_back.common.security.service.CustomOauth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

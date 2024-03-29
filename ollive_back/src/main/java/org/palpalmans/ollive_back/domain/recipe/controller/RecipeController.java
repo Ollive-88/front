@@ -2,7 +2,7 @@ package org.palpalmans.ollive_back.domain.recipe.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
+import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.RecipeDto;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.RecipeSummaryDto;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.request.RecipeScoreRequest;

@@ -10,7 +10,7 @@ import org.palpalmans.ollive_back.domain.board.model.entity.Board;
 import org.palpalmans.ollive_back.domain.board.repository.BoardQueryRepository;
 import org.palpalmans.ollive_back.domain.board.repository.BoardRepository;
 import org.palpalmans.ollive_back.domain.image.service.ImageService;
-import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
+import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.member.service.MemberService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

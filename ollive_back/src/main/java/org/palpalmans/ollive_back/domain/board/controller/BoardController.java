@@ -6,7 +6,7 @@ import org.palpalmans.ollive_back.domain.board.model.dto.request.WriteBoardReque
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardDetailResponse;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardsResponse;
 import org.palpalmans.ollive_back.domain.board.service.BoardService;
-import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
+import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;

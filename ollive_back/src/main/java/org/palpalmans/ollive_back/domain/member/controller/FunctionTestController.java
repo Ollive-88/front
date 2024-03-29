@@ -5,7 +5,7 @@ import org.palpalmans.ollive_back.domain.member.model.dto.request.EmailRequest;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.TokenCreateRequest;
 import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
 import org.palpalmans.ollive_back.domain.member.model.entity.SocialMember;
-import org.palpalmans.ollive_back.domain.member.security.service.JwtService;
+import org.palpalmans.ollive_back.common.security.service.JwtService;
 import org.palpalmans.ollive_back.domain.member.service.MemberService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

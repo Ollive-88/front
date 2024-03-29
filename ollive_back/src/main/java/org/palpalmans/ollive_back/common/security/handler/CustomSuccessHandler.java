@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.member.security.handler;
+package org.palpalmans.ollive_back.common.security.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -6,11 +6,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.palpalmans.ollive_back.common.security.service.JwtService;
 import org.palpalmans.ollive_back.domain.member.model.dto.GeneratedToken;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.TokenCreateRequest;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.CustomOauth2User;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
-import org.palpalmans.ollive_back.domain.member.security.service.JwtService;
 import org.palpalmans.ollive_back.domain.member.service.MemberService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;

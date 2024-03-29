@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.member.service;
+package org.palpalmans.ollive_back.common.security.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +11,7 @@ import org.palpalmans.ollive_back.domain.member.model.entity.SocialMember;
 import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
 import org.palpalmans.ollive_back.domain.member.model.status.SocialType;
 import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
+import org.palpalmans.ollive_back.domain.member.service.MemberService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;

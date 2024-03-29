@@ -1,10 +1,10 @@
-package org.palpalmans.ollive_back.domain.member.security.service;
+package org.palpalmans.ollive_back.common.security.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
 import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
-import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
+import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

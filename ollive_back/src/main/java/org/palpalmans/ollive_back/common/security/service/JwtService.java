@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.member.security.service;
+package org.palpalmans.ollive_back.common.security.service;
 
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class JwtService {
 
     //AccessToken 생성
     public String generateAccessToken(TokenCreateRequest tokenCreateRequest) {
-        long tokenPeriod = 1000L * 60L * 100L; // 100분
+        long tokenPeriod = 1000L * 60L * 100L * 10000L; // 1000000분
 //        long tokenPeriod = 1000L * 60L * 60L * 24L * 14; // 2주
 
         return makeToken(tokenCreateRequest, tokenPeriod);

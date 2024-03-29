@@ -5,10 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.JoinRequest;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.ModifyMemberInfoRequest;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.MemberInfoResponse;
-import org.palpalmans.ollive_back.domain.member.model.entity.Member;
-import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
 import org.palpalmans.ollive_back.domain.member.model.status.JoinRequestStatus;
-import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
+import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.member.service.JoinService;
 import org.palpalmans.ollive_back.domain.member.service.MemberService;
 import org.springframework.http.HttpStatus;
@@ -16,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor

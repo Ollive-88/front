@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.member.security.filter;
+package org.palpalmans.ollive_back.common.security.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
-import org.palpalmans.ollive_back.domain.member.security.details.CustomMemberDetails;
-import org.palpalmans.ollive_back.domain.member.security.service.JwtService;
+import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
+import org.palpalmans.ollive_back.common.security.service.JwtService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.member.security.details;
+package org.palpalmans.ollive_back.common.security.details;
 
 import lombok.Getter;
 import lombok.ToString;

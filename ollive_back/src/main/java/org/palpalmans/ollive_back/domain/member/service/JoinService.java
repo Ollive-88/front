@@ -31,7 +31,6 @@ public class JoinService {
         MemberRole role = MemberRole.ROLE_REGISTERED_MEMBER;
 
 
-
         Boolean isExist = memberRepository.existsByEmail(email);
         if(isExist) return JoinRequestStatus.EMAIL_DUPLICATED;
 
