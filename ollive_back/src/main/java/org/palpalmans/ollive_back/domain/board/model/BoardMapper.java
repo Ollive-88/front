@@ -42,13 +42,14 @@ public class BoardMapper {
 
     public static GetBoardDetailResponse toGetBoardDetailResponse(
             Board board, Member member,
-            int viewCount, int likeCount,
+            int viewCount, int likeCount, boolean isLiked,
             List<String> images, List<String> tags
     ) {
         return GetBoardDetailResponse.builder()
                 .boardId(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
+                .isLiked(isLiked)
                 .writer(new Writer(member.getNickname(), member.getProfilePicture()))
                 .isMine(board.getMemberId() == member.getId())
                 .createdAt(board.getCreatedAt())

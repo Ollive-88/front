@@ -86,6 +86,7 @@ public class BoardService {
         //TODO imageService 구현 완료시 이미지 조회 해오기
         // imageService.getImage();
         List<String> images = new ArrayList<>();
+        boolean isLiked = likeService.isLikedMember(board, customMemberDetails.getMember());
 
         List<String> tags = board.getBoardTags()
                 .stream()
@@ -94,7 +95,7 @@ public class BoardService {
 
         return toGetBoardDetailResponse(
                 board, customMemberDetails.getMember(),
-                viewCount, likeCount,
+                viewCount, likeCount, isLiked,
                 images, tags
         );
     }

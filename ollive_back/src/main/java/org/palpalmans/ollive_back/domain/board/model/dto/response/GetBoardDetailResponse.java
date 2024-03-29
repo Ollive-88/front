@@ -13,6 +13,7 @@ public record GetBoardDetailResponse(
         int viewCount,
         int likeCount,
         boolean isMine,
+        boolean isLiked,
         Writer writer,
         List<String> images,
         List<String> tags,
