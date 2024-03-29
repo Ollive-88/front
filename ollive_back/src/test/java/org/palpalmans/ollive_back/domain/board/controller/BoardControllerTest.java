@@ -101,6 +101,10 @@ class BoardControllerTest {
 
     @Test
     @DisplayName("write board controller test")
+    @WithUserDetails(value = "test@naver.com",
+            userDetailsServiceBeanName = "customMemberDetailsService",
+            setupBefore = TestExecutionEvent.TEST_EXECUTION
+    )
     @Transactional
     void writeBoard() throws Exception {
         MockMultipartFile mockImage1 = new MockMultipartFile("images", "test1".getBytes(StandardCharsets.UTF_8));
