@@ -7,6 +7,7 @@ import org.palpalmans.ollive_back.domain.board.model.entity.Board;
 import org.palpalmans.ollive_back.domain.board.model.entity.View;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
+import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -21,6 +22,12 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = NONE)
 class ViewRepositoryTest {
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private BoardRepository boardRepository;
+
     @Autowired
     private ViewRepository viewRepository;
 
@@ -37,6 +44,10 @@ class ViewRepositoryTest {
                 .gender("gender")
                 .role(MemberRole.ROLE_REGISTERED_MEMBER)
                 .build();
+
+
+        memberRepository.save(member);
+        boardRepository.save(board);
 
         View view = viewRepository.save(new View(board, member));
         List<View> views = viewRepository.findAll();
