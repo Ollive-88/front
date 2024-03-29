@@ -20,7 +20,7 @@ public class BoardMapper {
     }
 
     public static GetBoardResponse toGetBoardResponse(
-            Board board, int views, int likes, boolean isViewed, boolean isLiked
+            Board board, int views, int likes
     ) {
         return GetBoardResponse.builder()
                 .title(board.getTitle())
@@ -29,8 +29,6 @@ public class BoardMapper {
                 .commentCount(board.getComments().size())
                 .likes(likes)
                 .views(views)
-                .isLiked(isLiked)
-                .isViewed(isViewed)
                 .createdAt(board.getCreatedAt())
                 .tags(board.getBoardTags()
                         .stream()

@@ -13,8 +13,6 @@ public record GetBoardResponse(
         int commentCount,
         int likes,
         int views,
-        boolean isLiked,
-        boolean isViewed,
         List<String> tags,
         LocalDateTime createdAt
 ) {

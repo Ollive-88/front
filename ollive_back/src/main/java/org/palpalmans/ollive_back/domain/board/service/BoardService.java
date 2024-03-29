@@ -52,7 +52,9 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public GetBoardsResponse getBoards(String keyword, Long lastIndex, int size, List<String> tagNames) {
+    public GetBoardsResponse getBoards(
+            String keyword, Long lastIndex, int size, List<String> tagNames
+    ) {
         List<Board> boards = boardQueryRepository.getBoardList(keyword, lastIndex, size, tagNames);
         List<GetBoardResponse> getBoardResponseList = new ArrayList<>();
 
@@ -61,11 +63,9 @@ public class BoardService {
             int likeCount = likeService.getLikeCount(board);
 
             getBoardResponseList.add(
-                    toGetBoardResponse(
-                            board, viewCount, likeCount, false, false
-                    )
-                    // TODO login 완료시 : Member 가져오기
+                    toGetBoardResponse(board, viewCount, likeCount)
             );
+            // TODO imageService.select()
         }
         return new GetBoardsResponse(getBoardResponseList, boards.size() < size);
     }
