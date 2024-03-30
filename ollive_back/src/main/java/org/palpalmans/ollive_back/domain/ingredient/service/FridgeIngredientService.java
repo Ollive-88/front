@@ -35,6 +35,7 @@ public class FridgeIngredientService {
         return fridgeIngredientRepository.save(fridgeIngredient).getId();
     }
 
+    @Transactional
     public Long modifyFridgeIngredient(long memberId, long fridgeIngredientId, FridgeIngredientRequest request) {
         FridgeIngredient fridgeIngredient = fridgeIngredientRepository.findByIdAndMemberId(fridgeIngredientId, memberId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 재료입니다."));
 
@@ -44,6 +45,7 @@ public class FridgeIngredientService {
         return fridgeIngredientRepository.save(fridgeIngredient).getId();
     }
 
+    @Transactional
     public Long deleteFridgeIngredient(long memberId, Long fridgeIngredientId) {
         FridgeIngredient fridgeIngredient = fridgeIngredientRepository.findByIdAndMemberId(fridgeIngredientId, memberId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 재료입니다."));
         fridgeIngredientRepository.deleteById(fridgeIngredient.getId());
