@@ -36,4 +36,12 @@ public class FridgeIngredient {
         this.name = name;
         this.endAt = endAt;
     }
+
+    public void modifyName(String name){
+        this.name = name;
+    }
+
+    public void modifyEndAt(LocalDate endAt){
+        this.endAt = endAt;
+    }
 }

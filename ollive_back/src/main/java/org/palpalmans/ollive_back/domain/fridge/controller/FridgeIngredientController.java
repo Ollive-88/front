@@ -40,6 +40,21 @@ public class FridgeIngredientController {
         return ResponseEntity.ok().body(fridgeIngredientService.registerFridgeIngredient(memberId, request));
     }
 
+    @PutMapping("/{fridgeIngredientId}")
+    public ResponseEntity<Long> modifyFridgeIngredient(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+            @Valid @RequestBody FridgeIngredientRequest request,
+            @PathVariable Long fridgeIngredientId
+    ){
+        if(!UtilMethods.isValidLocalDate(request.endAt())){
+            throw new RuntimeException("유효하지 않은 날짜 타입입니다");
+        }
+
+        long memberId = customMemberDetails.getId();
+
+        return ResponseEntity.ok().body(fridgeIngredientService.modifyFridgeIngredient(memberId, fridgeIngredientId, request));
+    }
+
 
     @DeleteMapping("/{fridgeIngredientId}")
     public ResponseEntity<Long> deleteFridgeIngredient(
