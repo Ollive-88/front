@@ -3,7 +3,7 @@ package org.palpalmans.ollive_back.domain.fridge.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
-import org.palpalmans.ollive_back.domain.fridge.model.dto.FridgeIngredientRequest;
+import org.palpalmans.ollive_back.domain.fridge.model.dto.request.FridgeIngredientRequest;
 import org.palpalmans.ollive_back.domain.fridge.service.FridgeIngredientService;
 import org.palpalmans.ollive_back.domain.fridge.util.UtilMethods;
 import org.springframework.http.ResponseEntity;
