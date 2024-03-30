@@ -39,4 +39,13 @@ public class FridgeIngredientController {
 
         return ResponseEntity.ok().body(fridgeIngredientService.registerFridgeIngredient(memberId, request));
     }
+
+
+    @DeleteMapping("/{fridgeIngredientId}")
+    public ResponseEntity<Long> deleteFridgeIngredient(
+            @PathVariable Long fridgeIngredientId
+    ){
+
+        return ResponseEntity.ok().body(fridgeIngredientService.deleteFridgeIngredient(fridgeIngredientId));
+    }
 }

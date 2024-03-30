@@ -1,5 +1,6 @@
 package org.palpalmans.ollive_back.domain.fridge.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.fridge.model.dto.FridgeIngredientDto;
 import org.palpalmans.ollive_back.domain.fridge.model.dto.FridgeIngredientMapper;
@@ -32,5 +33,12 @@ public class FridgeIngredientService {
                 .build();
 
         return fridgeIngredientRepository.save(fridgeIngredient).getId();
+    }
+
+    public Long deleteFridgeIngredient(Long fridgeIngredientId) {
+        FridgeIngredient fridgeIngredient = fridgeIngredientRepository.findById(fridgeIngredientId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 재료입니다."));
+        fridgeIngredientRepository.deleteById(fridgeIngredient.getId());
+
+        return fridgeIngredient.getId();
     }
 }
