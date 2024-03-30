@@ -27,11 +27,9 @@ import java.util.List;
 
 import static org.palpalmans.ollive_back.domain.member.model.status.MemberRole.ROLE_ADMIN;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -145,4 +143,24 @@ class DislikeIngredientControllerTest {
         dislikeIngredientTearDown();
     }
 
+    @DisplayName("제외 재료 재료 삭제 테스트")
+    @Test
+    @WithUserDetails(value = "test@naver.com",
+            userDetailsServiceBeanName = "customMemberDetailsService",
+            setupBefore = TestExecutionEvent.TEST_EXECUTION
+    )
+    void deleteFridgeIngredientTest() throws Exception {
+        //given
+        List<DislikeIngredient> list = new ArrayList<>();
+        dislikeIngredientSetup(list);
+
+        //when
+        mockMvc.perform(delete("/dislike-ingredients/{dislikeIngredientId}", list.get(0).getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().string(list.get(0).getId().toString()))
+                .andDo(print());
+
+        //then
+        dislikeIngredientTearDown();
+    }
 }
