@@ -162,7 +162,7 @@ CREATE TABLE fridge_ingredient
     id        BIGINT AUTO_INCREMENT
         PRIMARY KEY,
     member_id BIGINT      NOT NULL,
-    end_at    TIMESTAMP   NOT NULL,
+    end_at    DATE   NOT NULL,
     name      VARCHAR(50) NOT NULL,
     CONSTRAINT FK_FRIDGE_INGREDIENT_MEMBER
         FOREIGN KEY (member_id) REFERENCES member (id)
