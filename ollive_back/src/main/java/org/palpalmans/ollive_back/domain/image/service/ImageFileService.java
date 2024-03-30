@@ -21,16 +21,13 @@ public class ImageFileService {
 
     private final MinioClient minioClient;
 
-    @Value("${minio.url}")
-    private String URL;
-
     @Value("${minio.bucket.name}")
     private String BUCKET_NAME;
 
     @Value("${minio.dir.image}")
     private String IMAGE_DIR;
 
-    @Value("${minio.url}/${minio.bucket.name}/")
+    @Value("${minio.path}")
     private String PATH;
 
     public String saveImageFile(MultipartFile multipartFile)
