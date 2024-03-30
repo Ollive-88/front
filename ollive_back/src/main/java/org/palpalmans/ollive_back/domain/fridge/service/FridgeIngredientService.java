@@ -24,7 +24,7 @@ public class FridgeIngredientService {
     }
 
     @Transactional
-    public Long registerIngredient(long memberId, FridgeIngredientRequest request){
+    public Long registerFridgeIngredient(long memberId, FridgeIngredientRequest request){
         FridgeIngredient fridgeIngredient = FridgeIngredient.builder()
                 .memberId(memberId)
                 .name(request.name())

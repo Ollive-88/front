@@ -27,7 +27,7 @@ public class FridgeIngredientController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> registerIngredient (
+    public ResponseEntity<Long> registerFridgeIngredient(
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
             @Valid @RequestBody FridgeIngredientRequest request
     ) {
@@ -37,6 +37,6 @@ public class FridgeIngredientController {
 
         long memberId = customMemberDetails.getId();
 
-        return ResponseEntity.ok().body(fridgeIngredientService.registerIngredient(memberId, request));
+        return ResponseEntity.ok().body(fridgeIngredientService.registerFridgeIngredient(memberId, request));
     }
 }
