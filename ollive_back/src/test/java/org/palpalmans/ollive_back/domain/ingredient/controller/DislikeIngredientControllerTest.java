@@ -21,13 +21,16 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static org.palpalmans.ollive_back.domain.member.model.status.MemberRole.ROLE_ADMIN;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -57,11 +60,15 @@ class DislikeIngredientControllerTest {
     }
 
     void dislikeIngredientSetup(List<DislikeIngredient> list) {
+        DislikeIngredient dislikeIngredient1 = dislikeIngredientRepository.save(new DislikeIngredient(normalMember.getId(), "오이"));
+        DislikeIngredient dislikeIngredient2 = dislikeIngredientRepository.save(new DislikeIngredient(normalMember.getId(), "오이"));
+        DislikeIngredient dislikeIngredient3 = dislikeIngredientRepository.save(new DislikeIngredient(normalMember.getId(), "오이"));
+        DislikeIngredient dislikeIngredient4 = dislikeIngredientRepository.save(new DislikeIngredient(normalMember.getId(), "오이"));
 
-    }
-
-    void dislikeIngredientTearDown() {
-        dislikeIngredientRepository.deleteAll();
+        list.add(dislikeIngredient1);
+        list.add(dislikeIngredient2);
+        list.add(dislikeIngredient3);
+        list.add(dislikeIngredient4);
     }
 
     @BeforeEach
@@ -80,18 +87,52 @@ class DislikeIngredientControllerTest {
         memberRepository.save(normalMember);
     }
 
+    void dislikeIngredientTearDown() {
+        dislikeIngredientRepository.deleteAll();
+    }
+
+
     @AfterEach
     void tearDown() {
         memberRepository.deleteAll();
     }
 
-    @DisplayName("냉장고 재료 저장 테스트")
+    @DisplayName("제외 재료 조회 테스트")
     @Test
     @WithUserDetails(value = "test@naver.com",
             userDetailsServiceBeanName = "customMemberDetailsService",
             setupBefore = TestExecutionEvent.TEST_EXECUTION
     )
-    void registerFridgeIngredientTest() throws Exception {
+    void getDislikeIngredientsTest() throws Exception{
+        //given
+        List<DislikeIngredient> list = new ArrayList<>();
+        dislikeIngredientSetup(list);
+
+        //when
+        mockMvc.perform(get("/dislike-ingredients"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].dislikeIngredientId").value(list.get(0).getId()))
+                .andExpect(jsonPath("$[0].name").value(list.get(0).getName()))
+                .andExpect(jsonPath("$[1].dislikeIngredientId").value(list.get(1).getId()))
+                .andExpect(jsonPath("$[1].name").value(list.get(1).getName()))
+                .andExpect(jsonPath("$[2].dislikeIngredientId").value(list.get(2).getId()))
+                .andExpect(jsonPath("$[2].name").value(list.get(2).getName()))
+                .andExpect(jsonPath("$[3].dislikeIngredientId").value(list.get(3).getId()))
+                .andExpect(jsonPath("$[3].name").value(list.get(3).getName()))
+                .andDo(print());
+
+        //then
+        dislikeIngredientTearDown();
+    }
+
+
+    @DisplayName("제외 재료 저장 테스트")
+    @Test
+    @WithUserDetails(value = "test@naver.com",
+            userDetailsServiceBeanName = "customMemberDetailsService",
+            setupBefore = TestExecutionEvent.TEST_EXECUTION
+    )
+    void registerDislikeIngredientTest() throws Exception {
         //given
         DislikeIngredientRegisterRequest request = request();
 
