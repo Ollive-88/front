@@ -1,6 +1,9 @@
 package org.palpalmans.ollive_back.domain.image.service;
 
+import io.minio.errors.*;
+import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.palpalmans.ollive_back.domain.image.model.ImageType;
 import org.palpalmans.ollive_back.domain.image.model.entity.Image;
 import org.palpalmans.ollive_back.domain.image.repository.ImageRepository;
@@ -8,8 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import static org.palpalmans.ollive_back.common.error.ErrorMessage.*;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ImageService {
@@ -19,8 +28,18 @@ public class ImageService {
     @Transactional
     public void saveImage(List<MultipartFile> images, ImageType imageType, Long referenceId) {
         images.forEach(image -> {
-            String address = imageFileService.saveImageFile(image);
-            imageRepository.save(new Image(address, imageType, referenceId));
+            try {
+                String address = imageFileService.saveImageFile(image);
+                imageRepository.save(new Image(address, imageType, referenceId));
+            } catch (ServerException | InsufficientDataException | ErrorResponseException
+                     | IOException | NoSuchAlgorithmException | InvalidKeyException
+                     | InvalidResponseException | XmlParserException | InternalException e) {
+                log.error(IMAGE_FILE_NOT_SAVED.getMessage());
+            } catch (PersistenceException e) {
+                log.error(IMAGE_ENTITY_NOT_SAVED.getMessage());
+            } catch (Exception e) {
+                log.error(UNKNOWN.getMessage());
+            }
         });
     }
 }
