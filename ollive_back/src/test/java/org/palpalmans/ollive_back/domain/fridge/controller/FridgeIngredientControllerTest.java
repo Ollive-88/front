@@ -149,6 +149,30 @@ class FridgeIngredientControllerTest {
         //then
     }
 
+    @DisplayName("냉장고 재료 수정 테스트")
+    @Test
+    @WithUserDetails(value = "test@naver.com",
+            userDetailsServiceBeanName = "customMemberDetailsService",
+            setupBefore = TestExecutionEvent.TEST_EXECUTION
+    )
+    void modifyFridgeIngredientTest() throws Exception {
+        //given
+        List<FridgeIngredient> list = new ArrayList<>();
+        fridgeIngredientSetup(list);
+
+        //when
+        mockMvc.perform(
+                        put("/fridge-ingredients/{fridgeIngredientId}",
+                        list.get(0).getId()).contentType(APPLICATION_JSON).content(objectToJson(request()))
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().string(list.get(0).getId().toString()))
+                .andDo(print());
+
+        //then
+        fridgeIngredientTearDown();
+    }
+
     @DisplayName("냉장고 재료 삭제 테스트")
     @Test
     @WithUserDetails(value = "test@naver.com",
