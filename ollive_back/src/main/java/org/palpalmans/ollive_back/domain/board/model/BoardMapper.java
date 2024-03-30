@@ -20,13 +20,13 @@ public class BoardMapper {
     }
 
     public static GetBoardResponse toGetBoardResponse(
-            Board board, int views, int likes
+            Board board, int views, int likes, String thumbnail
     ) {
         return GetBoardResponse.builder()
                 .boardId(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
-                .thumbnailAddress("thumbnailAddress") // TODO imageService 구현시 수정
+                .thumbnailAddress(thumbnail)
                 .commentCount(board.getComments().size())
                 .likes(likes)
                 .views(views)
@@ -61,7 +61,7 @@ public class BoardMapper {
                         .stream()
                         .map(CommentMapper::toGetCommentResponse)
                         .sorted(Comparator.comparing(GetCommentResponse::createdAt).reversed())
-                        .toList()
-                ).build();
+                        .toList())
+                .build();
     }
 }
