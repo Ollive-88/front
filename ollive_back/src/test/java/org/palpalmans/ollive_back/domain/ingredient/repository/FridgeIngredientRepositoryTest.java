@@ -1,10 +1,10 @@
-package org.palpalmans.ollive_back.domain.fridge.repository;
+package org.palpalmans.ollive_back.domain.ingredient.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.palpalmans.ollive_back.domain.fridge.model.entity.FridgeIngredient;
+import org.palpalmans.ollive_back.domain.ingredient.model.entity.FridgeIngredient;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
 import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;

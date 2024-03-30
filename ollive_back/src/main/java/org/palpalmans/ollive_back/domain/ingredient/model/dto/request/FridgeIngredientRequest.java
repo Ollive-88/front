@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.fridge.model.dto.request;
+package org.palpalmans.ollive_back.domain.ingredient.model.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

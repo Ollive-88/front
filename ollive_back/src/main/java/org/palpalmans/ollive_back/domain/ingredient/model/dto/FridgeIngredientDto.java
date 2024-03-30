@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.fridge.model.dto;
+package org.palpalmans.ollive_back.domain.ingredient.model.dto;
 
 public record FridgeIngredientDto(
     Long fridgeIngredientId,

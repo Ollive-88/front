@@ -1,12 +1,12 @@
-package org.palpalmans.ollive_back.domain.fridge.controller;
+package org.palpalmans.ollive_back.domain.ingredient.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
-import org.palpalmans.ollive_back.domain.fridge.model.dto.FridgeIngredientDto;
-import org.palpalmans.ollive_back.domain.fridge.model.dto.request.FridgeIngredientRequest;
-import org.palpalmans.ollive_back.domain.fridge.service.FridgeIngredientService;
-import org.palpalmans.ollive_back.domain.fridge.util.UtilMethods;
+import org.palpalmans.ollive_back.domain.ingredient.model.dto.FridgeIngredientDto;
+import org.palpalmans.ollive_back.domain.ingredient.model.dto.request.FridgeIngredientRequest;
+import org.palpalmans.ollive_back.domain.ingredient.service.FridgeIngredientService;
+import org.palpalmans.ollive_back.domain.ingredient.util.UtilMethods;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

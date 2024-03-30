@@ -1,6 +1,6 @@
-package org.palpalmans.ollive_back.domain.fridge.repository;
+package org.palpalmans.ollive_back.domain.ingredient.repository;
 
-import org.palpalmans.ollive_back.domain.fridge.model.entity.FridgeIngredient;
+import org.palpalmans.ollive_back.domain.ingredient.model.entity.FridgeIngredient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

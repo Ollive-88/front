@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.fridge.controller;
+package org.palpalmans.ollive_back.domain.ingredient.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,9 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.palpalmans.ollive_back.domain.fridge.model.dto.request.FridgeIngredientRequest;
-import org.palpalmans.ollive_back.domain.fridge.model.entity.FridgeIngredient;
-import org.palpalmans.ollive_back.domain.fridge.repository.FridgeIngredientRepository;
+import org.palpalmans.ollive_back.domain.ingredient.model.dto.request.FridgeIngredientRequest;
+import org.palpalmans.ollive_back.domain.ingredient.model.entity.FridgeIngredient;
+import org.palpalmans.ollive_back.domain.ingredient.repository.FridgeIngredientRepository;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
 import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;

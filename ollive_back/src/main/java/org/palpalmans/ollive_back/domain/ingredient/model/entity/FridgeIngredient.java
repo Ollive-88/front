@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.fridge.model.entity;
+package org.palpalmans.ollive_back.domain.ingredient.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

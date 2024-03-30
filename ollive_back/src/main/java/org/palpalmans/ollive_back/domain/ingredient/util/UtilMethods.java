@@ -1,4 +1,4 @@
-package org.palpalmans.ollive_back.domain.fridge.util;
+package org.palpalmans.ollive_back.domain.ingredient.util;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

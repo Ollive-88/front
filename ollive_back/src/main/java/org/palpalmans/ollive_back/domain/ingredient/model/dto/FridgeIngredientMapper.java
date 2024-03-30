@@ -1,6 +1,6 @@
-package org.palpalmans.ollive_back.domain.fridge.model.dto;
+package org.palpalmans.ollive_back.domain.ingredient.model.dto;
 
-import org.palpalmans.ollive_back.domain.fridge.model.entity.FridgeIngredient;
+import org.palpalmans.ollive_back.domain.ingredient.model.entity.FridgeIngredient;
 
 public class FridgeIngredientMapper {
     public static FridgeIngredientDto toFridgeIngredientDto(FridgeIngredient fridgeIngredient) {

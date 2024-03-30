@@ -1,12 +1,12 @@
-package org.palpalmans.ollive_back.domain.fridge.service;
+package org.palpalmans.ollive_back.domain.ingredient.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.palpalmans.ollive_back.domain.fridge.model.dto.FridgeIngredientDto;
-import org.palpalmans.ollive_back.domain.fridge.model.dto.FridgeIngredientMapper;
-import org.palpalmans.ollive_back.domain.fridge.model.dto.request.FridgeIngredientRequest;
-import org.palpalmans.ollive_back.domain.fridge.model.entity.FridgeIngredient;
-import org.palpalmans.ollive_back.domain.fridge.repository.FridgeIngredientRepository;
+import org.palpalmans.ollive_back.domain.ingredient.model.dto.FridgeIngredientDto;
+import org.palpalmans.ollive_back.domain.ingredient.model.dto.FridgeIngredientMapper;
+import org.palpalmans.ollive_back.domain.ingredient.model.dto.request.FridgeIngredientRequest;
+import org.palpalmans.ollive_back.domain.ingredient.model.entity.FridgeIngredient;
+import org.palpalmans.ollive_back.domain.ingredient.repository.FridgeIngredientRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
