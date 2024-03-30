@@ -58,6 +58,6 @@ public class ImageFileService {
                 .contentType(multipartFile.getContentType())
                 .build()
         );
-        return PATH +  fileName;
+        return PATH + "/" + fileName;
     }
 }
