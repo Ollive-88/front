@@ -20,7 +20,7 @@ public class FridgeIngredientController {
     private final FridgeIngredientService fridgeIngredientService;
 
     @PostMapping
-    public ResponseEntity<?> registerIngredient (
+    public ResponseEntity<Long> registerIngredient (
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
             @Valid @RequestBody FridgeIngredientRequest request
     ) {
