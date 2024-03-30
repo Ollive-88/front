@@ -48,3 +48,11 @@ cloth:
   weather:
     baseUrl: ${WEATHER_URL}
     serviceKey: ${WEATHER_SERVICE_KEY}
+
+minio:
+  url: ${MINIO_URL}
+  bucket:
+    name: ${MINIO_BUCKET}
+  access:
+    name: ${MINIO_ACCESS_KEY}
+    secret: ${MINIO_SECRET_KEY}
