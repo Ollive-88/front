@@ -3,12 +3,12 @@ import 'package:ollive_front/models/user/user_simple_model.dart';
 
 class BoardDetailModel {
   final String title, content, createdAt;
-  final int boardId, viewCnt, commentCnt;
-  int likeCnt;
-  bool isLiked, isMine;
+  final int boardId, viewCount;
+  int likeCount;
+  bool isMine, isLiked;
   final UserSimpleModel writer;
   final List<String> tags;
-  final List<String> imgUrls;
+  final List<String> images;
   final List<CommentModel> comments;
 
   BoardDetailModel.fromJson(Map<String, dynamic> json)
@@ -16,14 +16,13 @@ class BoardDetailModel {
         content = json['content'],
         createdAt = json['createdAt'],
         boardId = json['boardId'],
-        viewCnt = json['viewCnt'],
-        likeCnt = json['likeCnt'],
-        commentCnt = json['commentCnt'],
+        viewCount = json['viewCount'],
+        likeCount = json['likeCount'],
         isLiked = json['isLiked'],
         isMine = json['isMine'],
         writer = UserSimpleModel.fromJson(json['writer']),
         tags = List<String>.from(json['tags']),
-        imgUrls = List<String>.from(json['imgUrls']),
+        images = List<String>.from(json['images']),
         comments = (json['comments'] as List<dynamic>)
             .map((comment) => CommentModel.fromJson(comment))
             .toList();

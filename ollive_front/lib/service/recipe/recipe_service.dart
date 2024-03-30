@@ -1,35 +1,38 @@
-import 'dart:convert';
 import 'package:ollive_front/models/recipe/recipe_detail_model.dart';
 import 'package:ollive_front/models/recipe/recipe_model.dart';
 import 'package:ollive_front/util/dio/dio_service.dart';
+import 'package:ollive_front/util/error/error_service.dart';
 
 class RecipeService {
   static final DioService _dio = DioService();
 
   // 레시피 추천 조회
-  static Future<dynamic> getRecommendRecipeList(
+  static Future<List<RecipeModel>> getRecommendRecipeList(
     List<String> havingIngredients,
     List<String>? dislikeIngredients,
   ) async {
     try {
-      final response = await _dio.authDio.get(
-        "/test/test",
-        // data: {
-        //   "havingIngredients": havingIngredients,
-        //   "dislikeIngredients": dislikeIngredients,
-        // },
+      final response = await _dio.authDio.post(
+        "/recipes/recommendations",
+        data: {
+          "havingIngredients": havingIngredients,
+          "dislikeIngredients": dislikeIngredients,
+        },
       );
-      final List<RecipeModel> recommendrecipes = [];
+      final List<RecipeModel> recommendrecipes;
 
-      List<dynamic> data = jsonDecode(response.data);
-
-      for (var recipe in data) {
-        recommendrecipes.add(RecipeModel.fromJson(recipe));
+      if (response.statusCode == 200) {
+        recommendrecipes = (response.data).map<RecipeModel>((json) {
+          return RecipeModel.fromJson(json);
+        }).toList();
+      } else {
+        recommendrecipes = [];
       }
+
       return recommendrecipes;
     } catch (e) {
-      print(e.toString());
-      return e.toString();
+      print(e);
+      throw Error();
     }
   }
 
@@ -43,27 +46,43 @@ class RecipeService {
       int size) async {
     final List<RecipeModel> recipes;
 
-    final response = await _dio.authDio.post(
-      "/recipes",
-      data: {
-        "havingIngredients": havingIngredients,
-        "dislikeIngredients": dislikeIngredients,
-        "lastRecipeId": lastIndex,
-        "size": size,
-        "recipeCase": recipeCase,
-        "recipeCategory": recipeCategory,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      recipes = (response.data).map<RecipeModel>((json) {
-        return RecipeModel.fromJson(json);
-      }).toList();
-    } else {
-      recipes = [];
+    if (recipeCategory == "전체") {
+      recipeCategory = "";
     }
 
-    return recipes;
+    // print("좋재 : $havingIngredients");
+    // print("실재 : $dislikeIngredients");
+    // print("대분 : $recipeCase");
+    // print("소분 : $recipeCategory");
+    // print("라인 : $lastIndex");
+    // print("사이 : $size");
+
+    try {
+      final response = await _dio.authDio.post(
+        "/recipes",
+        data: {
+          "havingIngredients": havingIngredients,
+          "dislikeIngredients": dislikeIngredients,
+          "lastRecipeId": lastIndex,
+          "size": size,
+          "recipeCase": recipeCase,
+          "recipeCategory": recipeCategory,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        recipes = (response.data).map<RecipeModel>((json) {
+          return RecipeModel.fromJson(json);
+        }).toList();
+      } else {
+        recipes = [];
+      }
+      return recipes;
+    } catch (e) {
+      ErrorService.showToast("잘못된 요청입니다.");
+
+      throw Error();
+    }
   }
 
   // 레시피 상세 조회
@@ -74,13 +93,10 @@ class RecipeService {
         "/recipes/$recipeId",
       );
 
-      print(response.data);
       instance = RecipeDetailModel.fromJson(response.data);
-      print("tlqkf $instance");
 
       return instance;
     } catch (e) {
-      print(e);
       throw Error();
     }
   }

@@ -1,115 +1,146 @@
-import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ollive_front/models/board/board_detail_model.dart';
 import 'package:ollive_front/models/board/board_model.dart';
-import 'package:ollive_front/models/board/board_post_model.dart';
 import 'package:ollive_front/util/dio/dio_service.dart';
 
 class BoardService {
   static final Dio _dio = DioService().authDio;
 
   // 게시글 조회
-  static Future<dynamic> getBoardList(
+  static Future<List<BoardModel>> getBoardList(
       List<String>? tags, String? keyword, int lastIndex, int size) async {
-    final List<BoardModel> boards = [];
-
-    try {
-      final Response response;
-      if (keyword == null) {
-        response = await _dio.get(
-          "/api/v1/boards",
-          queryParameters: {
-            "lastIndex": lastIndex,
-            "size": size,
-          },
-        );
-      } else {
-        response = await _dio.get(
-          "/api/v1/boards",
-          queryParameters: {
-            "tags": tags,
-            "keyword": keyword,
-            "lastIndex": lastIndex,
-            "size": size,
-          },
-        );
-      }
-
-      print(response);
-
-      List<dynamic> data = jsonDecode(response.data);
-
-      for (var board in data) {
-        boards.add(BoardModel.fromJson(board));
-      }
-
-      return boards;
-    } catch (e) {
-      print(e);
-      return e.toString();
+    final Response response;
+    // 보드 화면 최초 접근
+    if (keyword == null) {
+      response = await _dio.get(
+        "/api/v1/boards",
+        queryParameters: {
+          "tags": tags,
+          "lastIndex": lastIndex,
+          "size": size,
+        },
+      );
+    } else {
+      // 보드 검색 결과
+      response = await _dio.get(
+        "/api/v1/boards",
+        queryParameters: {
+          "tags": tags,
+          "keyword": keyword,
+          "lastIndex": lastIndex,
+          "size": size,
+        },
+      );
     }
+
+    print(response.data);
+
+    List<BoardModel> boards = response.data['boards'].map<BoardModel>((json) {
+      return BoardModel.fromJson(json);
+    }).toList();
+
+    return boards;
   }
 
   // 게시글 생성
-  static Future<int> postBoard(BoardPostModel boardPostModel) async {
-    final response = await _dio.post(
-      "/boards",
-      queryParameters: {
-        "post": boardPostModel,
-      },
-    );
+  static Future<int> postBoard(String title, List<String> tagNames,
+      String content, List<MultipartFile> images) async {
+    try {
+      FormData post = FormData.fromMap({
+        "title": title,
+        "tagNames": tagNames,
+        "content": content,
+        "images": images,
+      });
 
-    if (response.statusCode == 200) {
-      int instance = jsonDecode(response.data.boardId);
-      return instance;
+      await _dio.post(
+        "/api/v1/boards",
+        data: post,
+      );
+
+      return 1;
+    } catch (e) {
+      return 0;
     }
-    throw Error();
   }
 
   // 게시글 수정
-  static Future<int> fatchBoard(BoardPostModel boardPostModel) async {
-    final response = await _dio.put(
-      "/boards",
-      queryParameters: {
-        "fetch": boardPostModel,
-      },
-    );
+  static Future<int> fatchBoard(
+      List<String> updateTagNames,
+      List<String> deleteTagNames,
+      List<MultipartFile> updateImages,
+      List<MultipartFile> deleteImages,
+      String title,
+      String content) async {
+    try {
+      FormData put = FormData.fromMap({
+        "updateTagNames": updateTagNames,
+        "deleteTagNames": deleteTagNames,
+        "updateImages": updateImages,
+        "deleteImages": deleteImages,
+        "title": title,
+        "content": content,
+      });
 
-    if (response.statusCode == 200) {
-      int instance = jsonDecode(response.data.boardId);
-      return instance;
+      await _dio.put(
+        "/api/v1/boards",
+        data: put,
+      );
+
+      return 1;
+    } catch (e) {
+      return 0;
     }
-    throw Error();
   }
 
   // 게시글 상세 조회
   static Future<BoardDetailModel> getBoardDetail(int boardId) async {
-    final response = await _dio.post(
-      "/boards/$boardId",
-    );
+    try {
+      final response = await _dio.get(
+        "/api/v1/boards/$boardId",
+      );
 
-    if (response.statusCode == 200) {
-      dynamic data = jsonDecode(response.data);
-
-      final instance = BoardDetailModel.fromJson(data);
+      final instance = BoardDetailModel.fromJson(response.data);
 
       return instance;
+    } catch (e) {
+      throw Error();
     }
-
-    throw Error();
   }
 
   // 게시글 삭제
   static Future<int> deleteBoard(int boardId) async {
-    final response =
-        await _dio.post("boards", queryParameters: {"boardId": boardId});
-    return response.statusCode!;
+    try {
+      await _dio.delete(
+        "/api/vi/boards$boardId",
+      );
+      return 1;
+    } catch (e) {
+      return 0;
+    }
   }
 
   // 좋아요 생성/삭제
   static void postLike(int boardId, bool isLiked) async {
-    await _dio.post("boards",
-        queryParameters: {"boardId": boardId, "isLiked": isLiked});
+    // await _dio.post("boards/like",
+    //     queryParameters: {"boardId": boardId, "isLiked": isLiked});
+  }
+
+  // XFile MultipartFile로 변환
+  static Future<List<MultipartFile>> convertXFileToMultipartFile(
+      List<XFile> xFileList) async {
+    List<MultipartFile> multipartFileList = [];
+
+    for (XFile file in xFileList) {
+      File tempFile = File(file.path);
+      MultipartFile multipartFile = await MultipartFile.fromFile(tempFile.path,
+          filename: tempFile.path.split("/").last);
+      multipartFileList.add(multipartFile);
+    }
+
+    return multipartFileList;
   }
 
   // 시간 계산

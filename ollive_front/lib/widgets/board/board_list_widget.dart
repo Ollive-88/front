@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/models/board/board_model.dart';
-import 'package:ollive_front/screens/board/board_detil_screen.dart';
 import 'package:ollive_front/service/board/board_service.dart';
 import 'package:ollive_front/widgets/board/board_tag_widget.dart';
 
@@ -11,94 +10,94 @@ class BoardList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BoardDetailScreen(
-              boardId: boardModel.boardId,
-            ),
-          ),
-        );
-      },
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height / 5,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 250,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 해쉬 태그 들어갈 자리
-                  Row(
-                    children: [
-                      for (var tag in boardModel.tags)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10, bottom: 10),
-                          child: Tag(tagName: tag, isSearch: false),
-                        )
-                    ],
-                  ),
-                  Text(
-                    boardModel.title,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    '${BoardService.timeAgo(boardModel.createdAt)} . 조회수 ${boardModel.viewCnt} . 좋아요 ${boardModel.likeCnt}',
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF000000),
+    return SizedBox(
+      height: 120,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 제목, 내용
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      boardModel.title,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      boardModel.content,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black.withOpacity(0.6),
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+
+              // 썸네일
+              boardModel.thumbnailAddress != ""
+                  ? SizedBox(
+                      width: MediaQuery.of(context).size.width / 5,
+                      height: MediaQuery.of(context).size.width / 5,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            15), // 여기서 borderRadius를 적용합니다.
+                        child: Image.network(
+                          boardModel.thumbnailAddress,
+                          headers: const {
+                            "User-Agent":
+                                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+                          },
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${BoardService.timeAgo(boardModel.createdAt)} . 조회수 ${boardModel.views} . 좋아요 ${boardModel.likes}',
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFF000000),
+                ),
+              ),
+              Row(
+                children: [
+                  Image.asset(
+                    "assets/image/icons/comentIcon.png",
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "${boardModel.commentCount}",
+                    style: const TextStyle(fontSize: 18),
                   ),
                 ],
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 5,
-                  height: MediaQuery.of(context).size.width / 5,
-                  child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(15), // 여기서 borderRadius를 적용합니다.
-                    child: Image.network(
-                      boardModel.imgUrls[0],
-                      headers: const {
-                        "User-Agent":
-                            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
-                      },
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        "assets/image/icons/comentIcon.png",
-                        fit: BoxFit.contain,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        "${boardModel.commentCnt}",
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
     );
   }

@@ -31,8 +31,6 @@ class _AppState extends State<App> {
         '/home': (context) => const HomeScreen(),
         '/board/search': (context) => const BoardSearchScreen(),
         '/board/write': (context) => BoardWriteScreen(),
-        '/1': (context) => const Test1(),
-        '/2': (context) => const Test2(),
         '/login': (context) => const LoginScreen(),
         '/signin': (context) => const SigninScreen(),
       },

@@ -59,7 +59,7 @@ class CustomNavigationbar extends StatelessWidget {
             ),
           ],
           currentIndex: selectedIndex,
-          selectedItemColor: Colors.blue,
+          selectedItemColor: Colors.black,
           onTap: onItemTapped,
         ),
       ),

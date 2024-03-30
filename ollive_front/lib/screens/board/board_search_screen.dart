@@ -58,76 +58,81 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFC),
-      appBar: AppBar(
-        toolbarHeight: MediaQuery.of(context).size.height / 9,
-        centerTitle: true,
-        surfaceTintColor: const Color(0xFFFFFFFC),
-        shadowColor: Colors.black,
-        elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Flexible(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xFFEBEBE9)),
-                // ignore: deprecated_member_use
-                child: RawKeyboardListener(
-                  focusNode: _focusNode,
-                  onKey: (event) {
-                    if (event.physicalKey.debugName == "Space") {
-                      subStringTags();
-                    }
-                  },
-                  child: TextField(
-                    controller: _inputController,
-                    onEditingComplete: onclickSearch,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      suffixIcon: Icon(Icons.search),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFFFFFFFC),
+        appBar: AppBar(
+          toolbarHeight: MediaQuery.of(context).size.height / 9,
+          centerTitle: true,
+          surfaceTintColor: const Color(0xFFFFFFFC),
+          shadowColor: Colors.black,
+          elevation: 0,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xFFEBEBE9)),
+                  // ignore: deprecated_member_use
+                  child: RawKeyboardListener(
+                    focusNode: _focusNode,
+                    onKey: (event) {
+                      if (event.physicalKey.debugName == "Space") {
+                        subStringTags();
+                      }
+                    },
+                    child: TextField(
+                      controller: _inputController,
+                      onEditingComplete: onclickSearch,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        suffixIcon: Icon(Icons.search),
+                      ),
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                    textAlign: TextAlign.start,
                   ),
                 ),
               ),
+            ],
+          ),
+          shape: const Border(
+            bottom: BorderSide(
+              width: 7,
+              color: Color(0xFFEBEBE9),
             ),
-          ],
-        ),
-        shape: const Border(
-          bottom: BorderSide(
-            width: 7,
-            color: Color(0xFFEBEBE9),
           ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: Column(
-          children: [
-            Wrap(
-              spacing: 8.0, // 가로 방향의 태그 사이 간격
-              runSpacing: 4.0,
-              children: [
-                for (int i = 0; i < tagNames.length; i++)
-                  Tag(
-                    tagName: tagNames[i],
-                    isSearch: true,
-                    deleteTag: () => deleteTags(i),
-                  )
-              ],
-            ),
-          ],
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Column(
+            children: [
+              Wrap(
+                spacing: 8.0, // 가로 방향의 태그 사이 간격
+                runSpacing: 4.0,
+                children: [
+                  for (int i = 0; i < tagNames.length; i++)
+                    Tag(
+                      tagName: tagNames[i],
+                      isSearch: true,
+                      deleteTag: () => deleteTags(i),
+                    )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

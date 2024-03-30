@@ -3,6 +3,7 @@ import 'package:ollive_front/models/recipe/recipe_model.dart';
 import 'package:ollive_front/screens/recipe/recipe_detail_screen.dart';
 import 'package:ollive_front/service/recipe/recipe_service.dart';
 import 'package:ollive_front/util/error/error_service.dart';
+import 'package:ollive_front/widgets/recipe/recipe_scroller_widget.dart';
 
 class RecipeListScreen extends StatefulWidget {
   const RecipeListScreen({
@@ -132,7 +133,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
 
   // 대분류 선택 메서드
   void onClickCase(int i) async {
-    if (i == 0) {
+    if (i < 1) {
       seletedCase = i;
       recipeCase = caseList[i];
 
@@ -141,6 +142,8 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
       }
 
       recipes = widget.recommendrecipes;
+
+      updateLastIndex(0);
     } else {
       seletedCase = i;
       recipeCase = caseList[i];
@@ -159,14 +162,12 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
         size,
       );
 
-      if (temp.isEmpty) {
-        ErrorService.showToast("잘못된 요청입니다.");
-      } else {
-        recipes = temp;
+      recipes = temp;
+      if (recipes.isNotEmpty) {
         updateLastIndex(recipes[recipes.length - 1].recipeId);
-        setState(() {});
       }
     }
+    setState(() {});
   }
 
   // 소분류 선택 메서드
@@ -178,24 +179,23 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
       widget.hateTagNames,
       recipeCase,
       recipeCategory,
-      lastIndex,
+      0,
       size,
     );
-    if (temp.isEmpty) {
-      ErrorService.showToast("잘못된 요청입니다.");
-    } else {
-      for (var i = 0; i < seletedCategoty.length; i++) {
-        seletedCategoty[i] = 0;
-      }
-
-      seletedCategoty[seletedCase] = i;
-
-      // 레시피 리스트 초기화
-      recipes = temp;
-      updateLastIndex(recipes[recipes.length - 1].recipeId);
-
-      setState(() {});
+    for (var i = 0; i < seletedCategoty.length; i++) {
+      seletedCategoty[i] = 0;
     }
+
+    seletedCategoty[seletedCase] = i;
+
+    // 레시피 리스트 초기화
+    recipes = temp;
+
+    if (recipes.isNotEmpty) {
+      updateLastIndex(recipes[recipes.length - 1].recipeId);
+    }
+
+    setState(() {});
   }
 
   // 무한 스크롤 감지 컨트롤러
@@ -253,6 +253,9 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
         elevation: 0,
         backgroundColor: const Color(0xFFFFFFFC),
         foregroundColor: Colors.black,
+      ),
+      floatingActionButton: RecipeScrollerButton(
+        controller: _scrollController,
       ),
       body: SingleChildScrollView(
         controller: _scrollController,

@@ -1,7 +1,7 @@
 class UserSimpleModel {
-  String nickName, imgUrl;
+  String nickname, imgUrl;
 
   UserSimpleModel.fromJson(Map<String, dynamic> json)
-      : nickName = json['nickName'],
+      : nickname = json['nickname'],
         imgUrl = json['imgUrl'];
 }

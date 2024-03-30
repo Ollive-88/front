@@ -19,7 +19,7 @@ class Tag extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         vertical: 4,
-        horizontal: 10,
+        horizontal: 5,
       ),
       decoration: BoxDecoration(
         color: Colors.white,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:ollive_front/models/board/board_model.dart';
+import 'package:ollive_front/screens/board/board_detil_screen.dart';
 import 'package:ollive_front/service/board/board_service.dart';
+import 'package:ollive_front/util/error/error_service.dart';
 import 'package:ollive_front/widgets/board/board_appbar_widget.dart';
 import 'package:ollive_front/widgets/board/board_list_widget.dart';
 
@@ -20,37 +22,13 @@ class BoardScreen extends StatefulWidget {
 
   ScrollController? boardScrollController = ScrollController();
 
-  // Todo : 나중에 지우기
-  static final BoardModel board1 = BoardModel.fromJson({
-    "title": "안녕하세요~ 간단한 용 잡아주실분 사례드릴게요",
-    "createdAt": '2024-01-15 04:28:03.339689',
-    "boardId": 1,
-    "viewCnt": 64,
-    "likeCnt": 10,
-    "commentCnt": 2,
-    "tags": [
-      "자유자유",
-      "꿀팁꿀팁",
-    ],
-    "imgUrls": ["https://i.ytimg.com/vi/gpFSXXhonVk/maxresdefault.jpg"],
-  });
-
   @override
   State<BoardScreen> createState() => _BoardScreenState();
 }
 
 class _BoardScreenState extends State<BoardScreen> {
-  // Todo : 나중에 지우기
-  final List<BoardModel> boards2 = [
-    BoardScreen.board1,
-    BoardScreen.board1,
-    BoardScreen.board1,
-    BoardScreen.board1,
-    BoardScreen.board1,
-    BoardScreen.board1,
-    BoardScreen.board1,
-    BoardScreen.board1
-  ];
+  int lastIndex = 0;
+  int size = 10;
 
   // api 요청으로 받아온 게시글 목록
   late Future<List<BoardModel>> boards;
@@ -67,26 +45,48 @@ class _BoardScreenState extends State<BoardScreen> {
     );
   }
 
-  void initBoards() async {
-    dynamic result =
-        await BoardService.getBoardList(widget.tagNames, widget.keyword, 0, 10);
+  void updateLastIndex(int index) {
+    lastIndex = index;
+  }
 
-    if (result is String) {
+  void _fetchBoards() async {
+    List<BoardModel> currentBoards = await boards;
+
+    List<BoardModel> newBoards = await BoardService.getBoardList(
+        widget.tagNames, widget.keyword, lastIndex, size);
+    if (newBoards.isNotEmpty) {
+      setState(() {
+        currentBoards.addAll(newBoards);
+        boards = Future.value(currentBoards);
+      });
     } else {
-      boards = result;
+      ErrorService.showToast("마지막 게시물 입니다.");
+    }
+  }
+
+  void scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      _fetchBoards();
     }
   }
 
   @override
   void initState() {
     super.initState();
-    initBoards();
+    boards = BoardService.getBoardList(
+        widget.tagNames, widget.keyword, lastIndex, size);
+
     if (widget.boardScrollController == null) {
       // 컨트롤러 초기화 후 addListener로 동작 감지 설정
       _scrollController = ScrollController();
     } else {
       _scrollController = widget.boardScrollController!;
     }
+    _scrollController.addListener(() {
+      scrollListener();
+    });
     _scrollController.addListener(() {
       // 스크롤 위치에 따라 AppBar의 표시 여부를 결정
       if (_scrollController.position.userScrollDirection ==
@@ -137,21 +137,30 @@ class _BoardScreenState extends State<BoardScreen> {
               ),
             )
           : null,
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Expanded(
-            child: ListView.separated(
+      body: FutureBuilder(
+        future: boards,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.separated(
               controller: _scrollController,
               scrollDirection: Axis.vertical,
-              itemCount: boards2.length,
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              itemCount: snapshot.data!.length,
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               itemBuilder: (context, index) {
-                var boardModel = boards2[index];
-
-                return BoardList(boardModel: boardModel);
+                var boardModel = snapshot.data![index];
+                updateLastIndex(boardModel.boardId);
+                return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BoardDetailScreen(
+                            boardId: boardModel.boardId,
+                          ),
+                        ),
+                      );
+                    },
+                    child: BoardList(boardModel: boardModel));
               },
               separatorBuilder: (context, index) {
                 return const Column(
@@ -167,9 +176,13 @@ class _BoardScreenState extends State<BoardScreen> {
                   ],
                 );
               },
-            ),
-          )
-        ],
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
       floatingActionButton: GestureDetector(
         onTap: () {
@@ -213,37 +226,3 @@ class _BoardScreenState extends State<BoardScreen> {
     );
   }
 }
-
-
-// FutureBuilder(
-//         future: boards,
-//         builder: (context, snapshot) {
-//           if (snapshot.hasData) {
-//             return Column(
-//               children: [
-//                 const SizedBox(
-//                   height: 50,
-//                 ),
-//                 ListView.separated(
-//                   scrollDirection: Axis.vertical,
-//                   itemCount: snapshot.data!.length,
-//                   padding:
-//                       const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-//                   itemBuilder: (context, index) {
-//                     var boardModel = snapshot.data![index];
-// 
-//                     return BoardList(boardModel: boardModel);
-//                   },
-//                   separatorBuilder: (context, index) => const SizedBox(
-//                     width: 40,
-//                   ),
-//                 )
-//               ],
-//             );
-//           } else {
-//             return const Center(
-//               child: CircularProgressIndicator(),
-//             );
-//           }
-//         },
-//       ),
