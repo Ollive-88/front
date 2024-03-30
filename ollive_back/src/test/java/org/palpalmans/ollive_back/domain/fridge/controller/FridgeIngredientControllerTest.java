@@ -82,7 +82,7 @@ class FridgeIngredientControllerTest {
         FridgeIngredientRequest request = request();
 
         //when
-        mockMvc.perform(post("/fridge").contentType(APPLICATION_JSON).content(objectToJson(request)))
+        mockMvc.perform(post("/fridge-ingredients").contentType(APPLICATION_JSON).content(objectToJson(request)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"))
                 .andDo(print());
