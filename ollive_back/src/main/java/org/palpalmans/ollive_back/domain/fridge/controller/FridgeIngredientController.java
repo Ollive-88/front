@@ -43,9 +43,10 @@ public class FridgeIngredientController {
 
     @DeleteMapping("/{fridgeIngredientId}")
     public ResponseEntity<Long> deleteFridgeIngredient(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
             @PathVariable Long fridgeIngredientId
     ){
-
-        return ResponseEntity.ok().body(fridgeIngredientService.deleteFridgeIngredient(fridgeIngredientId));
+        long memberId = customMemberDetails.getId();
+        return ResponseEntity.ok().body(fridgeIngredientService.deleteFridgeIngredient(memberId, fridgeIngredientId));
     }
 }
