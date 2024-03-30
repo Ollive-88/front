@@ -18,7 +18,7 @@ public class FridgeIngredientService {
     private final FridgeIngredientRepository fridgeIngredientRepository;
 
     public List<FridgeIngredientDto> getFridgeIngredients(long memberId) {
-        List<FridgeIngredient> fridgeIngredients = fridgeIngredientRepository.findByMemberId(memberId);
+        List<FridgeIngredient> fridgeIngredients = fridgeIngredientRepository.findByMemberIdOrderByEndAtAsc(memberId);
 
         return fridgeIngredients.stream().map(FridgeIngredientMapper::toFridgeIngredientDto).toList();
     }

@@ -22,7 +22,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import static org.palpalmans.ollive_back.domain.member.model.status.MemberRole.ROLE_ADMIN;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -56,11 +59,16 @@ class FridgeIngredientControllerTest {
         return new FridgeIngredientRequest("감자", "2022-03-10");
     }
 
-    void fridgeIngredientSetup() {
-        fridgeIngredientRepository.save(new FridgeIngredient(normalMember.getId(), "감자", LocalDate.of(2024, 4, 1)));
-        fridgeIngredientRepository.save(new FridgeIngredient(normalMember.getId(), "가지", LocalDate.of(2024, 4, 2)));
-        fridgeIngredientRepository.save(new FridgeIngredient(normalMember.getId(), "소고기", LocalDate.of(2024, 4, 3)));
-        fridgeIngredientRepository.save(new FridgeIngredient(normalMember.getId(), "양파", LocalDate.of(2024, 4, 4)));
+    void fridgeIngredientSetup(List<FridgeIngredient> list) {
+        FridgeIngredient fridgeIngredient1 = fridgeIngredientRepository.save(new FridgeIngredient(normalMember.getId(), "감자", LocalDate.of(2024, 5, 1)));
+        FridgeIngredient fridgeIngredient2 = fridgeIngredientRepository.save(new FridgeIngredient(normalMember.getId(), "가지", LocalDate.of(2024, 4, 2)));
+        FridgeIngredient fridgeIngredient3 = fridgeIngredientRepository.save(new FridgeIngredient(normalMember.getId(), "소고기", LocalDate.of(2024, 7, 3)));
+        FridgeIngredient fridgeIngredient4 = fridgeIngredientRepository.save(new FridgeIngredient(normalMember.getId(), "양파", LocalDate.of(2024, 8, 4)));
+
+        list.add(fridgeIngredient1);
+        list.add(fridgeIngredient2);
+        list.add(fridgeIngredient3);
+        list.add(fridgeIngredient4);
     }
 
     void fridgeIngredientTearDown() {
@@ -97,19 +105,26 @@ class FridgeIngredientControllerTest {
     )
     void getFridgeIngredientsTest() throws Exception{
         //given
-        fridgeIngredientSetup();
+        List<FridgeIngredient> list = new ArrayList<>();
+        fridgeIngredientSetup(list);
+        list.sort(new Comparator<FridgeIngredient>() {
+            @Override
+            public int compare(FridgeIngredient o1, FridgeIngredient o2) {
+                return o1.getEndAt().compareTo(o2.getEndAt()) ;
+            }
+        });
 
         //when
         mockMvc.perform(get("/fridge-ingredients"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].fridgeIngredientId").value(1))
-                .andExpect(jsonPath("$[0].name").value("감자"))
-                .andExpect(jsonPath("$[1].fridgeIngredientId").value(2))
-                .andExpect(jsonPath("$[1].name").value("가지"))
-                .andExpect(jsonPath("$[2].fridgeIngredientId").value(3))
-                .andExpect(jsonPath("$[2].name").value("소고기"))
-                .andExpect(jsonPath("$[3].fridgeIngredientId").value(4))
-                .andExpect(jsonPath("$[3].name").value("양파"))
+                .andExpect(jsonPath("$[0].fridgeIngredientId").value(list.get(0).getId()))
+                .andExpect(jsonPath("$[0].name").value(list.get(0).getName()))
+                .andExpect(jsonPath("$[1].fridgeIngredientId").value(list.get(1).getId()))
+                .andExpect(jsonPath("$[1].name").value(list.get(1).getName()))
+                .andExpect(jsonPath("$[2].fridgeIngredientId").value(list.get(2).getId()))
+                .andExpect(jsonPath("$[2].name").value(list.get(2).getName()))
+                .andExpect(jsonPath("$[3].fridgeIngredientId").value(list.get(3).getId()))
+                .andExpect(jsonPath("$[3].name").value(list.get(3).getName()))
                 .andDo(print());
 
         //then

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface FridgeIngredientRepository extends JpaRepository<FridgeIngredient, Long> {
-    List<FridgeIngredient> findByMemberId(long memberId);
+    List<FridgeIngredient> findByMemberIdOrderByEndAtAsc(long memberId);
 }
