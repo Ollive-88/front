@@ -36,8 +36,10 @@ public class ImageService {
                      | IOException | NoSuchAlgorithmException | InvalidKeyException
                      | InvalidResponseException | XmlParserException | InternalException e) {
                 log.error(IMAGE_FILE_NOT_SAVED.getMessage());
+                log.error("IMAGE_FILE_NOT_SAVED exception", e);
             } catch (PersistenceException e) {
                 log.error(IMAGE_ENTITY_NOT_SAVED.getMessage());
+                log.error("IMAGE_ENTITY_NOT_SAVED exception", e);
             } catch (Exception e) {
                 log.error(UNKNOWN.getMessage());
             }
