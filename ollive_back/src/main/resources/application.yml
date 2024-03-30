@@ -51,6 +51,8 @@ cloth:
 
 minio:
   url: ${MINIO_URL}
+  dir:
+    image: ${MINIO_IMAGE_DIR}
   bucket:
     name: ${MINIO_BUCKET}
   access:
