@@ -5,6 +5,7 @@ import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.palpalmans.ollive_back.domain.image.model.ImageType;
+import org.palpalmans.ollive_back.domain.image.model.dto.GetImageResponse;
 import org.palpalmans.ollive_back.domain.image.model.entity.Image;
 import org.palpalmans.ollive_back.domain.image.repository.ImageRepository;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,18 @@ public class ImageService {
                 log.error(UNKNOWN.getMessage());
             }
         });
+    }
+
+    @Transactional
+    public List<GetImageResponse> getImages(ImageType imageType, Long referenceId) {
+        return imageRepository.findALlByImageTypeAndReferenceId(imageType, referenceId)
+                .stream()
+                .map(image -> new GetImageResponse(
+                        image.getId(),
+                        image.getAddress(),
+                        image.getImageType(),
+                        image.getReferenceId()
+                ))
+                .toList();
     }
 }

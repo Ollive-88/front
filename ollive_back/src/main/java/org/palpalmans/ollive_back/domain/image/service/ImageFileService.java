@@ -30,7 +30,8 @@ public class ImageFileService {
     @Value("${minio.dir.image}")
     private String IMAGE_DIR;
 
-    private final String PATH = URL + "/" + BUCKET_NAME;
+    @Value("${minio.url}/${minio.bucket.name}/")
+    private String PATH;
 
     public String saveImageFile(MultipartFile multipartFile)
             throws IOException, ServerException, InsufficientDataException,
@@ -57,6 +58,6 @@ public class ImageFileService {
                 .contentType(multipartFile.getContentType())
                 .build()
         );
-        return PATH + fileName;
+        return PATH +  fileName;
     }
 }
