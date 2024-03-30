@@ -29,7 +29,7 @@ public class BoardQueryRepository {
                 .leftJoin(qTag).on(qBoardTag.tag.eq(qTag)).fetchJoin().fetchJoin()
                 .where(boardListCondition(keyword, lastIndex, tagNames))
                 .groupBy(qBoard.id)
-                .orderBy(qBoard.id.count().desc(), qBoard.createdAt.desc())
+                .orderBy(qBoard.createdAt.desc(), qBoard.id.count().desc())
                 .limit(size)
                 .fetch();
     }
