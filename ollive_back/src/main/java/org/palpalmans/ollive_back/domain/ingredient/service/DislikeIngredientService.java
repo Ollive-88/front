@@ -1,5 +1,6 @@
 package org.palpalmans.ollive_back.domain.ingredient.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.ingredient.model.dto.DislikeIngredientDto;
 import org.palpalmans.ollive_back.domain.ingredient.model.dto.DislikeIngredientMapper;
@@ -26,5 +27,13 @@ public class DislikeIngredientService {
     public Long registerDislikeIngredient(long memberId, DislikeIngredientRegisterRequest request) {
         DislikeIngredient dislikeIngredient = new DislikeIngredient(memberId, request.name());
         return dislikeIngredientRepository.save(dislikeIngredient).getId();
+    }
+
+    public Long deleteDislikeIngredient(long memberId, Long dislikeIngredientId) {
+        DislikeIngredient dislikeIngredient = dislikeIngredientRepository.findByIdAndMemberId(dislikeIngredientId, memberId)
+                .orElseThrow(() -> new EntityNotFoundException("이미 삭제된 재료입니다.")
+                );
+
+        return dislikeIngredient.getId();
     }
 }

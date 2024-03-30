@@ -36,4 +36,14 @@ public class DislikeIngredientController {
 
         return ResponseEntity.ok().body(dislikeIngredientService.registerDislikeIngredient(memberId, request));
     }
+
+    @DeleteMapping("/{dislikeIngredientId}")
+    public ResponseEntity<Long> deleteDislikeIngredient(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+            @PathVariable Long dislikeIngredientId
+    ){
+        long memberId = customMemberDetails.getId();
+
+        return ResponseEntity.ok().body(dislikeIngredientService.deleteDislikeIngredient(memberId, dislikeIngredientId));
+    }
 }
