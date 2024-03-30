@@ -13,6 +13,7 @@ import org.palpalmans.ollive_back.domain.board.model.entity.Tag;
 import org.palpalmans.ollive_back.domain.board.repository.BoardQueryRepository;
 import org.palpalmans.ollive_back.domain.board.repository.BoardRepository;
 import org.palpalmans.ollive_back.domain.board.repository.BoardTagRepository;
+import org.palpalmans.ollive_back.domain.image.model.dto.GetImageResponse;
 import org.palpalmans.ollive_back.domain.image.service.ImageService;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.service.MemberService;
@@ -63,15 +64,14 @@ public class BoardService {
     ) {
         List<Board> boards = boardQueryRepository.getBoardList(keyword, lastIndex, size, tagNames);
         List<GetBoardResponse> getBoardResponseList = new ArrayList<>();
-
         for (Board board : boards) {
             int viewCount = viewService.getViewCount(board);
             int likeCount = likeService.getLikeCount(board);
 
-            getBoardResponseList.add(
-                    toGetBoardResponse(board, viewCount, likeCount)
-            );
-            // TODO imageService.select()
+            List<GetImageResponse> images = imageService.getImages(BOARD, board.getId());
+            String thumbnail = images.isEmpty() ? "" : images.get(0).address();
+
+            getBoardResponseList.add(toGetBoardResponse(board, viewCount, likeCount, thumbnail));
         }
         return new GetBoardsResponse(getBoardResponseList, boards.size() < size);
     }
@@ -82,11 +82,11 @@ public class BoardService {
                 .orElseThrow(() -> new EntityNotFoundException(BOARD_NOT_FOUND.getMessage()));
         int viewCount = viewService.getViewCount(board);
         int likeCount = likeService.getLikeCount(board);
-
-        //TODO imageService 구현 완료시 이미지 조회 해오기
-        // imageService.getImage();
-        List<String> images = new ArrayList<>();
         boolean isLiked = likeService.isLikedMember(board, customMemberDetails.getMember());
+
+        List<String> images = imageService.getImages(BOARD, boardId)
+                .stream().map(GetImageResponse::address)
+                .toList();
 
         List<String> tags = board.getBoardTags()
                 .stream()
