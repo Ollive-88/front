@@ -51,9 +51,9 @@ public class BoardService {
 
         imageService.saveImage(writeBoardRequest.getImages(), BOARD, board.getId());
 
-        List<Tag> savedTag = new ArrayList<>();
-        tagService.saveTags(writeBoardRequest.getTagNames(), savedTag);
-        boardTagRepository.saveAll(savedTag.stream().map(tag -> new BoardTag(board, tag)).toList());
+        List<Tag> beMappedTag = new ArrayList<>();
+        tagService.saveTags(writeBoardRequest.getTagNames(), beMappedTag);
+        boardTagRepository.saveAll(beMappedTag.stream().map(tag -> new BoardTag(board, tag)).toList());
         viewService.saveView(board, member);
 
         return board.getId();

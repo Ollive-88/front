@@ -21,17 +21,18 @@ public class TagService {
     private final TagRepository tagRepository;
 
     @Transactional
-    public void saveTags(List<String> tagNames, List<Tag> savedTag) {
+    public void saveTags(List<String> tagNames, List<Tag> beMappedTags) {
         List<Tag> tags = tagNames.stream()
                 .map(Tag::new)
                 .toList();
 
-        Set<String> existTagNames = tagRepository.findAllByNameIn(
-                        tags.stream()
-                                .map(Tag::getName)
-                                .toList()
-                )
-                .stream()
+        List<Tag> existTags = tagRepository.findAllByNameIn(
+                tags.stream()
+                        .map(Tag::getName)
+                        .toList());
+        beMappedTags.addAll(existTags);
+
+        Set<String> existTagNames = existTags.stream()
                 .map(Tag::getName)
                 .collect(Collectors.toSet());
 
@@ -41,7 +42,7 @@ public class TagService {
 
         for (Tag tag : beSaved) {
             entityManager.persist(tag);
-            savedTag.add(tag);
+            beMappedTags.add(tag);
         }
         entityManager.flush();
         entityManager.clear();
