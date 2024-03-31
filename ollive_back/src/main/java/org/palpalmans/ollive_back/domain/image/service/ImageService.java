@@ -1,6 +1,7 @@
 package org.palpalmans.ollive_back.domain.image.service;
 
 import io.minio.errors.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,8 +55,30 @@ public class ImageService {
                         image.getId(),
                         image.getAddress(),
                         image.getImageType(),
-                        image.getReferenceId()
-                ))
+                        image.getReferenceId()))
                 .toList();
+    }
+
+    @Transactional
+    public void deleteImages(List<Long> images) {
+        images.forEach(imageId -> {
+            try {
+                Image foundImage = imageRepository.findById(imageId)
+                        .orElseThrow(EntityNotFoundException::new);
+                imageFileService.deleteImage(foundImage.getAddress());
+                imageRepository.delete(foundImage);
+            } catch (ServerException | InsufficientDataException | ErrorResponseException
+                     | IOException | NoSuchAlgorithmException | InvalidKeyException
+                     | InvalidResponseException | XmlParserException | InternalException e) {
+                log.error(IMAGE_FILE_NOT_DELETED.getMessage());
+                log.error("IMAGE_FILE_NOT_DELETED exception", e);
+            } catch (PersistenceException e) {
+                log.error(IMAGE_ENTITY_NOT_DELETED.getMessage());
+                log.error("IMAGE_ENTITY_NOT_SAVED exception", e);
+            } catch (Exception e) {
+                log.error(UNKNOWN.getMessage());
+            }
+        });
+
     }
 }

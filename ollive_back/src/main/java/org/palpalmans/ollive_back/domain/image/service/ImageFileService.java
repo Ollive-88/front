@@ -1,9 +1,6 @@
 package org.palpalmans.ollive_back.domain.image.service;
 
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import io.minio.*;
 import io.minio.errors.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,4 +54,16 @@ public class ImageFileService {
         );
         return PATH + "/" + fileName;
     }
+
+    public void deleteImage(String fileName)
+            throws ServerException, InsufficientDataException, ErrorResponseException,
+            IOException, NoSuchAlgorithmException, InvalidKeyException,
+            InvalidResponseException, XmlParserException, InternalException {
+        minioClient.removeObject(
+                RemoveObjectArgs.builder()
+                        .bucket(BUCKET_NAME)
+                        .object(fileName)
+                        .build());
+    }
+
 }
