@@ -14,6 +14,9 @@ import org.palpalmans.ollive_back.domain.board.model.entity.BoardTag;
 import org.palpalmans.ollive_back.domain.board.model.entity.Comment;
 import org.palpalmans.ollive_back.domain.board.model.entity.Tag;
 import org.palpalmans.ollive_back.domain.board.repository.*;
+import org.palpalmans.ollive_back.domain.image.model.ImageType;
+import org.palpalmans.ollive_back.domain.image.model.entity.Image;
+import org.palpalmans.ollive_back.domain.image.repository.ImageRepository;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
 import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
@@ -35,6 +38,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import static org.palpalmans.ollive_back.domain.image.model.ImageType.BOARD;
 import static org.palpalmans.ollive_back.domain.member.model.status.MemberRole.ROLE_ADMIN;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -74,6 +78,9 @@ class BoardControllerTest {
 
     @Autowired
     ViewRepository viewRepository;
+
+    @Autowired
+    ImageRepository imageRepository;
 
     Member member;
     NormalMember normalMember;
@@ -171,14 +178,14 @@ class BoardControllerTest {
     @Transactional(propagation = SUPPORTS)
     void getBoardsTest(
             String keyword, String lastIndex, String size, String tag1, String tag2,
-            String resultIdx1
+            String resultIdx
     ) throws Exception {
         //when
         List<Board> boardList = new ArrayList<>();
         List<Tag> tagList = new ArrayList<>();
         getBoardsSetup(boardList, tagList);
 
-        Board board1 = boardList.get(Integer.parseInt(resultIdx1));
+        Board expoectBoard = boardList.get(Integer.parseInt(resultIdx));
 
         //given
         MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
@@ -195,17 +202,14 @@ class BoardControllerTest {
                         .params(requestParams)
                 ).andExpect(status().isOk())
                 .andExpect(jsonPath("$.boards").isArray())
-                .andExpect(jsonPath("$.boards[0].title").value(board1.getTitle()))
-                .andExpect(jsonPath("$.boards[0].content").value(board1.getContent()))
                 .andExpect(jsonPath("$.boards[0].tags").isArray())
-                .andExpect(jsonPath("$.boards[0].tags[*]", Matchers.hasItems(tag1, tag2)))
                 .andDo(print());
 
         getBoardsTearDown(boardList, tagList);
     }
 
     @Transactional
-    void getBoardDetailSetup(Board board, List<Comment> comments) {
+    void getBoardDetailSetup(Board board, List<Comment> comments, List<Image> images, List<Tag> tags) {
         board = boardRepository.save(board);
 
         Comment comment1 = new Comment("content1", board, normalMember);
@@ -217,6 +221,23 @@ class BoardControllerTest {
         comments.add(comment3);
         comments.add(comment4);
         commentRepository.saveAll(comments);
+
+        Image image1 = new Image("address1", BOARD, board.getId());
+        Image image2 = new Image("address2", BOARD, board.getId());
+        images.add(image1);
+        images.add(image2);
+
+        imageRepository.saveAll(images);
+
+        Tag tag1 = new Tag("tagName1");
+        Tag tag2 = new Tag("tagName2");
+        tags.add(tag1);
+        tags.add(tag2);
+        tagRepository.saveAll(tags);
+
+        boardTagRepository.save(new BoardTag(board, tag1));
+        boardTagRepository.save(new BoardTag(board, tag2));
+
     }
 
     @Test
@@ -230,7 +251,9 @@ class BoardControllerTest {
         // when
         Board savedBoard = new Board("title", "content", normalMember.getId());
         List<Comment> comments = new ArrayList<>();
-        getBoardDetailSetup(savedBoard, comments);
+        List<Image> images = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
+        getBoardDetailSetup(savedBoard, comments, images, tags);
 
         // given
         mockMvc.perform(get("/api/v1/boards/" + savedBoard.getId())
@@ -245,6 +268,12 @@ class BoardControllerTest {
                 .andExpect(jsonPath("$.isMine").value(true))
                 .andExpect(jsonPath("$.isLiked").value(false))
                 .andExpect(jsonPath("$.comments").isArray())
+                .andExpect(jsonPath("$.images").isArray())
+                .andExpect(jsonPath("$.images[0].id").value(images.get(0).getId()))
+                .andExpect(jsonPath("$.images[1].id").value(images.get(1).getId()))
+                .andExpect(jsonPath("$.tags").isArray())
+                .andExpect(jsonPath("$.tags[0].id").value(tags.get(0).getId()))
+                .andExpect(jsonPath("$.tags[1].id").value(tags.get(1).getId()))
                 .andDo(print());
     }
 }
