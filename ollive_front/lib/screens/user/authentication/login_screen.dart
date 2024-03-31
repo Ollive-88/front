@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ollive_front/models/user/user_model.dart';
 import 'package:ollive_front/provider/provider.dart';
 import 'package:ollive_front/widgets/user/user_info_widget.dart';
@@ -32,9 +33,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool isSuccess = false;
 
-  // static const storage =
-  //     FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
-  // dynamic userInfo = ''; // storage에 있는 유저 정보를 저장
+  final storage =
+      const FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
+  dynamic userToken = ''; // storage에 있는 유저 정보를 저장
 
   @override
   void initState() {
@@ -57,9 +58,9 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
     // 비동기로 flutter secure storage 정보를 불러오는 작업
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _asyncMethod();
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _asyncMethod();
+    });
   }
 
   @override
@@ -180,18 +181,23 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: ElevatedButton(
                                 style: buttonStyle,
                                 onPressed: _formChanged
-                                    ? () {
+                                    ? () async {
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();
                                           // 로그인 요청 보내기
-                                          UserController().login(_userInfo);
-
-                                          // 로그인 실패하면 에러메시지 띄우기
-                                          setState(() {
-                                            _isEmpty = true;
-                                          });
-                                          // 모든 포커스 해제
-                                          FocusScope.of(context).unfocus();
+                                          if (await UserController()
+                                              .login(_userInfo)) {
+                                            // 로그인 성공이므로 홈페이지로 이동
+                                            Navigator.popAndPushNamed(
+                                                context, '/home');
+                                          } else {
+                                            // 로그인 실패하면 에러메시지 띄우기
+                                            setState(() {
+                                              _isEmpty = true;
+                                            });
+                                            // 모든 포커스 해제
+                                            FocusScope.of(context).unfocus();
+                                          }
                                         }
                                       }
                                     // 폼이 변하지 않았다면 버튼 비활성화
@@ -267,42 +273,14 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.of(context).pushNamed("/signin");
   }
 
-  // _asyncMethod() async {
-  //   // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
-  //   // 데이터가 없을때는 null을 반환
-  //   userInfo = await storage.read(key: 'login');
+  _asyncMethod() async {
+    // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
+    // 데이터가 없을때는 null을 반환
+    userToken = await storage.read(key: 'token');
 
-  //   // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
-  //   if (userInfo != null) {
-  //     Navigator.pushNamed(context, '/main');
-  //   } else {
-  //     print('로그인이 필요합니다');
-  //   }
-  // }
-
-  // // 로그인 버튼 누르면 실행
-  // loginAction(userId, password) async {
-  //   try {
-  //     var dio = Dio();
-  //     var param = {'user_id': '$userId', 'password': '$password'};
-
-  //     // API URL 바꾸기
-  //     Response response = await dio.post('로그인 API URL', data: param);
-
-  //     if (response.statusCode == 200) {
-  //       final jsonBody = jsonDecode(response.data);
-  //       var val = Login.fromJson(jsonBody);
-
-  //       await storage.write(
-  //         key: 'login',
-  //         value: jsonEncode(val.toJson()),
-  //       );
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     return false;
-  //   }
-  // }
+    // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
+    if (userToken != null) {
+      Navigator.popAndPushNamed(context, '/home');
+    }
+  }
 }
