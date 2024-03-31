@@ -22,14 +22,24 @@ public class BoardQueryRepository {
 
     @Transactional(readOnly = true)
     public List<Board> getBoardList(String keyword, Long lastIndex, int size, List<String> tagNames) {
+        if (tagNames.isEmpty()) {
+            return jpaQueryFactory
+                    .select(qBoard)
+                    .from(qBoard)
+                    .leftJoin(qBoard.comments).fetchJoin()
+                    .where(boardListCondition(keyword, lastIndex, tagNames))
+                    .orderBy(qBoard.id.desc())
+                    .limit(size)
+                    .fetch();
+        }
         return jpaQueryFactory
                 .select(qBoard)
                 .from(qBoard)
-                .leftJoin(qBoardTag).on(qBoard.eq(qBoardTag.board)).fetchJoin()
-                .leftJoin(qTag).on(qBoardTag.tag.eq(qTag)).fetchJoin().fetchJoin()
+                .leftJoin(qBoard.comments).fetchJoin()
+                .join(qBoardTag).on(qBoard.eq(qBoardTag.board)).fetchJoin()
+                .join(qTag).on(qBoardTag.tag.eq(qTag)).fetchJoin()
                 .where(boardListCondition(keyword, lastIndex, tagNames))
-                .groupBy(qBoard.id)
-                .orderBy(qBoard.createdAt.desc(), qBoard.id.count().desc())
+                .orderBy(qBoard.id.desc())
                 .limit(size)
                 .fetch();
     }
