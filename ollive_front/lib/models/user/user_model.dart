@@ -32,7 +32,7 @@ class SignIn {
 class ResponseDTO {
   int? code;
   String? msg;
-  String? token, refreshToken;
+  String? accessToken, refreshToken;
 
   ResponseDTO({
     this.code,
@@ -41,25 +41,31 @@ class ResponseDTO {
 
   ResponseDTO.fromJson()
       : code = 1,
-        token = '',
+        accessToken = '',
         refreshToken = '';
 }
 
 class UserIngredients {
-  String ingredientName;
-  String expirationDate;
+  String name, endAt;
+  int? fridgeIngredientId;
 
   UserIngredients({
-    required this.ingredientName,
-    required this.expirationDate,
+    required this.name,
+    required this.endAt,
+    this.fridgeIngredientId,
   });
+
+  UserIngredients.fromJson(Map<String, dynamic> json)
+      : fridgeIngredientId = json['fridgeIngredientId'],
+        name = json['name'],
+        endAt = json['endAt'];
 }
 
 class HateIngredients {
-  final String ingredientName;
+  final String name;
 
   HateIngredients({
-    required this.ingredientName,
+    required this.name,
   });
 }
 
@@ -69,31 +75,4 @@ final hateIngredientList = [
   '고추',
   '대추',
   '부추',
-];
-
-final userIngredientsList = [
-  UserIngredients(
-    ingredientName: '감자',
-    expirationDate: '2022-03-30',
-  ),
-  UserIngredients(
-    ingredientName: '양파',
-    expirationDate: '2023-03-30',
-  ),
-  UserIngredients(
-    ingredientName: '양배추',
-    expirationDate: '2024-03-30',
-  ),
-  UserIngredients(
-    ingredientName: '고추',
-    expirationDate: '2024-04-30',
-  ),
-  UserIngredients(
-    ingredientName: '대추',
-    expirationDate: '2024-03-25',
-  ),
-  UserIngredients(
-    ingredientName: '카레',
-    expirationDate: '2022-03-30',
-  ),
 ];
