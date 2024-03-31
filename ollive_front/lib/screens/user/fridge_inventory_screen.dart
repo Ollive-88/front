@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:ollive_front/models/user/user_model.dart';
+import 'package:ollive_front/service/user/user_service.dart';
 
 enum Actions { change, delete }
 
@@ -15,10 +16,15 @@ class FridgeInventoryScreen extends StatefulWidget {
 }
 
 class _FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
-  List<UserIngredients> ingredients = userIngredientsList;
-  DateTime today = DateTime.now();
+  late Future<List<UserIngredients>> ingredients;
   final TextEditingController _ingredientController = TextEditingController();
   var expirationDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    ingredients = UserService.getFridgeIngredients();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +39,11 @@ class _FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
         child: FloatingActionButton.large(
           onPressed: () {
             _ingredientController.clear();
-            showBottomSheet(context, null);
+            showBottomSheet(
+              context,
+              null,
+              null,
+            );
           },
           foregroundColor: Colors.white,
           backgroundColor: const Color(0xFF30AF98),
@@ -46,64 +56,87 @@ class _FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 50,
-          ),
-          Expanded(
-            child: SlidableAutoCloseBehavior(
-              closeWhenOpened: true,
-              child: ListView.separated(
-                  separatorBuilder: (context, index) => const Divider(
-                        height: 0,
-                      ),
-                  itemCount: ingredients.length,
-                  itemBuilder: (context, index) {
-                    final ingredient = ingredients[index];
-                    return Slidable(
-                      key: Key(ingredient.ingredientName),
-                      startActionPane: ActionPane(
-                        extentRatio: 0.25,
-                        motion: const BehindMotion(),
-                        children: [
-                          SlidableAction(
-                            backgroundColor: const Color(0xFF30AF98),
-                            label: '정보변경',
-                            onPressed: (context) {
-                              _updateText(ingredient.ingredientName);
-                              showBottomSheet(context, index);
-                            },
-                          ),
-                        ],
-                      ),
-                      endActionPane: ActionPane(
-                        extentRatio: 0.2,
-                        motion: const BehindMotion(),
-                        children: [
-                          SlidableAction(
-                            backgroundColor: Colors.red,
-                            label: '삭제',
-                            onPressed: (context) {
-                              _onDismissed(index, Actions.delete);
-                            },
-                          ),
-                        ],
-                      ),
-                      child: buildIngredientListTitle(ingredient),
-                    );
-                  }),
-            ),
-          )
-        ],
+      body: FutureBuilder(
+        future: ingredients,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Column(
+              children: [
+                const SizedBox(
+                  height: 50,
+                ),
+                Expanded(
+                  child: SlidableAutoCloseBehavior(
+                    closeWhenOpened: true,
+                    child: ListView.separated(
+                        separatorBuilder: (context, index) => const Divider(
+                              height: 0,
+                            ),
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          final ingredient = snapshot.data![index];
+                          return Slidable(
+                            key: Key(ingredient.name),
+                            startActionPane: ActionPane(
+                              extentRatio: 0.25,
+                              motion: const BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                  backgroundColor: const Color(0xFF30AF98),
+                                  label: '정보변경',
+                                  onPressed: (context) {
+                                    _updateText(ingredient.name);
+                                    expirationDate =
+                                        DateTime.parse(ingredient.endAt);
+                                    showBottomSheet(
+                                        context, index, snapshot.data!);
+                                  },
+                                ),
+                              ],
+                            ),
+                            endActionPane: ActionPane(
+                              extentRatio: 0.2,
+                              motion: const BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                  backgroundColor: Colors.red,
+                                  label: '삭제',
+                                  onPressed: (context) async {
+                                    if (await UserService
+                                        .deleteFridgeIngredients(
+                                            ingredient.fridgeIngredientId!)) {
+                                      setState(() {
+                                        ingredients =
+                                            UserService.getFridgeIngredients();
+                                      });
+                                      _onDismissed(Actions.delete);
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            child: buildIngredientListTitle(ingredient),
+                          );
+                        }),
+                  ),
+                )
+              ],
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
 
   // bottomSheet
-  Future<void> showBottomSheet(BuildContext context, int? index) {
+  Future<void> showBottomSheet(
+      BuildContext context, int? index, List<UserIngredients>? ingredientList) {
     var initDate = index != null
-        ? DateFormat('yyyy-MM-dd').parse(ingredients[index].expirationDate)
+        ? DateFormat('yyyy-MM-dd').parse(ingredientList![index].endAt)
         : DateTime.now();
 
     return showModalBottomSheet<void>(
@@ -194,7 +227,7 @@ class _FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (_ingredientController.text.isEmpty) {
                                 FocusScope.of(context).unfocus();
                                 // 약간의 딜레이 후에 토스트 메시지를 띄운다.
@@ -204,22 +237,34 @@ class _FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                                 });
                               } else {
                                 if (index != null) {
-                                  setState(() {
-                                    ingredients[index].ingredientName =
-                                        _ingredientController.text;
-                                    ingredients[index].expirationDate =
-                                        DateFormat('yyyy-MM-dd')
-                                            .format(expirationDate);
-                                  });
+                                  final input = UserIngredients(
+                                    name: _ingredientController.text,
+                                    endAt: DateFormat('yyyy-MM-dd')
+                                        .format(expirationDate),
+                                    fridgeIngredientId: ingredientList![index]
+                                        .fridgeIngredientId,
+                                  );
+                                  if (await UserService.putFridgeIngredients(
+                                      input)) {
+                                    setState(() {
+                                      ingredients =
+                                          UserService.getFridgeIngredients();
+                                    });
+                                    _onDismissed(Actions.change);
+                                  }
                                 } else {
                                   final newIngredient = UserIngredients(
-                                      ingredientName:
-                                          _ingredientController.text,
-                                      expirationDate: DateFormat('yyyy-MM-dd')
+                                      name: _ingredientController.text,
+                                      endAt: DateFormat('yyyy-MM-dd')
                                           .format(expirationDate));
-                                  userIngredientsList.add(newIngredient);
-
-                                  setState(() {});
+                                  // 추가 요청 보내기
+                                  if (await UserService.postFridgeIngredients(
+                                      newIngredient)) {
+                                    setState(() {
+                                      ingredients =
+                                          UserService.getFridgeIngredients();
+                                    });
+                                  }
                                 }
                                 // 입력 필드 초기화
                                 _ingredientController.clear();
@@ -249,9 +294,7 @@ class _FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
         });
   }
 
-  void _onDismissed(int index, Actions action) {
-    setState(() => ingredients.removeAt(index));
-
+  void _onDismissed(Actions action) {
     switch (action) {
       case Actions.delete:
         _showSnackBar(context, '삭제되었습니다.', Colors.grey);
@@ -300,11 +343,11 @@ class _FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
           return ListTile(
             contentPadding: const EdgeInsets.all(8.0),
             leading: Text(
-              ingredient.ingredientName,
+              ingredient.name,
               style: const TextStyle(fontSize: 15),
             ),
             trailing: Text(
-              calculateRemainingDate(ingredient.expirationDate),
+              calculateRemainingDate(ingredient.endAt),
               style: const TextStyle(
                   color: Colors.red, fontSize: 13, fontWeight: FontWeight.w700),
             ),
