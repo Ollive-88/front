@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/models/recipe/recipe_detail_model.dart';
 import 'package:ollive_front/service/recipe/recipe_service.dart';
+import 'package:ollive_front/util/error/error_service.dart';
 import 'package:ollive_front/widgets/recipe/prcipe_processe_widget.dart';
 import 'package:ollive_front/widgets/recipe/recipe_difficulty_widget.dart';
 import 'package:ollive_front/widgets/recipe/recipe_info_widget.dart';
@@ -24,7 +25,11 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   @override
   void initState() {
     super.initState();
-    recipeDetail = RecipeService.getRecipeDetail(widget.recipeId);
+    recipeDetail =
+        RecipeService.getRecipeDetail(widget.recipeId).catchError((onError) {
+      ErrorService.showToast("잘못된 요청입니다.");
+      return null;
+    });
   }
 
   @override

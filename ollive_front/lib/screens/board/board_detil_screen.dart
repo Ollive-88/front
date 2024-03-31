@@ -1,10 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ollive_front/models/board/board_detail_model.dart';
+import 'package:ollive_front/models/board/tag_model.dart';
 import 'package:ollive_front/screens/board/board_write_screen.dart';
 import 'package:ollive_front/service/board/board_service.dart';
+import 'package:ollive_front/util/error/error_service.dart';
 import 'package:ollive_front/widgets/board/board_tag_widget.dart';
 
 // ignore: must_be_immutable
@@ -23,7 +23,10 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
   @override
   void initState() {
     super.initState();
-    boardDetail = BoardService.getBoardDetail(widget.boardId);
+    boardDetail = BoardService.getBoardDetail(widget.boardId).catchError((e) {
+      ErrorService.showToast("잘못된 요청입니다.");
+      Navigator.pop(context);
+    });
   }
 
   @override
@@ -99,16 +102,18 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                     color: Color(0xFFEBEBE9),
                                   ),
                                   GestureDetector(
-                                    onTap: () {
-                                      Future<int> response =
-                                          BoardService.deleteBoard(
-                                              snapshot.data!.boardId);
-                                      // ignore: unrelated_type_equality_checks
-                                      if (response == 200) {
-                                        Navigator.pop(context);
-                                      } else {
-                                        // Todo : 오류 모달 생성
-                                      }
+                                    onTap: () async {
+                                      await BoardService.deleteBoard(
+                                              snapshot.data!.boardId)
+                                          .then((value) =>
+                                              Navigator.pushNamedAndRemoveUntil(
+                                                  context,
+                                                  '/home',
+                                                  (route) => false))
+                                          .catchError((e) {
+                                        ErrorService.showToast("잘못된 요청입니다.");
+                                        return null;
+                                      });
                                     },
                                     child: const Padding(
                                       padding: EdgeInsets.symmetric(
@@ -246,7 +251,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                   ),
                                   items: snapshot.data!.images
                                       .map(
-                                        (imgUrl) => Container(
+                                        (img) => Container(
                                           margin: const EdgeInsets.symmetric(
                                               horizontal: 10), // 여기에 마진 추가
 
@@ -262,7 +267,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                                       .size
                                                       .width /
                                                   1.1,
-                                              imgUrl,
+                                              img.address,
                                               headers: const {
                                                 "User-Agent":
                                                     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
@@ -307,7 +312,10 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         right: 10, bottom: 10),
-                                    child: Tag(tagName: tag, isSearch: false),
+                                    child: Tag(
+                                      tagModel: TagModel(tag.tagName),
+                                      isSearch: false,
+                                    ),
                                   )
                               ],
                             ),
@@ -477,60 +485,6 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                       ],
                     ),
                   ),
-
-                  // 댓글 입력 창
-                  SafeArea(
-                    bottom: true,
-                    child: Container(
-                      constraints: const BoxConstraints(minHeight: 48),
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          top: BorderSide(
-                            color: Color(0xFFE5E5EA),
-                          ),
-                        ),
-                      ),
-                      child: Stack(
-                        children: [
-                          TextField(
-                            // focusNode: context.read<ChatController>().focusNode,
-                            // onChanged:
-                            //     context.read<ChatController>().onFieldChanged,
-                            // controller: context
-                            //     .read<ChatController>()
-                            //     .textEditingController,
-                            maxLines: null,
-                            textAlignVertical: TextAlignVertical.top,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.only(
-                                right: 42,
-                                left: 16,
-                                top: 18,
-                              ),
-                              hintText: '댓글을 입력하세요.',
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                          ),
-                          // custom suffix btn
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: IconButton(
-                                icon: const Icon(Icons.send), onPressed: () {}),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                 ],
               ),
             );
@@ -540,6 +494,57 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
             );
           }
         },
+      ),
+      bottomNavigationBar: // 댓글 입력 창
+          Container(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        constraints: const BoxConstraints(minHeight: 48),
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Color(0xFFE5E5EA),
+            ),
+          ),
+        ),
+        child: Stack(
+          children: [
+            TextField(
+              // focusNode: context.read<ChatController>().focusNode,
+              // onChanged:
+              //     context.read<ChatController>().onFieldChanged,
+              // controller: context
+              //     .read<ChatController>()
+              //     .textEditingController,
+              maxLines: null,
+              textAlignVertical: TextAlignVertical.top,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.only(
+                  right: 42,
+                  left: 16,
+                  top: 18,
+                ),
+                hintText: '댓글을 입력하세요.',
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+            ),
+            // custom suffix btn
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: IconButton(icon: const Icon(Icons.send), onPressed: () {}),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -35,8 +35,6 @@ class BoardService {
       );
     }
 
-    print(response.data);
-
     List<BoardModel> boards = response.data['boards'].map<BoardModel>((json) {
       return BoardModel.fromJson(json);
     }).toList();
@@ -45,81 +43,61 @@ class BoardService {
   }
 
   // 게시글 생성
-  static Future<int> postBoard(String title, List<String> tagNames,
+  static Future<void> postBoard(String title, List<String> tagNames,
       String content, List<MultipartFile> images) async {
-    try {
-      FormData post = FormData.fromMap({
-        "title": title,
-        "tagNames": tagNames,
-        "content": content,
-        "images": images,
-      });
+    FormData post = FormData.fromMap({
+      "title": title,
+      "tagNames": tagNames,
+      "content": content,
+      "images": images,
+    });
 
-      await _dio.post(
-        "/api/v1/boards",
-        data: post,
-      );
-
-      return 1;
-    } catch (e) {
-      return 0;
-    }
+    await _dio.post(
+      "/api/v1/boards",
+      data: post,
+    );
   }
 
   // 게시글 수정
-  static Future<int> fatchBoard(
+  static Future<void> fatchBoard(
+      int boardId,
       List<String> updateTagNames,
-      List<String> deleteTagNames,
+      List<int> deleteTagNames,
       List<MultipartFile> updateImages,
-      List<MultipartFile> deleteImages,
+      List<int> deleteImages,
       String title,
       String content) async {
-    try {
-      FormData put = FormData.fromMap({
-        "updateTagNames": updateTagNames,
-        "deleteTagNames": deleteTagNames,
-        "updateImages": updateImages,
-        "deleteImages": deleteImages,
-        "title": title,
-        "content": content,
-      });
+    FormData put = FormData.fromMap({
+      "updateTagNames": updateTagNames,
+      "deleteTags": deleteTagNames,
+      "updateImages": updateImages,
+      "deleteImages": deleteImages,
+      "title": title,
+      "content": content,
+    });
 
-      await _dio.put(
-        "/api/v1/boards",
-        data: put,
-      );
-
-      return 1;
-    } catch (e) {
-      return 0;
-    }
+    await _dio.put(
+      "/api/v1/boards/$boardId",
+      data: put,
+    );
   }
 
   // 게시글 상세 조회
   static Future<BoardDetailModel> getBoardDetail(int boardId) async {
-    try {
-      final response = await _dio.get(
-        "/api/v1/boards/$boardId",
-      );
+    final response = await _dio.get(
+      "/api/v1/boards/$boardId",
+    );
 
-      final instance = BoardDetailModel.fromJson(response.data);
+    final instance = BoardDetailModel.fromJson(response.data);
 
-      return instance;
-    } catch (e) {
-      throw Error();
-    }
+    return instance;
   }
 
   // 게시글 삭제
-  static Future<int> deleteBoard(int boardId) async {
-    try {
-      await _dio.delete(
-        "/api/vi/boards$boardId",
-      );
-      return 1;
-    } catch (e) {
-      return 0;
-    }
+  static Future<void> deleteBoard(int boardId) async {
+    await _dio.delete(
+      "/api/v1/boards/$boardId",
+    );
   }
 
   // 좋아요 생성/삭제

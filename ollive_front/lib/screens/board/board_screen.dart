@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:ollive_front/models/board/board_model.dart';
+import 'package:ollive_front/models/board/tag_model.dart';
 import 'package:ollive_front/screens/board/board_detil_screen.dart';
 import 'package:ollive_front/service/board/board_service.dart';
 import 'package:ollive_front/util/error/error_service.dart';
@@ -16,7 +17,7 @@ class BoardScreen extends StatefulWidget {
     this.boardScrollController,
   });
   // 검색할 태그 목록
-  final List<String>? tagNames;
+  final List<TagModel>? tagNames;
   // 검색어
   final String? keyword;
 
@@ -52,16 +53,26 @@ class _BoardScreenState extends State<BoardScreen> {
   void _fetchBoards() async {
     List<BoardModel> currentBoards = await boards;
 
-    List<BoardModel> newBoards = await BoardService.getBoardList(
-        widget.tagNames, widget.keyword, lastIndex, size);
-    if (newBoards.isNotEmpty) {
-      setState(() {
-        currentBoards.addAll(newBoards);
-        boards = Future.value(currentBoards);
-      });
-    } else {
-      ErrorService.showToast("마지막 게시물 입니다.");
+    List<String> tagList = [];
+    if (widget.tagNames != null) {
+      for (var i = 0; i < widget.tagNames!.length; i++) {
+        tagList.add(widget.tagNames![i].tagName);
+      }
     }
+
+    await BoardService.getBoardList(tagList, widget.keyword, lastIndex, size)
+        .then((value) {
+      if (value.isNotEmpty) {
+        setState(() {
+          currentBoards.addAll(value);
+          boards = Future.value(currentBoards);
+        });
+      } else {
+        ErrorService.showToast("마지막 게시물 입니다.");
+      }
+    }).catchError((onError) {
+      ErrorService.showToast("잘못된 요청입니다.");
+    });
   }
 
   void scrollListener() {
@@ -75,8 +86,16 @@ class _BoardScreenState extends State<BoardScreen> {
   @override
   void initState() {
     super.initState();
-    boards = BoardService.getBoardList(
-        widget.tagNames, widget.keyword, lastIndex, size);
+
+    List<String> tagList = [];
+    if (widget.tagNames != null) {
+      for (var i = 0; i < widget.tagNames!.length; i++) {
+        tagList.add(widget.tagNames![i].tagName);
+      }
+    }
+
+    boards =
+        BoardService.getBoardList(tagList, widget.keyword, lastIndex, size);
 
     if (widget.boardScrollController == null) {
       // 컨트롤러 초기화 후 addListener로 동작 감지 설정

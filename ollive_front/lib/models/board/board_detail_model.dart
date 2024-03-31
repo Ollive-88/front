@@ -1,3 +1,5 @@
+import 'package:ollive_front/models/board/image_model.dart';
+import 'package:ollive_front/models/board/tag_model.dart';
 import 'package:ollive_front/models/comment/comment_model.dart';
 import 'package:ollive_front/models/user/user_simple_model.dart';
 
@@ -7,8 +9,8 @@ class BoardDetailModel {
   int likeCount;
   bool isMine, isLiked;
   final UserSimpleModel writer;
-  final List<String> tags;
-  final List<String> images;
+  final List<TagModel> tags;
+  final List<ImageModel> images;
   final List<CommentModel> comments;
 
   BoardDetailModel.fromJson(Map<String, dynamic> json)
@@ -21,8 +23,12 @@ class BoardDetailModel {
         isLiked = json['isLiked'],
         isMine = json['isMine'],
         writer = UserSimpleModel.fromJson(json['writer']),
-        tags = List<String>.from(json['tags']),
-        images = List<String>.from(json['images']),
+        tags = (json['tags'] as List<dynamic>)
+            .map((tag) => TagModel.fromJson(tag))
+            .toList(),
+        images = (json['images'] as List<dynamic>)
+            .map((image) => ImageModel.fromJson(image))
+            .toList(),
         comments = (json['comments'] as List<dynamic>)
             .map((comment) => CommentModel.fromJson(comment))
             .toList();

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ollive_front/models/board/board_detail_model.dart';
+import 'package:ollive_front/models/board/image_model.dart';
+import 'package:ollive_front/models/board/tag_model.dart';
 import 'package:ollive_front/service/board/board_service.dart';
 import 'package:ollive_front/util/error/error_service.dart';
 import 'package:ollive_front/widgets/board/board_image_widget.dart';
@@ -29,17 +31,17 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
   // 태그 포커스 노드
   final FocusNode _focusNode = FocusNode();
   // 태그 리스트
-  List<String> tagNames = [];
+  List<TagModel> tagNames = [];
   // 수정 태그 리스트
-  List<String> updateTagNames = [];
-  List<String> deleteTagNames = [];
+  List<TagModel> updateTagNames = [];
+  List<int> deleteTagNames = [];
 
   // 이미지 피커
   final ImagePicker _picker = ImagePicker();
-  final List<XFile> _pickedImgs = [];
+  final List<ImageDetailModel> _pickedImgs = [];
   // 수정 이미지 리스트
-  final List<XFile> _updatePickedImgs = [];
-  final List<XFile> _deletePickedImgs = [];
+  final List<ImageDetailModel> _updatePickedImgs = [];
+  final List<int> _deletePickedImgs = [];
 
   // 태그 입력 처리 메서드
   void subStringTags() {
@@ -50,10 +52,10 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
     for (var match in matches) {
       text = text.replaceFirst(match.group(0)!, '');
       if (isModify) {
-        updateTagNames.add(match.group(0)!);
+        updateTagNames.add(TagModel(match.group(0)!));
       }
 
-      tagNames.add(match.group(0)!);
+      tagNames.add(TagModel(match.group(0)!));
     }
     _inputController.text = text.trim(); // trim()을 사용해 앞뒤 공백 제거
     _scrollToBottom();
@@ -62,11 +64,13 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
   }
 
   // 태그 지우는 메서드
-  void deleteTags(int index) {
-    if (isModify) {
-      deleteTagNames.add(tagNames[index]);
+  void deleteTags(TagModel tagModel, int i) {
+    if (tagModel.id != null) {
+      deleteTagNames.add(tagModel.id!);
     }
-    tagNames.removeAt(index);
+
+    tagNames.removeAt(i);
+
     setState(() {});
   }
 
@@ -89,9 +93,9 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
       for (var image in images) {
         if (_pickedImgs.length < 5) {
           if (isModify) {
-            _updatePickedImgs.add(image);
+            _updatePickedImgs.add(ImageDetailModel(imgFile: image));
           }
-          _pickedImgs.add(image);
+          _pickedImgs.add(ImageDetailModel(imgFile: image));
         } else {
           isFull = true;
         }
@@ -104,9 +108,9 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
   }
 
   // 이미지 지우는 메서드
-  void deleteImage(int index) {
-    if (isModify) {
-      _deletePickedImgs.add(_pickedImgs[index]);
+  void deleteImage(ImageDetailModel imageDetailModel, int index) {
+    if (isModify && imageDetailModel.id != null) {
+      _deletePickedImgs.add(imageDetailModel.id!);
     }
     _pickedImgs.removeAt(index);
     setState(() {});
@@ -118,9 +122,10 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
   }
 
   void addImages() async {
-    for (var imgUrl in widget.boardDetail!.images) {
-      XFile img = await getImageXFileByUrl(imgUrl);
-      _pickedImgs.add(img);
+    for (var img in widget.boardDetail!.images) {
+      XFile temp = await getImageXFileByUrl(img.address);
+      _pickedImgs.add(
+          ImageDetailModel(imgFile: temp, id: img.id, address: img.address));
     }
     setState(() {});
   }
@@ -153,6 +158,7 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
       _titleController.text = widget.boardDetail!.title;
       _contentController.text = widget.boardDetail!.content;
       tagNames.addAll(widget.boardDetail!.tags);
+
       addImages();
     }
   }
@@ -197,46 +203,63 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                   }
 
                   if (!isModify) {
-                    List<MultipartFile> imgs =
-                        await BoardService.convertXFileToMultipartFile(
-                            _pickedImgs);
+                    List<XFile> imgList = [];
 
-                    int result = await BoardService.postBoard(
-                        _titleController.text,
-                        tagNames,
-                        _contentController.text,
-                        imgs);
-                    if (result == 0) {
-                      ErrorService.showToast("잘못된 요청입니다.");
-                    } else {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/', (route) => false);
+                    for (var i = 0; i < _pickedImgs.length; i++) {
+                      imgList.add(_pickedImgs[i].imgFile);
                     }
+                    List<MultipartFile> imgs =
+                        await BoardService.convertXFileToMultipartFile(imgList);
+
+                    List<String> tagList = [];
+
+                    for (var i = 0; i < tagNames.length; i++) {
+                      tagList.add(tagNames[i].tagName);
+                    }
+
+                    await BoardService.postBoard(_titleController.text, tagList,
+                            _contentController.text, imgs)
+                        .then((value) => Navigator.pushNamedAndRemoveUntil(
+                            context, '/home', (route) => false))
+                        .catchError((e) {
+                      ErrorService.showToast("잘못된 요청입니다.");
+                      return null;
+                    });
                   } else {
+                    // 추가된 태그 목록 초기화
+                    List<String> updateTagList = [];
+
+                    for (var i = 0; i < updateTagNames.length; i++) {
+                      updateTagList.add(updateTagNames[i].tagName);
+                    }
+
+                    // 추가된 이미지 초기화
+                    List<XFile> updateImgList = [];
+
+                    for (var i = 0; i < _updatePickedImgs.length; i++) {
+                      updateImgList.add(_updatePickedImgs[i].imgFile);
+                    }
+
                     List<MultipartFile> updateImages =
                         await BoardService.convertXFileToMultipartFile(
-                            _updatePickedImgs);
+                            updateImgList);
 
-                    List<MultipartFile> deleteImages =
-                        await BoardService.convertXFileToMultipartFile(
-                            _deletePickedImgs);
-                    int result = await BoardService.fatchBoard(
-                      updateTagNames,
+                    await BoardService.fatchBoard(
+                      widget.boardDetail!.boardId,
+                      updateTagList,
                       deleteTagNames,
                       updateImages,
-                      deleteImages,
+                      _deletePickedImgs,
                       _titleController.text,
                       _contentController.text,
-                    );
-
-                    if (result == 0) {
+                    )
+                        .then((value) => Navigator.pushNamedAndRemoveUntil(
+                            context, '/home', (route) => false))
+                        .catchError((e) {
                       ErrorService.showToast("잘못된 요청입니다.");
-                    } else {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/', (route) => false);
-                    }
+                      return null;
+                    });
                   }
-                  // ignore: unrelated_type_equality_checks
                 },
                 child: const Text(
                   "완료",
@@ -343,9 +366,9 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                             children: [
                               for (int i = 0; i < tagNames.length; i++)
                                 Tag(
-                                  tagName: tagNames[i],
+                                  tagModel: tagNames[i],
                                   isSearch: true,
-                                  deleteTag: () => deleteTags(i),
+                                  deleteTag: () => deleteTags(tagNames[i], i),
                                 )
                             ],
                           ),
@@ -390,10 +413,11 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 5),
                                   child: BoardImage(
-                                    image: _pickedImgs[i],
+                                    image: _pickedImgs[i].imgFile,
                                     heght:
                                         MediaQuery.of(context).size.height / 10,
-                                    deleteImage: () => deleteImage(i),
+                                    deleteImage: () =>
+                                        deleteImage(_pickedImgs[i], i),
                                   ),
                                 )
                             ],

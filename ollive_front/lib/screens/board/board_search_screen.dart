@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ollive_front/models/board/tag_model.dart';
 import 'package:ollive_front/screens/board/board_screen.dart';
 import 'package:ollive_front/widgets/board/board_tag_widget.dart';
 
@@ -13,7 +14,7 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
   final FocusNode _focusNode = FocusNode();
 
   // 태그 리스트
-  List<String> tagNames = [];
+  List<TagModel> tagNames = [];
 
   // 태그 입력 처리 메서드
   void subStringTags() {
@@ -23,7 +24,7 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
 
     for (var match in matches) {
       text = text.replaceFirst(match.group(0)!, '');
-      tagNames.add(match.group(0)!.substring(1));
+      tagNames.add(TagModel(match.group(0)!.substring(1)));
     }
 
     setState(() {
@@ -125,7 +126,7 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
                 children: [
                   for (int i = 0; i < tagNames.length; i++)
                     Tag(
-                      tagName: tagNames[i],
+                      tagModel: tagNames[i],
                       isSearch: true,
                       deleteTag: () => deleteTags(i),
                     )

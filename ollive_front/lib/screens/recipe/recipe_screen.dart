@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ollive_front/models/recipe/recipe_model.dart';
 import 'package:ollive_front/screens/recipe/recipe_list_screen.dart';
 import 'package:ollive_front/service/recipe/recipe_service.dart';
 import 'package:ollive_front/util/error/error_service.dart';
@@ -441,21 +440,23 @@ class _RecipeScreenState extends State<RecipeScreen> {
                         if (havingIngredients.isEmpty) {
                           ErrorService.showToast("포함시킬 재료를 선택해주세요");
                         } else {
-                          List<RecipeModel> recommendrecipes =
-                              await RecipeService.getRecommendRecipeList(
+                          await RecipeService.getRecommendRecipeList(
                             havingIngredients,
                             dislikeIngredients,
-                          );
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RecipeListScreen(
-                                likeTagNames: havingIngredients,
-                                hateTagNames: dislikeIngredients,
-                                recommendrecipes: recommendrecipes,
+                          ).then((value) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RecipeListScreen(
+                                  likeTagNames: havingIngredients,
+                                  hateTagNames: dislikeIngredients,
+                                  recommendrecipes: value,
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          }).catchError((onError) {
+                            ErrorService.showToast("잘못된 요청입니다.");
+                          });
                         }
                       },
                       child: Container(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/models/cloth/cloth_list_model.dart';
 import 'package:ollive_front/service/cloth/cloth_service.dart';
+import 'package:ollive_front/util/error/error_service.dart';
 import 'package:ollive_front/widgets/cloth/cloth_list_widget.dart';
 
 // ignore: must_be_immutable
@@ -19,7 +20,11 @@ class _ClothListScreenState extends State<ClothListScreen> {
   @override
   void initState() {
     super.initState();
-    clothList = ClothService.getRecommendClothList(widget.outing, widget.sing);
+    clothList = ClothService.getRecommendClothList(widget.outing, widget.sing)
+        //     .catchError((onError) {
+        //   ErrorService.showToast("잘못된 요청입니다.");
+        // })
+        ;
   }
 
   @override

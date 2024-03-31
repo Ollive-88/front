@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ollive_front/screens/board/board_search_screen.dart';
 import 'package:ollive_front/screens/board/board_write_screen.dart';
 import 'package:ollive_front/screens/home_screen.dart';
+import 'package:ollive_front/screens/splash_screen.dart';
 import 'package:ollive_front/screens/user/authentication/login_screen.dart';
 import 'package:ollive_front/screens/user/authentication/signin_screen.dart';
 import 'package:ollive_front/util/controller/getx_controller.dart';
@@ -52,7 +53,7 @@ class _AppState extends State<App> {
       theme: ThemeData(
         fontFamily: 'NanumSquare',
       ),
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }

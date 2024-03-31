@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:ollive_front/models/board/tag_model.dart';
 
 import '../board/board_tag_widget.dart';
 
@@ -86,7 +87,7 @@ class _RecipeTextFieldState extends State<RecipeTextField> {
                       Row(
                         children: [
                           Tag(
-                            tagName: widget.ingredients[i],
+                            tagModel: TagModel(widget.ingredients[i]),
                             isSearch: true,
                             deleteTag: () => deleteTags(i, widget.ingredients),
                           ),

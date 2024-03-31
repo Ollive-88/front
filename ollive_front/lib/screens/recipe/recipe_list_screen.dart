@@ -153,48 +153,54 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
       }
 
       // 레시피 리스트 초기화
-      List<RecipeModel> temp = await RecipeService.getRecipeList(
+      await RecipeService.getRecipeList(
         widget.likeTagNames,
         widget.hateTagNames,
         recipeCase,
         "",
         0,
         size,
-      );
-
-      recipes = temp;
-      if (recipes.isNotEmpty) {
-        updateLastIndex(recipes[recipes.length - 1].recipeId);
-      }
+      ).then((value) {
+        recipes = value;
+        if (recipes.isNotEmpty) {
+          updateLastIndex(recipes[recipes.length - 1].recipeId);
+        }
+      }).catchError((onError) {
+        ErrorService.showToast("잘못된 요청입니다.");
+      });
     }
     setState(() {});
   }
 
   // 소분류 선택 메서드
   void onClickcategoty(int i) async {
+    String temp = recipeCategory;
     recipeCategory = categotyList[seletedCase][i];
 
-    List<RecipeModel> temp = await RecipeService.getRecipeList(
+    await RecipeService.getRecipeList(
       widget.likeTagNames,
       widget.hateTagNames,
       recipeCase,
       recipeCategory,
       0,
       size,
-    );
-    for (var i = 0; i < seletedCategoty.length; i++) {
-      seletedCategoty[i] = 0;
-    }
+    ).then((value) {
+      for (var i = 0; i < seletedCategoty.length; i++) {
+        seletedCategoty[i] = 0;
+      }
 
-    seletedCategoty[seletedCase] = i;
+      seletedCategoty[seletedCase] = i;
 
-    // 레시피 리스트 초기화
-    recipes = temp;
+      // 레시피 리스트 초기화
+      recipes = value;
 
-    if (recipes.isNotEmpty) {
-      updateLastIndex(recipes[recipes.length - 1].recipeId);
-    }
-
+      if (recipes.isNotEmpty) {
+        updateLastIndex(recipes[recipes.length - 1].recipeId);
+      }
+    }).catchError((onError) {
+      recipeCategory = temp;
+      ErrorService.showToast("잘못된 요청입니다.");
+    });
     setState(() {});
   }
 
@@ -206,24 +212,26 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange &&
         seletedCase > 0) {
-      List<RecipeModel> temp = await RecipeService.getRecipeList(
+      await RecipeService.getRecipeList(
         widget.likeTagNames,
         widget.hateTagNames,
         recipeCase,
         recipeCategory,
         lastIndex,
         size,
-      );
+      ).then((value) {
+        if (value.isEmpty) {
+          ErrorService.showToast("마지막 페이지 입니다.");
+        } else {
+          // 레시피 리스트 초기화
+          recipes.addAll(value);
+          updateLastIndex(recipes[recipes.length - 1].recipeId);
 
-      if (temp.isEmpty) {
-        ErrorService.showToast("마지막 페이지 입니다.");
-      } else {
-        // 레시피 리스트 초기화
-        recipes.addAll(temp);
-        updateLastIndex(recipes[recipes.length - 1].recipeId);
-
-        setState(() {});
-      }
+          setState(() {});
+        }
+      }).catchError((onError) {
+        ErrorService.showToast("잘못된 요청입니다.");
+      });
     }
   }
 
