@@ -10,11 +10,12 @@ class UserController {
   final mContext = navigatorKey.currentContext;
 
   Future<bool> login(Login input) async {
-    ResponseDTO responseDTO = await UserService().loginAction(input);
+    ResponseDTO responseDTO = await UserService.loginAction(input);
 
     if (responseDTO.code == 1) {
       // 토큰을 휴대폰에 저장
-      await secureStorage.write(key: 'token', value: responseDTO.token);
+      await secureStorage.write(
+          key: 'accessToken', value: responseDTO.accessToken);
       await secureStorage.write(
           key: 'refreshToken', value: responseDTO.refreshToken);
       return true;

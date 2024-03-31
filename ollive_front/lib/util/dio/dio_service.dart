@@ -32,7 +32,7 @@ class DioService {
             return handler.next(options);
           }
 
-          options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+          options.headers['Authorization'] = '${token.accessToken}';
           return handler.next(options);
         },
         onResponse: (response, handler) async {
