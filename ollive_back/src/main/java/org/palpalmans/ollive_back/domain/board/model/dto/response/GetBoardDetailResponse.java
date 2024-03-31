@@ -1,6 +1,7 @@
 package org.palpalmans.ollive_back.domain.board.model.dto.response;
 
 import lombok.Builder;
+import org.palpalmans.ollive_back.domain.image.model.dto.GetImageResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,8 +16,8 @@ public record GetBoardDetailResponse(
         boolean isMine,
         boolean isLiked,
         Writer writer,
-        List<String> images,
-        List<String> tags,
+        List<GetImageResponse> images,
+        List<GetTagResponse> tags,
         LocalDateTime createdAt,
         List<GetCommentResponse> comments
 ) {

@@ -2,6 +2,7 @@ package org.palpalmans.ollive_back.domain.board.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
+import org.palpalmans.ollive_back.domain.board.model.dto.request.UpdateBoardRequest;
 import org.palpalmans.ollive_back.domain.board.model.dto.request.WriteBoardRequest;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardDetailResponse;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardsResponse;
@@ -57,5 +58,24 @@ public class BoardController {
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails
     ) {
         return ResponseEntity.ok(boardService.getBoardDetail(boardId, customMemberDetails));
+    }
+
+    @PutMapping("/{boardId}")
+    public ResponseEntity<Void> updateBoard(
+            @PathVariable(name = "boardId") Long boardId,
+            @Validated UpdateBoardRequest updateBoardRequest,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
+    ) {
+        boardService.updateBoard(boardId, updateBoardRequest, customMemberDetails);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<Void> deleteBoard(
+            @PathVariable(name = "boardId") Long boardId,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
+    ) {
+        boardService.deleteBoard(boardId, customMemberDetails);
+        return ResponseEntity.ok().build();
     }
 }

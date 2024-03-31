@@ -3,10 +3,12 @@ package org.palpalmans.ollive_back.domain.board.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
+import org.palpalmans.ollive_back.domain.board.model.dto.request.UpdateBoardRequest;
 import org.palpalmans.ollive_back.domain.board.model.dto.request.WriteBoardRequest;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardDetailResponse;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardResponse;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardsResponse;
+import org.palpalmans.ollive_back.domain.board.model.dto.response.GetTagResponse;
 import org.palpalmans.ollive_back.domain.board.model.entity.Board;
 import org.palpalmans.ollive_back.domain.board.model.entity.BoardTag;
 import org.palpalmans.ollive_back.domain.board.model.entity.Tag;
@@ -16,7 +18,7 @@ import org.palpalmans.ollive_back.domain.board.repository.BoardTagRepository;
 import org.palpalmans.ollive_back.domain.image.model.dto.GetImageResponse;
 import org.palpalmans.ollive_back.domain.image.service.ImageService;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
-import org.palpalmans.ollive_back.domain.member.service.MemberService;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +34,6 @@ import static org.palpalmans.ollive_back.domain.image.model.ImageType.BOARD;
 @RequiredArgsConstructor
 public class BoardService {
     private final ImageService imageService;
-    private final MemberService memberService;
 
     private final TagService tagService;
     private final LikeService likeService;
@@ -48,12 +49,12 @@ public class BoardService {
                 writeBoardRequest.getTitle(), writeBoardRequest.getContent(), member
         );
 
-        List<Tag> savedTag = new ArrayList<>();
-
         imageService.saveImage(writeBoardRequest.getImages(), BOARD, board.getId());
+
+        List<Tag> savedTag = new ArrayList<>();
         tagService.saveTags(writeBoardRequest.getTagNames(), savedTag);
-        viewService.saveView(board, member);
         boardTagRepository.saveAll(savedTag.stream().map(tag -> new BoardTag(board, tag)).toList());
+        viewService.saveView(board, member);
 
         return board.getId();
     }
@@ -84,13 +85,14 @@ public class BoardService {
         int likeCount = likeService.getLikeCount(board);
         boolean isLiked = likeService.isLikedMember(board, customMemberDetails.getMember());
 
-        List<String> images = imageService.getImages(BOARD, boardId)
-                .stream().map(GetImageResponse::address)
-                .toList();
+        List<GetImageResponse> images = imageService.getImages(BOARD, boardId);
 
-        List<String> tags = board.getBoardTags()
+        List<GetTagResponse> tags = board.getBoardTags()
                 .stream()
-                .map(boardTag -> boardTag.getTag().getName())
+                .map(boardTag ->
+                        new GetTagResponse(
+                                boardTag.getTag().getId(),
+                                boardTag.getTag().getName()))
                 .toList();
 
         return toGetBoardDetailResponse(
@@ -100,7 +102,49 @@ public class BoardService {
         );
     }
 
+    @Transactional
+    public void updateBoard(
+            Long boardId,
+            UpdateBoardRequest updateBoardRequest,
+            CustomMemberDetails customMemberDetails
+    ) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new EntityNotFoundException(""));
+
+        if (board.getMemberId() != customMemberDetails.getId()) {
+            throw new AuthorizationServiceException("권한이 없습니다.");
+        }
+
+        board.changeTitle(updateBoardRequest.getTitle());
+        board.changeContent(updateBoardRequest.getContent());
+        boardRepository.save(board);
+
+        List<Tag> savedTag = new ArrayList<>();
+        tagService.saveTags(updateBoardRequest.getUpdateTagNames(), savedTag);
+        boardTagRepository.saveAll(
+                savedTag.stream()
+                        .map(tag -> new BoardTag(board, tag))
+                        .toList());
+
+        updateBoardRequest.getDeleteTags()
+                .forEach(deleteTagId ->
+                        boardTagRepository.deleteBoardTagByBoardAndTag_Id(board, deleteTagId)
+                );
+
+        imageService.saveImage(updateBoardRequest.getUpdateImages(), BOARD, boardId);
+        imageService.deleteImages(updateBoardRequest.getDeleteImages());
+    }
+
     private Board writeBoard(String title, String content, Member member) {
         return boardRepository.save(new Board(title, content, member.getId()));
+    }
+
+    public void deleteBoard(Long boardId, CustomMemberDetails customMemberDetails) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new EntityNotFoundException(""));
+
+        if (board.getMemberId() != customMemberDetails.getId()) {
+            throw new AuthorizationServiceException("권한이 없습니다.");
+        }
+        boardRepository.delete(board);
     }
 }
