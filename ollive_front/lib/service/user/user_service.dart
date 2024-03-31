@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:ollive_front/models/user/user_model.dart';
-import 'package:ollive_front/util/dio/dio_service.dart';
+
+final dio = Dio(BaseOptions(
+  baseUrl: "http://j10a508.p.ssafy.io", // 위에서 실행시킨 스프링서버
+  contentType: "application/json; charset=utf-8",
+));
 
 class UserService {
-  static final Dio _dio = DioService().authDio;
-
-  static Future<bool> registerUser(SignIn input) async {
+  Future<void> registerUser(SignIn input) async {
     Map<String, dynamic> requestBody = {
       'email': input.email,
       'password': input.password,
@@ -15,22 +17,21 @@ class UserService {
     };
 
     try {
-      await _dio.post('/join', data: requestBody);
-      return true;
+      Response response = await dio.post('/join', data: requestBody);
+      print('회원가입 성공! ${response.data}');
     } catch (e) {
       print('Error: $e');
-      return false;
     }
   }
 
-  static Future<ResponseDTO> loginAction(Login input) async {
+  Future<ResponseDTO> loginAction(Login input) async {
     FormData formData = FormData.fromMap({
       'email': input.email,
       'password': input.password,
     });
 
     try {
-      Response response = await _dio.post('/login', data: formData);
+      Response response = await dio.post('/login', data: formData);
 
       ResponseDTO responseDTO = ResponseDTO.fromJson();
       // 토큰 받기
@@ -47,65 +48,11 @@ class UserService {
         }
       }
       if (authorization != null) {
-        responseDTO.accessToken = authorization.first;
+        responseDTO.token = authorization.first;
       }
       return responseDTO;
     } catch (e) {
       return ResponseDTO(code: -1, msg: "유저네임 혹은 비번이 틀렸습니다");
-    }
-  }
-
-  static Future<List<UserIngredients>> getFridgeIngredients() async {
-    List<UserIngredients> ingredientInstances = [];
-    try {
-      Response response = await _dio.get('/fridge-ingredients');
-      for (var ingredient in response.data) {
-        ingredientInstances.add(UserIngredients.fromJson(ingredient));
-      }
-    } catch (e) {
-      print('$e');
-    }
-    return ingredientInstances;
-  }
-
-  static Future<dynamic> postFridgeIngredients(UserIngredients input) async {
-    Map<String, dynamic> requestBody = {
-      'name': input.name,
-      'endAt': input.endAt,
-    };
-
-    try {
-      await _dio.post('/fridge-ingredients', data: requestBody);
-      return true;
-    } catch (e) {
-      print('Error: $e');
-      return false;
-    }
-  }
-
-  static Future<dynamic> putFridgeIngredients(UserIngredients input) async {
-    Map<String, dynamic> requestBody = {
-      'name': input.name,
-      'endAt': input.endAt,
-    };
-    print(requestBody);
-    try {
-      await _dio.put('/fridge-ingredients/${input.fridgeIngredientId}',
-          data: requestBody);
-      return true;
-    } catch (e) {
-      print('Error: $e');
-      return false;
-    }
-  }
-
-  static Future<dynamic> deleteFridgeIngredients(int fridgeIngredientId) async {
-    try {
-      await _dio.delete('/fridge-ingredients/$fridgeIngredientId');
-      return true;
-    } catch (e) {
-      print('Error: $e');
-      return false;
     }
   }
 }
