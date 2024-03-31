@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:ollive_front/models/user/user_model.dart';
 import 'package:ollive_front/provider/provider.dart';
+import 'package:ollive_front/util/controller/getx_controller.dart';
 import 'package:ollive_front/widgets/user/user_info_widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -35,7 +37,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final storage =
       const FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
-  dynamic userToken = ''; // storage에 있는 유저 정보를 저장
+  // storage에 있는 토큰 값 저장
+  dynamic accessToken = '';
+  dynamic refreshToken = '';
 
   @override
   void initState() {
@@ -276,10 +280,16 @@ class _LoginScreenState extends State<LoginScreen> {
   _asyncMethod() async {
     // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
     // 데이터가 없을때는 null을 반환
-    userToken = await storage.read(key: 'token');
+    accessToken = await storage.read(key: 'accessToken');
+    refreshToken = await storage.read(key: 'refreshToken');
 
-    // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
-    if (userToken != null) {
+    // user의 정보가 있다면 게시판으로 이동.
+    if (accessToken != null && refreshToken != null) {
+      // 전역 Token 값에 accessToken, refreshToken 값 저장
+      Get.find<StatusController>().setToken(Token(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      ));
       Navigator.popAndPushNamed(context, '/home');
     }
   }

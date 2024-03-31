@@ -19,20 +19,6 @@ class _SigninScreenState extends State<SigninScreen> {
   bool isVisible = false;
   String? _gender;
 
-  // static const storage =
-  //     FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
-  // dynamic userInfo = ''; // storage에 있는 유저 정보를 저장
-
-  @override
-  void initState() {
-    super.initState();
-
-    // 비동기로 flutter secure storage 정보를 불러오는 작업
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _asyncMethod();
-    // });
-  }
-
   @override
   Widget build(BuildContext context) {
     final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
@@ -215,16 +201,17 @@ class _SigninScreenState extends State<SigninScreen> {
                               Expanded(
                                 child: ElevatedButton(
                                   style: buttonStyle,
-                                  onPressed: () {
+                                  onPressed: () async {
                                     if (_formKey.currentState!.validate() &&
                                         _gender != null) {
                                       _formKey.currentState!.save();
                                       _userInfo.gender = _gender!;
                                       // 회원가입 요청 보내기
-                                      UserService().registerUser(_userInfo);
-
-                                      // 다음 페이지로 이동시키기 (pushedName으로 바꾸기)
-                                      Navigator.pop(context);
+                                      if (await UserService.registerUser(
+                                          _userInfo)) {
+                                        // 다음 페이지로 이동시키기 (pushedName으로 바꾸기)
+                                        Navigator.pop(context);
+                                      }
                                     } else {
                                       if (_gender == null) {
                                         setState(() {
@@ -268,43 +255,4 @@ class _SigninScreenState extends State<SigninScreen> {
     // 생년월일 형식으로 조합하여 반환
     return '$year-$month-$day';
   }
-
-  // _asyncMethod() async {
-  //   // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
-  //   // 데이터가 없을때는 null을 반환
-  //   userInfo = await storage.read(key: 'login');
-
-  //   // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
-  //   if (userInfo != null) {
-  //     Navigator.pushNamed(context, '/main');
-  //   } else {
-  //     print('로그인이 필요합니다');
-  //   }
-  // }
-
-  // // 로그인 버튼 누르면 실행
-  // loginAction(userId, password) async {
-  //   try {
-  //     var dio = Dio();
-  //     var param = {'user_id': '$userId', 'password': '$password'};
-
-  //     // API URL 바꾸기
-  //     Response response = await dio.post('로그인 API URL', data: param);
-
-  //     if (response.statusCode == 200) {
-  //       final jsonBody = jsonDecode(response.data);
-  //       var val = Login.fromJson(jsonBody);
-
-  //       await storage.write(
-  //         key: 'login',
-  //         value: jsonEncode(val.toJson()),
-  //       );
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     return false;
-  //   }
-  // }
 }
