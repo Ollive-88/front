@@ -48,6 +48,14 @@ public class Board extends BaseTimeEntity {
         this.memberId = memberId;
     }
 
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
+
     @Override
     public String toString() {
         return "Board{" +
