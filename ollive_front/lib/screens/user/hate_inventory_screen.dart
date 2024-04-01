@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ollive_front/models/user/user_model.dart';
+import 'package:ollive_front/service/user/user_service.dart';
 
 class HateInventoryScreen extends StatefulWidget {
   const HateInventoryScreen({super.key});
@@ -11,10 +12,25 @@ class HateInventoryScreen extends StatefulWidget {
 }
 
 class _HateInventoryScreenState extends State<HateInventoryScreen> {
-  List<String> ingredients = hateIngredientList;
-  Set<String> ingredientSet = hateIngredientList.toSet();
+  late Future<List<HateIngredients>> ingredients;
+  late Set<String> ingredientSet;
 
   final TextEditingController _ingredientController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  void fetchData() async {
+    ingredients = UserService.getDislikeIngredients();
+    List<HateIngredients> ingredientList = await ingredients;
+    setState(() {
+      ingredientSet =
+          Set.from(ingredientList.map((ingredient) => ingredient.name));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,42 +57,60 @@ class _HateInventoryScreenState extends State<HateInventoryScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 50,
-          ),
-          Expanded(
-            child: SlidableAutoCloseBehavior(
-              closeWhenOpened: true,
-              child: ListView.separated(
-                  separatorBuilder: (context, index) => const Divider(
-                        height: 0,
-                      ),
-                  itemCount: ingredients.length,
-                  itemBuilder: (context, index) {
-                    final ingredient = ingredients[index];
-                    return Slidable(
-                      key: Key(ingredient),
-                      endActionPane: ActionPane(
-                        extentRatio: 0.2,
-                        motion: const BehindMotion(),
-                        children: [
-                          SlidableAction(
-                            backgroundColor: Colors.red,
-                            label: '삭제',
-                            onPressed: (context) {
-                              _onDismissed(index);
-                            },
-                          ),
-                        ],
-                      ),
-                      child: buildIngredientListTitle(ingredient),
-                    );
-                  }),
-            ),
-          )
-        ],
+      body: FutureBuilder(
+        future: ingredients,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Column(
+              children: [
+                const SizedBox(
+                  height: 50,
+                ),
+                Expanded(
+                  child: SlidableAutoCloseBehavior(
+                    closeWhenOpened: true,
+                    child: ListView.separated(
+                        separatorBuilder: (context, index) => const Divider(
+                              height: 0,
+                            ),
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          final ingredient = snapshot.data![index];
+                          return Slidable(
+                            key: Key(snapshot.data![index].dislikeIngredientId
+                                .toString()),
+                            endActionPane: ActionPane(
+                              extentRatio: 0.2,
+                              motion: const BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                  backgroundColor: Colors.red,
+                                  label: '삭제',
+                                  onPressed: (context) async {
+                                    if (await UserService
+                                        .deleteDislikeIngredients(snapshot
+                                            .data![index]
+                                            .dislikeIngredientId!)) {
+                                      fetchData();
+                                      _onDismissed();
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            child: buildIngredientListTitle(ingredient),
+                          );
+                        }),
+                  ),
+                )
+              ],
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
@@ -136,7 +170,7 @@ class _HateInventoryScreenState extends State<HateInventoryScreen> {
                 style: TextStyle(color: Colors.black54),
               )),
           TextButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_ingredientController.text.isEmpty) {
                   showToast(context, '재료명을 입력해주세요.');
                 } else {
@@ -144,11 +178,11 @@ class _HateInventoryScreenState extends State<HateInventoryScreen> {
                     showToast(context, '이미 목록에 있는 재료입니다.');
                     _ingredientController.clear();
                   } else {
-                    setState(() {
-                      // api 연결하기
-                      ingredients.add(_ingredientController.text);
-                      ingredientSet.add(_ingredientController.text);
-                    });
+                    // api 연결하기
+                    if (await UserService.postDislikeIngredients(
+                        _ingredientController.text)) {
+                      fetchData();
+                    }
                     _ingredientController.clear();
                     Navigator.of(context).pop();
                   }
@@ -162,11 +196,7 @@ class _HateInventoryScreenState extends State<HateInventoryScreen> {
     );
   }
 
-  void _onDismissed(int index) {
-    setState(() {
-      ingredientSet.remove(ingredients[index]);
-      ingredients.removeAt(index);
-    });
+  void _onDismissed() {
     _showSnackBar(context, '삭제되었습니다.');
   }
 
@@ -191,12 +221,12 @@ class _HateInventoryScreenState extends State<HateInventoryScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Widget buildIngredientListTitle(String ingredient) => Builder(
+  Widget buildIngredientListTitle(dynamic ingredient) => Builder(
         builder: (context) {
           return ListTile(
             contentPadding: const EdgeInsets.all(8.0),
             leading: Text(
-              ingredient,
+              ingredient.name,
               style: const TextStyle(fontSize: 15),
             ),
             onTap: () {
