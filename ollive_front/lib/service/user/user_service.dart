@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:ollive_front/models/user/user_model.dart';
+import 'package:ollive_front/models/user/user_simple_model.dart';
 import 'package:ollive_front/util/dio/dio_service.dart';
 
 class UserService {
@@ -109,13 +110,43 @@ class UserService {
     }
   }
 
-  static Future<List<UserIngredients>> getDislikeIngredients() async {
-    List<UserIngredients> ingredientInstances = [];
-    Response response = await _dio.get('/dislike-ingredients');
-    for (var ingredient in response.data) {
-      ingredientInstances.add(UserIngredients.fromJson(ingredient));
-    }
+  static Future<List<HateIngredients>> getDislikeIngredients() async {
+    List<HateIngredients> ingredientInstances = [];
+    try {
+      Response response = await _dio.get('/dislike-ingredients');
+      for (var ingredient in response.data) {
+        ingredientInstances.add(HateIngredients.fromJson(ingredient));
+      }
+    } catch (e) {}
 
     return ingredientInstances;
+  }
+
+  static Future<dynamic> postDislikeIngredients(String input) async {
+    Map<String, dynamic> requestBody = {
+      'name': input,
+    };
+
+    try {
+      await _dio.post('/dislike-ingredients', data: requestBody);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<dynamic> deleteDislikeIngredients(
+      int dislikeIngredientId) async {
+    try {
+      await _dio.delete('/dislike-ingredients/$dislikeIngredientId');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<UserSimpleModel> getUserInfo() async {
+    Response response = await _dio.get('/memberinfo');
+    return UserSimpleModel.fromJsonmypage(response.data);
   }
 }
