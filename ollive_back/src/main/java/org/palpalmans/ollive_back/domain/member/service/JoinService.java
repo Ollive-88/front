@@ -2,6 +2,7 @@ package org.palpalmans.ollive_back.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.image.model.ImageType;
+import org.palpalmans.ollive_back.domain.image.model.dto.GetImageResponse;
 import org.palpalmans.ollive_back.domain.image.service.ImageService;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.JoinRequest;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
@@ -85,7 +86,16 @@ public class JoinService {
 
             Optional<Member> newMember = memberRepository.getMemberByEmail(email);
 
-            imageService.saveImage(profilePicture, ImageType.PROFILE_PICTURE, newMember.get().getId());
+            long id = newMember.get().getId();
+
+            imageService.saveImage(profilePicture, ImageType.PROFILE_PICTURE, id);
+
+            List<GetImageResponse> images = imageService.getImages(ImageType.PROFILE_PICTURE, id);
+            String profile = images.isEmpty() ? "" : images.get(0).address();
+
+            newMember.get().setProfilePicture(profile);
+
+            memberRepository.save(newMember.get());
 
         }
 
