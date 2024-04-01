@@ -29,10 +29,13 @@ public class DislikeIngredientService {
         return dislikeIngredientRepository.save(dislikeIngredient).getId();
     }
 
+    @Transactional
     public Long deleteDislikeIngredient(long memberId, Long dislikeIngredientId) {
         DislikeIngredient dislikeIngredient = dislikeIngredientRepository.findByIdAndMemberId(dislikeIngredientId, memberId)
                 .orElseThrow(() -> new EntityNotFoundException("이미 삭제된 재료입니다.")
                 );
+
+        dislikeIngredientRepository.deleteById(dislikeIngredient.getId());
 
         return dislikeIngredient.getId();
     }
