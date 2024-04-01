@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.request.RecipeRecommendRequest;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.request.RecipeSearchRequest;
 import org.palpalmans.ollive_back.domain.recipe.model.entity.Recipe;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 @Repository
@@ -81,7 +83,19 @@ public class CustomRecipeRepositoryImpl implements CustomRecipeRepository {
             criteria = criteria.andOperator(andCriteriaList.toArray(new Criteria[0]));
         }
 
-        Query query = Query.query(criteria).limit(20);
+        Query query = Query.query(criteria).limit(100);
+        return mongoTemplate.find(query, Recipe.class);
+    }
+
+    @Override
+    public List<Recipe> findRecipesByScoredIds(List<Long> scoredRecipeIds){
+        Random random = new Random();
+        Criteria criteria = Criteria.where("recipeId").gt(random.nextInt(190000)+1);
+        if (!scoredRecipeIds.isEmpty()){
+            Criteria exCriteria = new Criteria("recipeId").nin(scoredRecipeIds);
+            criteria.andOperator(exCriteria);
+        }
+        Query query = Query.query(criteria).with(Sort.by(Sort.Direction.DESC, "score")).limit(100);
         return mongoTemplate.find(query, Recipe.class);
     }
 }

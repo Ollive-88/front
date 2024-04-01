@@ -8,4 +8,6 @@ import java.util.List;
 public interface CustomRecipeRepository {
     List<Recipe> findRecipesByCriteriaWithPaging(RecipeSearchRequest recipeSearchRequest);
     List<Recipe> findRecipesByIngredientsAndScoredRecipeIds(RecipeRecommendRequest request, List<Long> scoredRecipeIds);
+
+    List<Recipe> findRecipesByScoredIds(List<Long> scoredRecipeIds);
 }

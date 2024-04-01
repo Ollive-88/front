@@ -2,6 +2,7 @@ package org.palpalmans.ollive_back.domain.recipe.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.palpalmans.ollive_back.batch.TestMahout;
 import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.RecipeDto;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.RecipeSummaryDto;
@@ -24,6 +25,7 @@ import java.util.List;
 public class RecipeController {
     private final RecipeService recipeService;
     private final RecipeRecommendService recipeRecommendService;
+    private final TestMahout testMahout;
 
     @GetMapping("/{recipeId}")
     public ResponseEntity<RecipeDto> getRecipe(@PathVariable Long recipeId) {
@@ -45,13 +47,11 @@ public class RecipeController {
     }
 
     @PostMapping("/recommendations")
-    public ResponseEntity<?> recommendRecipes(@Valid @RequestBody RecipeRecommendRequest request){
-        List<RecipeSummaryDto> recommendCandidates = recipeRecommendService.getRecommendCandidates(request);
-
-        if (recommendCandidates.size() <= 10){
-            return ResponseEntity.ok().body(recommendCandidates);
-        }else{
-            return ResponseEntity.ok().body(recommendCandidates.subList(0, 10));
-        }
+    public ResponseEntity<?> recommendRecipes(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+            @Valid @RequestBody RecipeRecommendRequest request
+    ){
+        long memberId = customMemberDetails.getId();
+        return ResponseEntity.ok().body(recipeRecommendService.getRecommendCandidates(memberId, request));
     }
 }
