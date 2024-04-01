@@ -26,8 +26,6 @@ class DioService {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final token = Get.find<StatusController>().token;
-          options.headers['Authorization'] =
-              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NSwicm9sZSI6IlJPTEVfUkVHSVNURVJFRF9NRU1CRVIiLCJpYXQiOjE3MTE3ODQ5NjQsImV4cCI6MTc3MTc4NDk2NH0.tcoSpH9vbomZxLqs1_gzbuuPjLNyqUwsmwZFcdKlKm0';
           if (token.accessToken == null) {
             return handler.next(options);
           }
