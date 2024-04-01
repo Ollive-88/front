@@ -17,6 +17,8 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 public class Member extends BaseTimeEntity {
+
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private long id;
@@ -40,6 +42,10 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MemberRole role;
+
+    @Setter
+    @Column
+    private String profilePicture;
 
     @Builder
     public Member(long id, String email, String gender, Date birthday, String name,
