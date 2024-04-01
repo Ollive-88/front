@@ -23,8 +23,6 @@ public class JoinRequest {
     private String password;
     @NotBlank(message = "name은 공백일 수 없습니다.")
     private String name;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
     private String gender;
-    private List<MultipartFile> profilePicture = new ArrayList<>();
 }

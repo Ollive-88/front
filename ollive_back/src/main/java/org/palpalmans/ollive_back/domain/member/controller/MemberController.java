@@ -29,7 +29,7 @@ public class MemberController {
 
 
     @PostMapping("/join")
-    public ResponseEntity<String> join(JoinRequest joinRequest){
+    public ResponseEntity<String> join(@RequestBody JoinRequest joinRequest){
 
 
         JoinRequestStatus status = joinService.joinProcess(joinRequest);

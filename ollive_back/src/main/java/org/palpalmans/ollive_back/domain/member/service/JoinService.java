@@ -14,6 +14,7 @@ import org.palpalmans.ollive_back.domain.member.model.status.SocialType;
 import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -28,14 +29,13 @@ public class JoinService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ImageService imageService;
 
-    public JoinRequestStatus joinProcess(JoinRequest joinRequest){
+    public JoinRequestStatus joinProcess(@RequestBody JoinRequest joinRequest){
 
         String email = joinRequest.getEmail();
         String password = joinRequest.getPassword();
         String gender = joinRequest.getGender();
         Date birthday = joinRequest.getBirthday();
         String name = joinRequest.getName();
-        List<MultipartFile> profilePicture = joinRequest.getProfilePicture();
         MemberRole role = MemberRole.ROLE_REGISTERED_MEMBER;
 
 
@@ -83,19 +83,6 @@ public class JoinService {
 
             //멤버 가입시키기
             memberRepository.save(joinMember);
-
-            Optional<Member> newMember = memberRepository.getMemberByEmail(email);
-
-            long id = newMember.get().getId();
-
-            imageService.saveImage(profilePicture, ImageType.PROFILE_PICTURE, id);
-
-            List<GetImageResponse> images = imageService.getImages(ImageType.PROFILE_PICTURE, id);
-            String profile = images.isEmpty() ? "" : images.get(0).address();
-
-            newMember.get().setProfilePicture(profile);
-
-            memberRepository.save(newMember.get());
 
         }
 
