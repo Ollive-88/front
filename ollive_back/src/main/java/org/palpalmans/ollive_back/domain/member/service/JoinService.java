@@ -64,7 +64,7 @@ public class JoinService {
 
         }else if(role == MemberRole.ROLE_REGISTERED_MEMBER){
 
-            if(email == null || birthday == null || name == null){
+            if(email == null || name == null){
                 return JoinRequestStatus.NULL_EXIST;
             }
             //ROLE_REGISTERED_MEMBER 면 NormalMember Entity 이용해서 회원가입
