@@ -94,9 +94,6 @@ public class MemberController {
             log.info("nickname isDone = {}", isDone);
         }
 
-        //todo : 업데이트 완료되면 상태에 따라서 다른 값 반환
-
-
 
         return ResponseEntity.ok("정보 수정이 완료되었습니다");
     }
