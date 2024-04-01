@@ -1,0 +1,6 @@
+# 스플래쉬 화면 설정
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/image/app_icon.png
+  android_12:
+    image: assets/image/app_icon_1152.png
