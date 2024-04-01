@@ -15,5 +15,4 @@ public class ModifyMemberInfoRequest {
     private String password;
     private String gender;
     private String nickname;
-    private List<MultipartFile> profilePicture;
 }

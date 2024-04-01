@@ -60,13 +60,11 @@ public class MemberController {
         long id = customMemberDetails.getId();
         String password = modifyMemberInfoRequest.getPassword();
         String gender = modifyMemberInfoRequest.getGender();
-        List<MultipartFile> profilePicture = modifyMemberInfoRequest.getProfilePicture();
         String nickname = modifyMemberInfoRequest.getNickname();
         //멤버 서비스에서 주어진 값을 이용해 정보 업데이트
         log.info("id = {}", id);
         log.info("password = {}", password);
         log.info("gender = {}", gender);
-        log.info("profilePicture = {}", profilePicture.toString());
         log.info("nickname = {}", nickname);
 
         // 패스워드값이 있으면 normalmember 가져와서 수정
@@ -82,11 +80,6 @@ public class MemberController {
             log.info("gender isDone = {}", isDone);
         }
 
-        // profilePicture 값이 있으면 수정
-        if (!profilePicture.isEmpty()) {
-            Boolean isDone = memberService.modifyProfilePicture(id, profilePicture);
-            log.info("picture isDone = {}", isDone);
-        }
 
         // nickname 값이 있으면 수정
         if (nickname != null) {
@@ -94,6 +87,19 @@ public class MemberController {
             log.info("nickname isDone = {}", isDone);
         }
 
+
+        return ResponseEntity.ok("정보 수정이 완료되었습니다");
+    }
+
+    @PatchMapping("/member-profile-picture")
+    public ResponseEntity<String> modifyProfilePicture(@AuthenticationPrincipal CustomMemberDetails customMemberDetails, List<MultipartFile> profilePicture){
+        long id = customMemberDetails.getId();
+
+        // profilePicture 값이 있으면 수정
+        if (!profilePicture.isEmpty()) {
+            Boolean isDone = memberService.modifyProfilePicture(id, profilePicture);
+            log.info("picture isDone = {}", isDone);
+        }
 
         return ResponseEntity.ok("정보 수정이 완료되었습니다");
     }

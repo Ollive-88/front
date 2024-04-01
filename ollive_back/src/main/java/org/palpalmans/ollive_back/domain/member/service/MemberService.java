@@ -1,6 +1,7 @@
 package org.palpalmans.ollive_back.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.palpalmans.ollive_back.domain.image.model.ImageType;
 import org.palpalmans.ollive_back.domain.image.model.dto.GetImageResponse;
 import org.palpalmans.ollive_back.domain.image.service.ImageService;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -90,6 +92,7 @@ public class MemberService {
             //저장한 이미지 정보 불러오기
             List<GetImageResponse> images= imageService.getImages(ImageType.PROFILE_PICTURE, id);
             String profile = images.isEmpty() ? "" : images.get(0).address();
+            log.info("profile url = {}", profile);
             //이미지 url member에 넣기
             now.setProfilePicture(profile);
             //멤버 정보 수정하기
