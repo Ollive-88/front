@@ -54,7 +54,7 @@ public class MemberController {
     }
 
     @PatchMapping("/memberinfo")
-    public ResponseEntity<String> modifyMemberInfo(@AuthenticationPrincipal CustomMemberDetails customMemberDetails, @RequestBody ModifyMemberInfoRequest modifyMemberInfoRequest){
+    public ResponseEntity<String> modifyMemberInfo(@AuthenticationPrincipal CustomMemberDetails customMemberDetails, ModifyMemberInfoRequest modifyMemberInfoRequest){
 
         //현재 사용자 id값 가져오기
         long id = customMemberDetails.getId();
