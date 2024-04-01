@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:ollive_front/screens/board/board_search_screen.dart';
 import 'package:ollive_front/screens/board/board_write_screen.dart';
 import 'package:ollive_front/screens/home_screen.dart';
-import 'package:ollive_front/screens/splash_screen.dart';
 import 'package:ollive_front/screens/user/authentication/login_screen.dart';
 import 'package:ollive_front/screens/user/authentication/signin_screen.dart';
 import 'package:ollive_front/util/controller/getx_controller.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Future.delayed(const Duration(seconds: 1));
-  FlutterNativeSplash.remove();
+void main() {
   runApp(const App());
 }
 
@@ -60,7 +55,7 @@ class _AppState extends State<App> {
       theme: ThemeData(
         fontFamily: 'NanumSquare',
       ),
-      home: const SplashScreen(),
+      home: const LoginScreen(),
     );
   }
 }
