@@ -28,16 +28,13 @@ public class MemberService {
         Member member = memberRepository.getMemberById(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 ID를 가진 멤버가 존재하지 않습니다: " + id));
 
-        List<GetImageResponse> images = imageService.getImages(ImageType.PROFILE_PICTURE, id);
-        String profilePicture = images.isEmpty() ? "" : images.get(0).address();
-
         MemberInfoResponse memberInfoResponse = new MemberInfoResponse();
         memberInfoResponse.setNickname(member.getNickname());
         memberInfoResponse.setName(member.getName());
         memberInfoResponse.setGender(member.getGender());
         memberInfoResponse.setEmail(member.getEmail());
         memberInfoResponse.setBirthday(member.getBirthday());
-        memberInfoResponse.setProfilePicture(profilePicture);
+        memberInfoResponse.setProfilePicture(member.getProfilePicture());
 
 
         return memberInfoResponse;
@@ -87,7 +84,17 @@ public class MemberService {
 
         Optional<Member> member = memberRepository.getMemberById(id);
         if(member.isPresent()){
+            Member now = member.get();
+            //받은 이미지 저장
             imageService.saveImage(profilePicture,ImageType.PROFILE_PICTURE,id);
+            //저장한 이미지 정보 불러오기
+            List<GetImageResponse> images= imageService.getImages(ImageType.PROFILE_PICTURE, id);
+            String profile = images.isEmpty() ? "" : images.get(0).address();
+            //이미지 url member에 넣기
+            now.setProfilePicture(profile);
+            //멤버 정보 수정하기
+            memberRepository.save(now);
+
             return true;
         }
         return false;
