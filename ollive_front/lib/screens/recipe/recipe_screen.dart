@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/screens/recipe/recipe_list_screen.dart';
 import 'package:ollive_front/service/recipe/recipe_service.dart';
+import 'package:ollive_front/service/user/user_service.dart';
 import 'package:ollive_front/util/error/error_service.dart';
 import 'package:ollive_front/widgets/recipe/recipe_tag_widget.dart';
 import 'package:ollive_front/widgets/recipe/recipe_textfield_widget.dart';
@@ -17,22 +18,8 @@ class _RecipeScreenState extends State<RecipeScreen> {
   List<String> havingIngredients = [];
   List<String> dislikeIngredients = [];
   // 냉장고/제외 재료 리스트
-  List<String> refrigerators = [
-    "양파",
-    "사과",
-    "피망",
-    "오이",
-    "가지",
-    "삼겹살",
-    "배",
-    "대패삼겹살",
-  ];
-  List<String> ingredients = [
-    "시발",
-    "ㅈ까",
-    "걍쳐먹어",
-    "시발련아",
-  ];
+  List<String> refrigerators = [];
+  List<String> ingredients = [];
 
   List<bool> isRefrigeratorsSelected = [];
   List<bool> isIngredientsSelected = [];
@@ -61,13 +48,32 @@ class _RecipeScreenState extends State<RecipeScreen> {
     setState(() {});
   }
 
-  @override
-  void initState() {
-    super.initState();
+  void initIgredientsList() async {
+    await UserService.getFridgeIngredients().then((value) {
+      for (var i = 0; i < value.length; i++) {
+        refrigerators.add(value[i].name);
+      }
+    }).catchError((e) {
+      ErrorService.showToast("잘못된 요청입니다.");
+    });
+
+    await UserService.getDislikeIngredients().then((value) {
+      for (var i = 0; i < value.length; i++) {
+        ingredients.add(value[i].name);
+      }
+    }).catchError((e) {
+      ErrorService.showToast("잘못된 요청입니다.");
+    });
 
     isRefrigeratorsSelected =
         List.generate(refrigerators.length, (index) => false);
     isIngredientsSelected = List.generate(ingredients.length, (index) => false);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initIgredientsList();
   }
 
   @override
@@ -432,55 +438,55 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    // 검색 버튼
-                    GestureDetector(
-                      onTap: () async {
-                        FocusScope.of(context).unfocus();
-
-                        if (havingIngredients.isEmpty) {
-                          ErrorService.showToast("포함시킬 재료를 선택해주세요");
-                        } else {
-                          await RecipeService.getRecommendRecipeList(
-                            havingIngredients,
-                            dislikeIngredients,
-                          ).then((value) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RecipeListScreen(
-                                  likeTagNames: havingIngredients,
-                                  hateTagNames: dislikeIngredients,
-                                  recommendrecipes: value,
-                                ),
-                              ),
-                            );
-                          }).catchError((onError) {
-                            ErrorService.showToast("잘못된 요청입니다.");
-                          });
-                        }
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width / 1.1,
-                        height: MediaQuery.of(context).size.height / 11,
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF30AF98),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: const Text(
-                          "검색",
-                          style: TextStyle(
-                            fontSize: 28,
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    )
                   ],
                 ),
               )
             ],
+          ),
+        ),
+        bottomNavigationBar: // 검색 버튼
+            GestureDetector(
+          onTap: () async {
+            FocusScope.of(context).unfocus();
+
+            if (havingIngredients.isEmpty) {
+              ErrorService.showToast("포함시킬 재료를 선택해주세요");
+            } else {
+              await RecipeService.getRecommendRecipeList(
+                havingIngredients,
+                dislikeIngredients,
+              ).then((value) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RecipeListScreen(
+                      likeTagNames: havingIngredients,
+                      hateTagNames: dislikeIngredients,
+                      recommendrecipes: value,
+                    ),
+                  ),
+                );
+              }).catchError((onError) {
+                ErrorService.showToast("잘못된 요청입니다.");
+              });
+            }
+          },
+          child: Container(
+            width: MediaQuery.of(context).size.width / 1.1,
+            height: MediaQuery.of(context).size.height / 11,
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              color: const Color(0xFF30AF98),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: const Text(
+              "검색",
+              style: TextStyle(
+                fontSize: 28,
+                color: Colors.white,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
       ),

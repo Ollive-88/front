@@ -108,4 +108,14 @@ class UserService {
       return false;
     }
   }
+
+  static Future<List<UserIngredients>> getDislikeIngredients() async {
+    List<UserIngredients> ingredientInstances = [];
+    Response response = await _dio.get('/dislike-ingredients');
+    for (var ingredient in response.data) {
+      ingredientInstances.add(UserIngredients.fromJson(ingredient));
+    }
+
+    return ingredientInstances;
+  }
 }

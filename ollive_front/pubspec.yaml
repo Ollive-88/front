@@ -59,6 +59,11 @@ dependencies:
   # sgv 라이브러리
   flutter_svg: ^2.0.10+1
 
+  # 위치 정보 라이브러리
+  geolocator: ^11.0.0
+
+
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

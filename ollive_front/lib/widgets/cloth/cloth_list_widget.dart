@@ -31,7 +31,7 @@ class ClothListWidget extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  for (ClothModel cloth in clothList)
+                  for (ClothModel cloth in clothList.reversed)
                     Padding(
                       padding: const EdgeInsets.only(right: 15),
                       child: ClothWidget(clothModel: cloth),

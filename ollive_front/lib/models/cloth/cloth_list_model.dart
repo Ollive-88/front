@@ -4,16 +4,16 @@ class ClothListModel {
   List<ClothModel> outerList, topList, bottomList, shoesList;
 
   ClothListModel.fromJson(Map<String, dynamic> json)
-      : outerList = (json['outerList'] as List<dynamic>)
+      : outerList = (json['outer'] as List<dynamic>)
             .map((comment) => ClothModel.fromJson(comment))
             .toList(),
-        topList = (json['topList'] as List<dynamic>)
+        topList = (json['top'] as List<dynamic>)
             .map((comment) => ClothModel.fromJson(comment))
             .toList(),
-        bottomList = (json['bottomList'] as List<dynamic>)
+        bottomList = (json['bottom'] as List<dynamic>)
             .map((comment) => ClothModel.fromJson(comment))
             .toList(),
-        shoesList = (json['shoesList'] as List<dynamic>)
+        shoesList = (json['shoes'] as List<dynamic>)
             .map((comment) => ClothModel.fromJson(comment))
             .toList();
 }

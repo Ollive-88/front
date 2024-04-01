@@ -78,7 +78,7 @@ class RecipeService {
 
   // 별점 부여 생성/삭제
   static void postStar(int recipeId, int score) async {
-    await _dio.authDio.post("recipes/star", data: {
+    await _dio.authDio.post("/recipes/scores", data: {
       "recipeId": recipeId,
       "score": score,
     });

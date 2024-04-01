@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:ollive_front/models/cloth/cloth_list_model.dart';
 import 'package:ollive_front/service/cloth/cloth_service.dart';
 import 'package:ollive_front/util/error/error_service.dart';
@@ -6,25 +7,31 @@ import 'package:ollive_front/widgets/cloth/cloth_list_widget.dart';
 
 // ignore: must_be_immutable
 class ClothListScreen extends StatefulWidget {
-  ClothListScreen({super.key, required this.outing, required this.sing});
+  ClothListScreen(
+      {super.key,
+      required this.outing,
+      required this.sing,
+      required this.position});
 
   String outing, sing;
+  Position position;
 
   @override
   State<ClothListScreen> createState() => _ClothListScreenState();
 }
 
 class _ClothListScreenState extends State<ClothListScreen> {
-  late Future<ClothListModel> clothList;
+  late Future<ClothListModel>? clothList;
 
   @override
   void initState() {
     super.initState();
-    clothList = ClothService.getRecommendClothList(widget.outing, widget.sing)
-        //     .catchError((onError) {
-        //   ErrorService.showToast("잘못된 요청입니다.");
-        // })
-        ;
+
+    clothList = ClothService.getRecommendClothList(widget.outing, widget.sing,
+            widget.position.longitude, widget.position.latitude)
+        .catchError((onError) {
+      ErrorService.showToast("잘못된 요청입니다.");
+    });
   }
 
   @override

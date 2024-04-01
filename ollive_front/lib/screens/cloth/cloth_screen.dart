@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:ollive_front/screens/cloth/cloth_list_screen.dart';
+import 'package:ollive_front/service/cloth/cloth_service.dart';
 import 'package:ollive_front/util/error/error_service.dart';
 
 class ClothScreen extends StatefulWidget {
@@ -175,15 +177,22 @@ class _ClothScreenState extends State<ClothScreen> {
                     if (_singController.text.isEmpty) {
                       ErrorService.showToast("노래가사를 입력해주세요.");
                     } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ClothListScreen(
-                            outing: _outingController.text,
-                            sing: _singController.text,
+                      dynamic position = await ClothService.getPosition();
+
+                      if (position is Position) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ClothListScreen(
+                              outing: _outingController.text,
+                              sing: _singController.text,
+                              position: position,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      } else {
+                        ErrorService.showToast("위치 정보를 동의해 주세요.");
+                      }
                     }
                   },
                   child: Container(

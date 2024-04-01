@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/models/cloth/cloth_model.dart';
+import 'package:ollive_front/service/cloth/cloth_service.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class ClothWidget extends StatelessWidget {
@@ -11,6 +12,7 @@ class ClothWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
+        await ClothService.postCloth(clothModel.id);
         await launchUrlString(clothModel.url);
       },
       child: Column(

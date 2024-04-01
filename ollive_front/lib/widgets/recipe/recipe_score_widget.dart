@@ -17,31 +17,17 @@ class RecipeScore extends StatelessWidget {
         children: [
           Row(
             children: [
-              for (int i = 0; i < score.toInt(); i++)
+              for (int i = 0; i < 5; i++)
                 Row(
                   children: [
                     IconButton(
                       icon: Image.asset(
-                        "assets/image/icons/star_fullIcon.png",
+                        i < score.toInt()
+                            ? "assets/image/icons/star_fullIcon.png"
+                            : "assets/image/icons/star_emptyIcon.png",
                       ),
                       onPressed: () {
-                        RecipeService.postStar(recipeId, i);
-                      },
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    )
-                  ],
-                ),
-              for (int i = 0; i < 5 - score.toInt(); i++)
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Image.asset(
-                        "assets/image/icons/star_emptyIcon.png",
-                      ),
-                      onPressed: () {
-                        RecipeService.postStar(recipeId, i);
+                        RecipeService.postStar(recipeId, i + 1);
                       },
                     ),
                     const SizedBox(
@@ -52,7 +38,7 @@ class RecipeScore extends StatelessWidget {
             ],
           ),
           Text(
-            score.toString(),
+            score.toStringAsFixed(1),
             style: const TextStyle(
               fontSize: 24,
             ),

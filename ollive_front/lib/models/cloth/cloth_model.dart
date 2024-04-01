@@ -1,9 +1,10 @@
 class ClothModel {
-  String name, category, url, imgUrl;
+  int id;
+  String name, url, imgUrl;
 
   ClothModel.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
-        category = json['category'],
-        url = json['url'],
-        imgUrl = json['imgUrl'];
+      : id = json["id"],
+        name = json['product_name'],
+        url = json['product_url'],
+        imgUrl = json['img_url'];
 }

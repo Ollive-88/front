@@ -27,6 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     const String imageLogoName = './assets/image/logo/OlliveLogo.svg';
+    const String titleName = './assets/image/logo/OlliveLogo.svg';
 
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
@@ -36,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
         data: MediaQuery.of(context)
             .copyWith(textScaler: const TextScaler.linear(1.0)),
         child: Scaffold(
-          backgroundColor: const Color(0xFFFFFFFC),
+          backgroundColor: const Color(0xFF30AF98),
           body: Center(
             child: SvgPicture.asset(
               imageLogoName,
