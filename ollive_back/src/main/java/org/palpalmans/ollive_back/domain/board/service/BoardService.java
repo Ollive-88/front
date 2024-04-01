@@ -62,9 +62,10 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public GetBoardsResponse getBoards(
-            String keyword, Long lastIndex, int size, List<String> tagNames
+            String keyword, Long lastIndex, int size, Long memberId,
+            List<String> tagNames
     ) {
-        List<Board> boards = boardQueryRepository.getBoardList(keyword, lastIndex, size, tagNames);
+        List<Board> boards = boardQueryRepository.getBoardList(keyword, lastIndex, size, memberId, tagNames);
         List<GetBoardResponse> getBoardResponseList = new ArrayList<>();
         for (Board board : boards) {
             int viewCount = viewService.getViewCount(board);
@@ -167,5 +168,4 @@ public class BoardService {
                 .orElseThrow(() -> new EntityNotFoundException(BOARD_NOT_FOUND.getMessage()));
         return board;
     }
-
 }

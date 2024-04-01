@@ -21,13 +21,16 @@ public class BoardQueryRepository {
     private static final QTag qTag = QTag.tag;
 
     @Transactional(readOnly = true)
-    public List<Board> getBoardList(String keyword, Long lastIndex, int size, List<String> tagNames) {
+    public List<Board> getBoardList(
+            String keyword, Long lastIndex, int size, Long memberId,
+            List<String> tagNames
+    ) {
         if (tagNames.isEmpty()) {
             return jpaQueryFactory
                     .select(qBoard)
                     .from(qBoard)
                     .leftJoin(qBoard.comments).fetchJoin()
-                    .where(boardListCondition(keyword, lastIndex, tagNames))
+                    .where(boardListCondition(keyword, lastIndex, memberId, tagNames))
                     .orderBy(qBoard.id.desc())
                     .limit(size)
                     .fetch();
@@ -38,16 +41,19 @@ public class BoardQueryRepository {
                 .leftJoin(qBoard.comments).fetchJoin()
                 .join(qBoardTag).on(qBoard.eq(qBoardTag.board)).fetchJoin()
                 .join(qTag).on(qBoardTag.tag.eq(qTag)).fetchJoin()
-                .where(boardListCondition(keyword, lastIndex, tagNames))
+                .where(boardListCondition(keyword, lastIndex, memberId, tagNames))
                 .orderBy(qBoard.id.desc())
                 .limit(size)
                 .fetch();
     }
 
-    private static BooleanExpression boardListCondition(String keyword, Long lastIndex, List<String> tagNames) {
+    private static BooleanExpression boardListCondition(
+            String keyword, Long lastIndex, Long memberId, List<String> tagNames
+    ) {
         BooleanExpression indexCondition = lastIndex == 0 ? qBoard.id.gt(lastIndex) : qBoard.id.lt(lastIndex);
         return indexCondition
                 .and(keyword == null ? null : qBoard.title.contains(keyword))
-                .and(tagNames.isEmpty() ? null : qTag.name.in(tagNames));
+                .and(tagNames.isEmpty() ? null : qTag.name.in(tagNames))
+                .and(memberId == 0 ? null : qBoard.memberId.eq(memberId));
     }
 }

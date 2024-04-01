@@ -46,13 +46,20 @@ public class BoardController {
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false, defaultValue = "0") Long lastIndex,
             @RequestParam(required = false, defaultValue = "10") int size,
-            @RequestParam(required = false) List<String> tags
+            @RequestParam(required = false, defaultValue = "false") boolean isMyView,
+            @RequestParam(required = false) List<String> tags,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
     ) {
         if (keyword != null && keyword.isBlank())
             throw new IllegalArgumentException("keyword는 공백일 수 없습니다!");
         if (tags == null)
             tags = Collections.emptyList();
-        return ResponseEntity.ok(boardService.getBoards(keyword, lastIndex, size, tags));
+
+        Long memberId = 0L;
+        if (isMyView) {
+            memberId = customMemberDetails.getMember().getId();
+        }
+        return ResponseEntity.ok(boardService.getBoards(keyword, lastIndex, size, memberId, tags));
     }
 
     @GetMapping("/{boardId}")
