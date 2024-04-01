@@ -1,6 +1,8 @@
 package org.palpalmans.ollive_back.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
+import org.palpalmans.ollive_back.domain.image.model.ImageType;
+import org.palpalmans.ollive_back.domain.image.service.ImageService;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.JoinRequest;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
@@ -11,8 +13,11 @@ import org.palpalmans.ollive_back.domain.member.model.status.SocialType;
 import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +25,7 @@ public class JoinService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ImageService imageService;
 
     public JoinRequestStatus joinProcess(JoinRequest joinRequest){
 
@@ -28,6 +34,7 @@ public class JoinService {
         String gender = joinRequest.getGender();
         Date birthday = joinRequest.getBirthday();
         String name = joinRequest.getName();
+        List<MultipartFile> profilePicture = joinRequest.getProfilePicture();
         MemberRole role = MemberRole.ROLE_REGISTERED_MEMBER;
 
 
@@ -47,7 +54,6 @@ public class JoinService {
                     .name(name)
                     .nickname("띠디딩딩")
                     .role(role) // role 설정
-                    .profilePicture("https://cdn.spotvnews.co.kr/news/photo/202104/418112_528907_5918.jpg")
                     .build();
 
             SocialMember joinMember = new SocialMember(member, SocialType.GOOGLE);
@@ -68,7 +74,6 @@ public class JoinService {
                     .name(name)
                     .nickname("띠디딩딩")
                     .role(role) // role 설정
-                    .profilePicture("https://cdn.spotvnews.co.kr/news/photo/202104/418112_528907_5918.jpg")
                     .build();
 
             String encodedPass = bCryptPasswordEncoder.encode(password);
@@ -77,6 +82,10 @@ public class JoinService {
 
             //멤버 가입시키기
             memberRepository.save(joinMember);
+
+            Optional<Member> newMember = memberRepository.getMemberByEmail(email);
+
+            imageService.saveImage(profilePicture, ImageType.PROFILE_PICTURE, newMember.get().getId());
 
         }
 

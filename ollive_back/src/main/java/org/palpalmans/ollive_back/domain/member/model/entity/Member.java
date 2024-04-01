@@ -41,12 +41,9 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private MemberRole role;
 
-    @Column(nullable = true)
-    private String profilePicture;
-
     @Builder
     public Member(long id, String email, String gender, Date birthday, String name,
-                  String nickname, MemberRole role, String profilePicture){
+                  String nickname, MemberRole role){
         this.id = id;
         this.email = email;
         this.gender = gender;
@@ -54,15 +51,10 @@ public class Member extends BaseTimeEntity {
         this.name = name;
         this.nickname = nickname;
         this.role = role;
-        this.profilePicture = profilePicture;
     }
 
     public void changeGender(String newGender){
         this.gender = newGender;
-    }
-
-    public void changeProfilePicture(String newProfilePicture){
-        this.profilePicture = newProfilePicture;
     }
 
     public void changeNickname(String newNickname){
