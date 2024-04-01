@@ -80,8 +80,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public GetBoardDetailResponse getBoardDetail(Long boardId, CustomMemberDetails customMemberDetails) {
-        Board board = boardRepository.findByIdWithComments(boardId)
-                .orElseThrow(() -> new EntityNotFoundException(BOARD_NOT_FOUND.getMessage()));
+        Board board = getBoard(boardId);
         int viewCount = viewService.getViewCount(board);
         int likeCount = likeService.getLikeCount(board);
         boolean isLiked = likeService.isLikedMember(board, customMemberDetails.getMember());
@@ -89,10 +88,9 @@ public class BoardService {
         List<GetImageResponse> images = imageService.getImages(BOARD, boardId);
         List<GetTagResponse> tags = board.getBoardTags()
                 .stream()
-                .map(boardTag ->
-                        new GetTagResponse(
-                                boardTag.getTag().getId(),
-                                boardTag.getTag().getName()))
+                .map(boardTag -> new GetTagResponse(
+                        boardTag.getTag().getId(),
+                        boardTag.getTag().getName()))
                 .toList();
 
         return toGetBoardDetailResponse(
@@ -108,9 +106,7 @@ public class BoardService {
             UpdateBoardRequest updateBoardRequest,
             CustomMemberDetails customMemberDetails
     ) {
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new EntityNotFoundException(""));
-
+        Board board = getBoard(boardId);
         if (board.getMemberId() != customMemberDetails.getId()) {
             throw new AuthorizationServiceException(NOT_AUTHORIZED.getMessage());
         }
@@ -136,9 +132,7 @@ public class BoardService {
 
     @Transactional
     public void deleteBoard(Long boardId, CustomMemberDetails customMemberDetails) {
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new EntityNotFoundException(BOARD_NOT_FOUND.getMessage()));
-
+        Board board = getBoard(boardId);
         if (board.getMemberId() != customMemberDetails.getId()) {
             throw new AuthorizationServiceException(NOT_AUTHORIZED.getMessage());
         }
@@ -147,8 +141,7 @@ public class BoardService {
 
     @Transactional
     public GetCommentResponse writeComment(WriteCommentRequest writeCommentRequest, Long boardId, Member member) {
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new EntityNotFoundException(BOARD_NOT_FOUND.getMessage()));
+        Board board = getBoard(boardId);
         return commentService.writeComment(writeCommentRequest, board, member);
     }
 
@@ -157,7 +150,22 @@ public class BoardService {
         commentService.deleteComment(deleteCommentRequest, member);
     }
 
+    @Transactional
+    public void toggleLike(Long boardId, Member member) {
+        Board board = getBoard(boardId);
+        likeService.findLikeByBoardAndMember(board, member)
+                .ifPresentOrElse(likeService::deleteLike,
+                        () -> likeService.saveLike(board, member));
+    }
+
     private Board writeBoard(String title, String content, Member member) {
         return boardRepository.save(new Board(title, content, member.getId()));
     }
+
+    private Board getBoard(Long boardId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new EntityNotFoundException(BOARD_NOT_FOUND.getMessage()));
+        return board;
+    }
+
 }

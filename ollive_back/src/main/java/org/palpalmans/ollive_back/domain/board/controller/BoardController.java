@@ -102,4 +102,13 @@ public class BoardController {
         boardService.deleteComment(deleteCommentRequest, customMemberDetails.getMember());
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/{boardId}/likes")
+    public ResponseEntity<WriteBoardResponse> toggleLike(
+            @PathVariable(name = "boardId") Long boardId,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
+    ) {
+        boardService.toggleLike(boardId, customMemberDetails.getMember());
+        return ResponseEntity.ok().build();
+    }
 }
