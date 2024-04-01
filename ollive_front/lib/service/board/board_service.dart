@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ollive_front/models/board/board_detail_model.dart';
 import 'package:ollive_front/models/board/board_model.dart';
+import 'package:ollive_front/models/comment/comment_model.dart';
 import 'package:ollive_front/util/dio/dio_service.dart';
 
 class BoardService {
@@ -104,6 +105,24 @@ class BoardService {
   static void postLike(int boardId, bool isLiked) async {
     // await _dio.post("boards/like",
     //     queryParameters: {"boardId": boardId, "isLiked": isLiked});
+  }
+
+  // 댓글 생성
+  static Future<CommentModel> postComment(int boardId, String content) async {
+    final response = await _dio.post("/api/v1/boards/$boardId/comments", data: {
+      "content": content,
+    });
+
+    CommentModel commentModel = CommentModel.fromJson(response.data);
+
+    return commentModel;
+  }
+
+  // 댓글 삭제
+  static Future<void> deleteComment(int boardId, int commentId) async {
+    await _dio.delete("/api/v1/boards/$boardId/comments", data: {
+      "commentId": commentId,
+    });
   }
 
   // XFile MultipartFile로 변환
