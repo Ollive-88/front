@@ -37,8 +37,8 @@ public class ClothService {
                 .baseUrl(fastApiProperties.getBaseUrl())
                 .requestFactory(ClientHttpRequestFactories
                         .get(ClientHttpRequestFactorySettings.DEFAULTS
-                                .withConnectTimeout(Duration.ofSeconds(10))
-                                .withReadTimeout(Duration.ofSeconds(10))))
+                                .withConnectTimeout(Duration.ofSeconds(15))
+                                .withReadTimeout(Duration.ofSeconds(15))))
                 .build();
 
         return restClient
