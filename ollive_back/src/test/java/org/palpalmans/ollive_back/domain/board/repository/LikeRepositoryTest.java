@@ -7,6 +7,7 @@ import org.palpalmans.ollive_back.domain.board.model.entity.Board;
 import org.palpalmans.ollive_back.domain.board.model.entity.Like;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.model.status.MemberRole;
+import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -24,7 +25,13 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @AutoConfigureTestDatabase(replace = NONE)
 class LikeRepositoryTest {
     @Autowired
+    private BoardRepository boardRepository;
+
+    @Autowired
     private LikeRepository likeRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Test
     @DisplayName("Like Save Test")
@@ -39,6 +46,9 @@ class LikeRepositoryTest {
                 .gender("gender")
                 .role(MemberRole.ROLE_REGISTERED_MEMBER)
                 .build();
+
+        boardRepository.save(board);
+        memberRepository.save(member);
 
         Like like = likeRepository.save(new Like(board, member));
         List<Like> likes = likeRepository.findAll();
