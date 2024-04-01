@@ -28,7 +28,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 public class WeatherService {
     private final WeatherApiProperties weatherApiProperties;
 
-    public double getTemperatureFromKMA(WeatherRequest weatherRequest) throws Exception {
+    public double getTemperatureFromKMA(WeatherRequest weatherRequest) {
+        LocalDateTime baseDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusMinutes(60L);
+        String baseDate = baseDateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String baseTime = baseDateTime.format(DateTimeFormatter.ofPattern("HHmm"));
+
         RestClient restClient = RestClient
                 .builder()
                 .requestFactory(ClientHttpRequestFactories
@@ -40,7 +44,7 @@ public class WeatherService {
 
         WeatherResponse responseBody = restClient
                 .get()
-                .uri(buildTemperatureRequestUri(weatherRequest))
+                .uri(buildTemperatureRequestUri(weatherRequest, baseDate, baseTime))
                 .accept(APPLICATION_JSON)
                 .retrieve()
                 .body(WeatherResponse.class);
@@ -56,16 +60,22 @@ public class WeatherService {
                     .filter(item -> item.category().equals("T1H"))
                     .map(item -> Double.parseDouble(item.obsrValue()))
                     .findFirst().orElseThrow();
-        } catch (NullPointerException e) {
-            throw new Exception("유효하지 않은 기상 정보입니다.");
+        } catch (Exception e) {
+            int month = Integer.parseInt(baseDate.substring(4, 6));
+            return switch (month) {
+                case 1, 2 -> -10;
+                case 3, 4 -> 18;
+                case 5, 6 -> 25;
+                case 7, 8 -> 30;
+                case 9, 10 -> 15;
+                case 11, 12 -> 5;
+                default -> 20;
+            };
         }
     }
 
-    public URI buildTemperatureRequestUri(WeatherRequest weatherRequest) {
+    public URI buildTemperatureRequestUri(WeatherRequest weatherRequest, String baseDate, String baseTime) {
         WeatherRequest grid = convertFromCoordinateToGrid(weatherRequest);
-        LocalDateTime baseDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusMinutes(60L);
-        String baseDate = baseDateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        String baseTime = baseDateTime.format(DateTimeFormatter.ofPattern("HHmm"));
 
         log.info("baseDate: {}", baseDate);
         log.info("baseTime: {}", baseTime);

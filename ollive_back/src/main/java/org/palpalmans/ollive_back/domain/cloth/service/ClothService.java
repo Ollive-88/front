@@ -21,7 +21,7 @@ public class ClothService {
     private final WeatherService weatherService;
     private final FastApiProperties fastApiProperties;
 
-    public ClothRecommendationResponse recommendCloth(ClothRecommendationRequest clothRecommendationRequest) throws Exception {
+    public ClothRecommendationResponse recommendCloth(ClothRecommendationRequest clothRecommendationRequest) {
         WeatherRequest weatherRequest = clothRecommendationRequest.extractWeatherRequest();
         double temperature = weatherService.getTemperatureFromKMA(weatherRequest);
         log.info("현재 기온: {}", temperature);
