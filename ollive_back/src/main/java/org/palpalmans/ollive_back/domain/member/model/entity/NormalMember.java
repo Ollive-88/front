@@ -15,7 +15,7 @@ public class NormalMember extends Member{
 
     public NormalMember(Member member, String password) {
         super(member.getId(), member.getEmail(), member.getGender(), member.getBirthday(),
-                member.getName(), member.getNickname(), member.getRole());
+                member.getName(), member.getNickname(), member.getRole(), member.getProfilePicture());
         this.password = password;
     }
 

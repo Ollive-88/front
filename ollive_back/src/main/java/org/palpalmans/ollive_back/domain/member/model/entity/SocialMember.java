@@ -18,7 +18,7 @@ public class SocialMember extends Member{
 
     public SocialMember(Member member, SocialType socialType) {
         super(member.getId(), member.getEmail(), member.getGender(), member.getBirthday(),
-                member.getName(), member.getNickname(), member.getRole());
+                member.getName(), member.getNickname(), member.getRole(), member.getProfilePicture());
         this.socialType = socialType;
     }
 }
