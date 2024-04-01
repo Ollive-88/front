@@ -4,8 +4,10 @@ import static org.springframework.http.HttpStatus.*;
 
 import java.util.List;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -41,7 +43,29 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<>(
 			ErrorResponse.of(errorMessage.toString(), request.getRequestURI(), fieldErrors),
-			HttpStatus.BAD_REQUEST
+			BAD_REQUEST
+		);
+	}
+
+	@ExceptionHandler(ExpiredJwtException.class)
+	public ResponseEntity<ErrorResponse> TokenExpiredExceptionHandler(
+			HttpServletRequest request, ExpiredJwtException exception
+	) {
+		printException(exception);
+		return new ResponseEntity<>(
+				ErrorResponse.of(exception.getMessage(), request.getRequestURI()),
+				UNAUTHORIZED
+		);
+	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<ErrorResponse> AccessDeniedExceptionHandler(
+			HttpServletRequest request, AccessDeniedException exception
+	) {
+		printException(exception);
+		return new ResponseEntity<>(
+				ErrorResponse.of(exception.getMessage(), request.getRequestURI()),
+				UNAUTHORIZED
 		);
 	}
 
@@ -77,6 +101,7 @@ public class GlobalExceptionHandler {
 			INTERNAL_SERVER_ERROR
 		);
 	}
+
 
 	private void printException(Exception exception) {
 		log.error("exception 발생: ", exception);

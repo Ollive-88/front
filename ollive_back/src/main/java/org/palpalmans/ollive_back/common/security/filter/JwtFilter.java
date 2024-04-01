@@ -63,10 +63,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (jwtService.isExpired(token)) {
             log.info("access token expired");
-
-            response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰이 만료되었습니다.");
             return;
-
         }
 
         long memberId = jwtService.getId(token);

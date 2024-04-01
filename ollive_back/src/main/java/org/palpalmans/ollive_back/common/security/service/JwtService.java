@@ -1,5 +1,6 @@
 package org.palpalmans.ollive_back.common.security.service;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.palpalmans.ollive_back.domain.member.model.dto.GeneratedToken;
@@ -39,6 +40,7 @@ public class JwtService {
     public String generateAccessToken(TokenCreateRequest tokenCreateRequest) {
         long tokenPeriod = 1000L * 60L * 100L * 10000L; // 1000000분
 //        long tokenPeriod = 1000L * 60L * 60L * 24L * 14; // 2주
+//        long tokenPeriod = 1000L * 60L;
 
         return makeToken(tokenCreateRequest, tokenPeriod);
     }
@@ -78,8 +80,11 @@ public class JwtService {
     }
 
     public Boolean isExpired(String token) {
-
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        try {
+            return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        } catch (ExpiredJwtException e) {
+            return true;
+        }
     }
 
 }
