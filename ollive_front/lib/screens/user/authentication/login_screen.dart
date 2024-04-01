@@ -114,7 +114,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             Icons.account_circle_outlined,
                             color: idIconColor,
                           ),
-                          autofocus: true,
                           keyboardType: TextInputType.emailAddress,
                           focusNode: idFocusNode,
                           suffixIcon: _idController.text.isEmpty
