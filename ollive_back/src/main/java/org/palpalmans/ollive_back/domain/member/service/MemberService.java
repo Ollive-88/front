@@ -83,14 +83,11 @@ public class MemberService {
         return false;
     }
 
-    public Boolean modifyProfilePicture(long id, String profilePicture){
+    public Boolean modifyProfilePicture(long id, List<MultipartFile> profilePicture){
 
         Optional<Member> member = memberRepository.getMemberById(id);
-        //todo : profilepicture 새로운거 save
         if(member.isPresent()){
-            Member now = member.get();
-            now.changeProfilePicture(profilePicture);
-            memberRepository.save(now);
+            imageService.saveImage(profilePicture,ImageType.PROFILE_PICTURE,id);
             return true;
         }
         return false;

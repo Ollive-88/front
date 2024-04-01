@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,13 +60,13 @@ public class MemberController {
         long id = customMemberDetails.getId();
         String password = modifyMemberInfoRequest.getPassword();
         String gender = modifyMemberInfoRequest.getGender();
-        String profilePicture = modifyMemberInfoRequest.getProfilePicture();
+        List<MultipartFile> profilePicture = modifyMemberInfoRequest.getProfilePicture();
         String nickname = modifyMemberInfoRequest.getNickname();
         //멤버 서비스에서 주어진 값을 이용해 정보 업데이트
         log.info("id = {}", id);
         log.info("password = {}", password);
         log.info("gender = {}", gender);
-        log.info("profilePicture = {}", profilePicture);
+        log.info("profilePicture = {}", profilePicture.toString());
         log.info("nickname = {}", nickname);
 
         // 패스워드값이 있으면 normalmember 가져와서 수정
@@ -80,7 +83,7 @@ public class MemberController {
         }
 
         // profilePicture 값이 있으면 수정
-        if (profilePicture != null) {
+        if (!profilePicture.isEmpty()) {
             Boolean isDone = memberService.modifyProfilePicture(id, profilePicture);
             log.info("picture isDone = {}", isDone);
         }
