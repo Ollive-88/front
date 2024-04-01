@@ -6,13 +6,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.common.security.service.JwtService;
 import org.palpalmans.ollive_back.domain.member.model.dto.GeneratedToken;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.TokenCreateRequest;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.CustomOauth2User;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.service.MemberService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -35,30 +38,38 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("received information = {}", customOauth2User);
         Optional<Member> isExist = memberService.getMemberInfo(customOauth2User.getEmail());
 
-        if(isExist.isPresent()){
-            // 유저 권한이 REGISTERD_MEMBER일 경우에만 동작
-            String role = isExist.get().getRole().name();
+        if (isExist.isPresent()) {
+            Member member = isExist.get();
+            Member social = Member.builder()
+                    .id(member.getId())
+                    .nickname(member.getNickname())
+                    .email(member.getEmail())
+                    .gender(member.getGender())
+                    .birthday(member.getBirthday())
+                    .role(member.getRole())
+                    .build();
 
-            if(role.equals("ROLE_REGISTERED_MEMBER")){
+            CustomMemberDetails customMemberDetails = new CustomMemberDetails(social);
 
-                TokenCreateRequest tokenCreateRequest = new TokenCreateRequest();
+            Authentication auth = new UsernamePasswordAuthenticationToken(customMemberDetails, null, customMemberDetails.getAuthorities());
 
-                tokenCreateRequest.setId(isExist.get().getId());
-                tokenCreateRequest.setRole(role);
+            SecurityContextHolder.getContext().setAuthentication(auth);
 
-                GeneratedToken generatedToken = jwtService.generateToken(tokenCreateRequest);
-                String accessToken = generatedToken.getAccessToken();
-                String refreshToken = generatedToken.getRefreshToken();
+            //토큰도 발급
+            TokenCreateRequest tokenCreateRequest = new TokenCreateRequest();
+
+            tokenCreateRequest.setId(member.getId());
+            tokenCreateRequest.setRole(String.valueOf(member.getRole()));
+
+            GeneratedToken generatedToken = jwtService.generateToken(tokenCreateRequest);
+            String accessToken = generatedToken.getAccessToken();
+            String refreshToken = generatedToken.getRefreshToken();
 
 
-                response.addHeader("Authorization", "Bearer " + accessToken);
-                response.addCookie(createCookie("Refresh", refreshToken));
+            response.addHeader("Authorization", "Bearer " + accessToken);
+            response.addCookie(createCookie("Refresh", refreshToken));
 
-            }
         }
-
-
-
         super.onAuthenticationSuccess(request, response, authentication);
     }
     private Cookie createCookie(String key, String value) {
