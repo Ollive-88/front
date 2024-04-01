@@ -6,8 +6,10 @@ import org.palpalmans.ollive_back.domain.board.model.entity.Board;
 import org.palpalmans.ollive_back.domain.image.model.dto.GetImageResponse;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 
-import java.util.Comparator;
 import java.util.List;
+
+import static java.util.Comparator.comparing;
+import static org.palpalmans.ollive_back.domain.board.model.CommentMapper.toGetCommentResponse;
 
 public class BoardMapper {
     public static Board toBoard(WriteBoardRequest writeBoardRequest, Long memberId) {
@@ -60,8 +62,8 @@ public class BoardMapper {
                 .tags(tags)
                 .comments(board.getComments()
                         .stream()
-                        .map(CommentMapper::toGetCommentResponse)
-                        .sorted(Comparator.comparing(GetCommentResponse::createdAt).reversed())
+                        .map(comment -> toGetCommentResponse(comment, member))
+                        .sorted(comparing(GetCommentResponse::createdAt).reversed())
                         .toList())
                 .build();
     }

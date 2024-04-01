@@ -9,6 +9,7 @@ public record GetCommentResponse(
         Long commentId,
         String content,
         Long memberId,
+        boolean isMine,
         String nickname,
         String memberProfile,
         LocalDateTime createdAt

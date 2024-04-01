@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.palpalmans.ollive_back.common.error.ErrorMessage.BOARD_NOT_FOUND;
+import static org.palpalmans.ollive_back.common.error.ErrorMessage.NOT_AUTHORIZED;
 import static org.palpalmans.ollive_back.domain.board.model.BoardMapper.toGetBoardDetailResponse;
 import static org.palpalmans.ollive_back.domain.board.model.BoardMapper.toGetBoardResponse;
 import static org.palpalmans.ollive_back.domain.image.model.ImageType.BOARD;
@@ -86,7 +87,6 @@ public class BoardService {
         boolean isLiked = likeService.isLikedMember(board, customMemberDetails.getMember());
 
         List<GetImageResponse> images = imageService.getImages(BOARD, boardId);
-
         List<GetTagResponse> tags = board.getBoardTags()
                 .stream()
                 .map(boardTag ->
@@ -112,7 +112,7 @@ public class BoardService {
                 .orElseThrow(() -> new EntityNotFoundException(""));
 
         if (board.getMemberId() != customMemberDetails.getId()) {
-            throw new AuthorizationServiceException("권한이 없습니다.");
+            throw new AuthorizationServiceException(NOT_AUTHORIZED.getMessage());
         }
 
         board.changeTitle(updateBoardRequest.getTitle());
@@ -128,8 +128,7 @@ public class BoardService {
 
         updateBoardRequest.getDeleteTags()
                 .forEach(deleteTagId ->
-                        boardTagRepository.deleteBoardTagByBoardAndTag_Id(board, deleteTagId)
-                );
+                        boardTagRepository.deleteBoardTagByBoardAndTag_Id(board, deleteTagId));
 
         imageService.saveImage(updateBoardRequest.getUpdateImages(), BOARD, boardId);
         imageService.deleteImages(updateBoardRequest.getDeleteImages());
