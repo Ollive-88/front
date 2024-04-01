@@ -198,7 +198,7 @@ class _BoardScreenState extends State<BoardScreen> {
             );
           } else {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: SizedBox(),
             );
           }
         },

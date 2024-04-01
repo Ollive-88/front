@@ -18,38 +18,41 @@ class RecipeTextField extends StatefulWidget {
 class _RecipeTextFieldState extends State<RecipeTextField> {
   final TextEditingController _inputController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final FocusNode _fcusNode = FocusNode();
 
-  // 태그 입력 처리 메서드
-  void subStringTags() {
-    String text = _inputController.text;
-    RegExp regExp = RegExp(r"[\uAC00-\uD7A3a-zA-Z0-9_]+");
-    Iterable<RegExpMatch> matches = regExp.allMatches(text);
-
-    for (var match in matches) {
-      text = text.replaceFirst(match.group(0)!, '');
-      widget.ingredients.add(match.group(0)!);
+  void _handleInput(String input) {
+    if (input.endsWith(' ')) {
+      String ingredient = input.trim();
+      if (ingredient.isNotEmpty) {
+        setState(() {
+          widget.ingredients.add(ingredient);
+          _inputController.clear();
+        });
+        Timer(const Duration(milliseconds: 50), () {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+          );
+        });
+      }
     }
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _inputController.text = text.trim(); // trim()을 사용해 앞뒤 공백 제거
-    });
-
-    Timer(const Duration(milliseconds: 100), () {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
-      );
-    });
-
-    setState(() {});
   }
 
   // 태그 지우는 메서드
   void deleteTags(int index, List<String> tagNames) {
     tagNames.removeAt(index);
     setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _inputController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -63,49 +66,41 @@ class _RecipeTextFieldState extends State<RecipeTextField> {
           ),
           borderRadius: BorderRadius.circular(25),
           color: const Color(0xFFEBEBE9)),
-      // ignore: deprecated_member_use
-      child: RawKeyboardListener(
-        focusNode: _fcusNode,
-        onKey: (event) {
-          if (event.physicalKey.debugName == "Space") {
-            subStringTags();
-          }
-        },
-        child: TextField(
-          controller: _inputController,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            // ignore: sized_box_for_whitespace
-            prefixIcon: Container(
-              constraints: const BoxConstraints(maxWidth: 280),
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    for (var i = 0; i < widget.ingredients.length; i++)
-                      Row(
-                        children: [
-                          Tag(
-                            tagModel: TagModel(widget.ingredients[i]),
-                            isSearch: true,
-                            deleteTag: () => deleteTags(i, widget.ingredients),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          )
-                        ],
-                      ),
-                  ],
-                ),
+      child: TextField(
+        onChanged: _handleInput,
+        controller: _inputController,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          // ignore: sized_box_for_whitespace
+          prefixIcon: Container(
+            constraints: const BoxConstraints(maxWidth: 280),
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (var i = 0; i < widget.ingredients.length; i++)
+                    Row(
+                      children: [
+                        Tag(
+                          tagModel: TagModel(widget.ingredients[i]),
+                          isSearch: true,
+                          deleteTag: () => deleteTags(i, widget.ingredients),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        )
+                      ],
+                    ),
+                ],
               ),
             ),
           ),
-          style: const TextStyle(
-            fontSize: 18,
-          ),
-          textAlign: TextAlign.start,
         ),
+        style: const TextStyle(
+          fontSize: 18,
+        ),
+        textAlign: TextAlign.start,
       ),
     );
   }

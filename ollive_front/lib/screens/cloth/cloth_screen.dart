@@ -125,7 +125,7 @@ class _ClothScreenState extends State<ClothScreen> {
                     ),
 
                     const Text(
-                      "  노래 가사",
+                      "  노래 제목",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -166,7 +166,7 @@ class _ClothScreenState extends State<ClothScreen> {
                 ),
               ),
               const SizedBox(
-                height: 80,
+                height: 200,
               ),
               Padding(
                 padding:

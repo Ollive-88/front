@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:ollive_front/screens/recipe/recipe_list_screen.dart';
 import 'package:ollive_front/service/recipe/recipe_service.dart';
 import 'package:ollive_front/service/user/user_service.dart';
@@ -101,12 +103,14 @@ class _RecipeScreenState extends State<RecipeScreen> {
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 26, vertical: 5),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     // 소개글
                     RichText(
@@ -440,53 +444,60 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     ),
                   ],
                 ),
-              )
-            ],
-          ),
-        ),
-        bottomNavigationBar: // 검색 버튼
-            GestureDetector(
-          onTap: () async {
-            FocusScope.of(context).unfocus();
-
-            if (havingIngredients.isEmpty) {
-              ErrorService.showToast("포함시킬 재료를 선택해주세요");
-            } else {
-              await RecipeService.getRecommendRecipeList(
-                havingIngredients,
-                dislikeIngredients,
-              ).then((value) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RecipeListScreen(
-                      likeTagNames: havingIngredients,
-                      hateTagNames: dislikeIngredients,
-                      recommendrecipes: value,
-                    ),
-                  ),
-                );
-              }).catchError((onError) {
-                ErrorService.showToast("잘못된 요청입니다.");
-              });
-            }
-          },
-          child: Container(
-            width: MediaQuery.of(context).size.width / 1.1,
-            height: MediaQuery.of(context).size.height / 11,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            decoration: BoxDecoration(
-              color: const Color(0xFF30AF98),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: const Text(
-              "검색",
-              style: TextStyle(
-                fontSize: 28,
-                color: Colors.white,
               ),
-              textAlign: TextAlign.center,
-            ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 26, vertical: 5),
+                child: GestureDetector(
+                  onTap: () async {
+                    FocusScope.of(context).unfocus();
+
+                    if (havingIngredients.isEmpty) {
+                      ErrorService.showToast("포함시킬 재료를 선택해주세요");
+                    } else {
+                      await RecipeService.getRecommendRecipeList(
+                        havingIngredients,
+                        dislikeIngredients,
+                      ).then((value) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RecipeListScreen(
+                              likeTagNames: havingIngredients,
+                              hateTagNames: dislikeIngredients,
+                              recommendrecipes: value,
+                            ),
+                          ),
+                        );
+                      }).catchError((onError) {
+                        ErrorService.showToast("잘못된 요청입니다.");
+                      });
+                    }
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width / 1.1,
+                        height: MediaQuery.of(context).size.height / 11,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF30AF98),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: const Text(
+                          "검색",
+                          style: TextStyle(
+                            fontSize: 28,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

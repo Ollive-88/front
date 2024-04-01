@@ -11,25 +11,38 @@ class BoardSearchScreen extends StatefulWidget {
 
 class _BoardSearchScreenState extends State<BoardSearchScreen> {
   final TextEditingController _inputController = TextEditingController();
+
   final FocusNode _focusNode = FocusNode();
 
   // 태그 리스트
   List<TagModel> tagNames = [];
 
   // 태그 입력 처리 메서드
-  void subStringTags() {
-    String text = _inputController.text;
-    RegExp regExp = RegExp(r"#[\uAC00-\uD7A3a-zA-Z0-9_]+");
-    Iterable<RegExpMatch> matches = regExp.allMatches(text);
+  void _handleInput(String input) {
+    if (input.endsWith(' ')) {
+      print("work");
+      // 해시태그를 찾기 위한 정규 표현식
+      final RegExp regExp = RegExp(r"#([\w가-힣-]+)");
+      // 모든 해시태그 찾기
+      final Iterable<RegExpMatch> matches = regExp.allMatches(input);
+      if (matches.isNotEmpty) {
+        // 해시태그 제거 후 남은 문자열을 저장할 변수
+        String remainingText = input;
 
-    for (var match in matches) {
-      text = text.replaceFirst(match.group(0)!, '');
-      tagNames.add(TagModel(match.group(0)!.substring(1)));
+        setState(() {
+          for (final match in matches) {
+            // 해시태그에서 '#' 제거 후 tagNames에 추가
+            String tagName = match.group(0)!; // '#'을 포함한 전체 해시태그
+            tagNames.add(TagModel(tagName.substring(1))); // '#' 제거 후 추가
+
+            // 해시태그를 포함한 문자열에서 해시태그 제거
+            remainingText = remainingText.replaceAll(tagName, "");
+          }
+          // 해시태그를 제외한 나머지 문자열로 텍스트 필드 업데이트
+          _inputController.text = remainingText;
+        });
+      }
     }
-
-    setState(() {
-      _inputController.text = text.trim(); // trim()을 사용해 앞뒤 공백 제거
-    });
   }
 
   // 태그 지우는 메서드
@@ -85,25 +98,18 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
                       borderRadius: BorderRadius.circular(10),
                       color: const Color(0xFFEBEBE9)),
                   // ignore: deprecated_member_use
-                  child: RawKeyboardListener(
-                    focusNode: _focusNode,
-                    onKey: (event) {
-                      if (event.physicalKey.debugName == "Space") {
-                        subStringTags();
-                      }
-                    },
-                    child: TextField(
-                      controller: _inputController,
-                      onEditingComplete: onclickSearch,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        suffixIcon: Icon(Icons.search),
-                      ),
-                      style: const TextStyle(
-                        fontSize: 18,
-                      ),
-                      textAlign: TextAlign.start,
+                  child: TextField(
+                    controller: _inputController,
+                    onChanged: _handleInput,
+                    onEditingComplete: onclickSearch,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      suffixIcon: Icon(Icons.search),
                     ),
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                    textAlign: TextAlign.start,
                   ),
                 ),
               ),

@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ScrollController boardScrollController = ScrollController();
 
   void _onTapNavBar(int index) {
-    if (index == _selectedIndex) {
+    if (index == _selectedIndex && index == 0) {
       boardScrollController.animateTo(
         0,
         duration: const Duration(seconds: 1),

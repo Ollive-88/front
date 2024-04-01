@@ -1,11 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ollive_front/models/board/board_detail_model.dart';
 import 'package:ollive_front/models/board/tag_model.dart';
-import 'package:ollive_front/models/comment/comment_model.dart';
 import 'package:ollive_front/screens/board/board_write_screen.dart';
 import 'package:ollive_front/service/board/board_service.dart';
 import 'package:ollive_front/util/error/error_service.dart';
@@ -46,7 +42,9 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
   @override
   void initState() {
     super.initState();
+    print(widget.boardId);
     boardDetail = BoardService.getBoardDetail(widget.boardId).catchError((e) {
+      print(e);
       ErrorService.showToast("잘못된 요청입니다.");
       Navigator.pop(context);
     });

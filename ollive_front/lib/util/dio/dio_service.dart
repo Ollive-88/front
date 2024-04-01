@@ -1,8 +1,9 @@
 import 'dart:collection';
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:ollive_front/screens/user/authentication/login_screen.dart';
 import 'package:ollive_front/util/controller/getx_controller.dart';
 
 class DioService {
@@ -43,34 +44,50 @@ class DioService {
             final token = Get.find<StatusController>().token;
             // refresh token이 없으면 로그인 페이지로 이동
             if (token.refreshToken == null) {
-              // moveToLoginScreen();
+              Get.to(const LoginScreen());
               return;
             }
 
             try {
               var refreshDio =
                   Dio(BaseOptions(baseUrl: "http://j10a508.p.ssafy.io"));
+              refreshDio.options.headers['Authorization'] =
+                  '${token.refreshToken}';
               final response = await refreshDio.post(
                 "/api/auth/token/refresh",
-                data: jsonEncode(
-                    <String, String>{'refresh-token': token.refreshToken!}),
               );
 
               if (response.statusCode == 200) {
-                Get.find<StatusController>().setToken(Token(
-                  accessToken: response.data["accessToken"],
-                  refreshToken: response.data["refreshToken"],
-                ));
+                const storage = FlutterSecureStorage();
 
-                _processRequestQueue(Get.find<StatusController>()
-                    .token
-                    .accessToken!); // 저장된 요청 처리
+                final String accessToken, refreshToken;
+                final authorization = response.headers['Authorization'];
+                final cookies = response.headers['Set-Cookie'];
+
+                if (cookies != null) {
+                  final cookie = cookies.first;
+                  // 쿠키 문자열에서 리프레시 토큰 값을 파싱
+                  RegExp regExp = RegExp(r'Refresh=([^;]+)');
+                  Match? match = regExp.firstMatch(cookie);
+                  if (match != null) {
+                    refreshToken = match.group(1)!;
+                    storage.write(key: 'refreshToken', value: refreshToken);
+                    token.refreshToken = refreshToken;
+                  }
+                }
+                if (authorization != null) {
+                  accessToken = authorization.first;
+                  storage.write(key: 'accessToken', value: accessToken);
+                  token.accessToken = accessToken;
+                }
+                _processRequestQueue(token.accessToken!);
                 return;
-              } else {
-                // moveToLoginScreen();
               }
             } catch (error) {
-              // moveToLoginScreen();
+              const storage = FlutterSecureStorage();
+              storage.delete(key: "accessToken");
+              storage.delete(key: "refreshToken");
+              Get.to(const LoginScreen());
             }
           } else {
             handler.next(error);

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -44,23 +46,23 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
   final List<int> _deletePickedImgs = [];
 
   // 태그 입력 처리 메서드
-  void subStringTags() {
-    String text = _inputController.text;
-    RegExp regExp = RegExp(r"[\uAC00-\uD7A3a-zA-Z0-9_]+");
-    Iterable<RegExpMatch> matches = regExp.allMatches(text);
-
-    for (var match in matches) {
-      text = text.replaceFirst(match.group(0)!, '');
-      if (isModify) {
-        updateTagNames.add(TagModel(match.group(0)!));
+  void _handleInput(String input) {
+    if (input.endsWith(' ')) {
+      String tagName = input.trim();
+      if (tagName.isNotEmpty) {
+        setState(() {
+          tagNames.add(TagModel(tagName));
+          _inputController.clear();
+        });
+        Timer(const Duration(milliseconds: 50), () {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+          );
+        });
       }
-
-      tagNames.add(TagModel(match.group(0)!));
     }
-    _inputController.text = text.trim(); // trim()을 사용해 앞뒤 공백 제거
-    _scrollToBottom();
-
-    setState(() {});
   }
 
   // 태그 지우는 메서드
@@ -337,23 +339,16 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                         ),
                       ),
                       // ignore: deprecated_member_use
-                      RawKeyboardListener(
-                        focusNode: _focusNode,
-                        onKey: (event) {
-                          if (event.physicalKey.debugName == "Space") {
-                            subStringTags();
-                          }
-                        },
-                        child: TextFormField(
-                          controller: _inputController,
-                          decoration: const InputDecoration(
-                            hintText: "태그를 입력하세요",
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
+                      TextFormField(
+                        onChanged: _handleInput,
+                        controller: _inputController,
+                        decoration: const InputDecoration(
+                          hintText: "태그를 입력하세요",
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
                           ),
                         ),
                       ),
@@ -379,57 +374,51 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                 ),
               ),
             ),
-            Positioned(
-              bottom: keyboardHeight,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.all(20.0),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFFFFC),
-                  border: Border(
-                    top: BorderSide(
-                      color: Color(0xFFEBEBE9),
-                      width: 3,
-                    ),
-                  ),
-                ),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.image),
-                          color: Colors.black,
-                          onPressed: () {
-                            _pickImg();
-                          },
-                        ),
-                        SingleChildScrollView(
-                          child: Row(
-                            children: [
-                              for (var i = 0; i < _pickedImgs.length; i++)
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 5),
-                                  child: BoardImage(
-                                    image: _pickedImgs[i].imgFile,
-                                    heght:
-                                        MediaQuery.of(context).size.height / 10,
-                                    deleteImage: () =>
-                                        deleteImage(_pickedImgs[i], i),
-                                  ),
-                                )
-                            ],
-                          ),
-                        )
-                      ],
-                    );
-                  },
-                ),
+          ],
+        ),
+        bottomNavigationBar: Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          constraints: const BoxConstraints(minHeight: 48),
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: Color(0xFFE5E5EA),
               ),
             ),
-          ],
+          ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.image),
+                    color: Colors.black,
+                    onPressed: () {
+                      _pickImg();
+                    },
+                  ),
+                  SingleChildScrollView(
+                    child: Row(
+                      children: [
+                        for (var i = 0; i < _pickedImgs.length; i++)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 5),
+                            child: BoardImage(
+                              image: _pickedImgs[i].imgFile,
+                              heght: MediaQuery.of(context).size.height / 10,
+                              deleteImage: () => deleteImage(_pickedImgs[i], i),
+                            ),
+                          )
+                      ],
+                    ),
+                  )
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
