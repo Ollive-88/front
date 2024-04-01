@@ -1,0 +1,5 @@
+flutter_icons:
+  android: true
+  image_path: "assets/image/app_icon.png"
+  # adaptive_icon_background: "#FFFFFF" # 안드로이드용, 배경색 설정
+  # adaptive_icon_foreground: "assets/image/app_icon.png" # 안드로이드용, 전경 이미지 경로
