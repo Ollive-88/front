@@ -138,7 +138,7 @@ CREATE TABLE image
     id           BIGINT AUTO_INCREMENT PRIMARY KEY,
     reference_id BIGINT   NOT NULL,
     address      VARCHAR(255) NULL,
-    image_type   ENUM ('BOARD') NULL,
+    image_type   ENUM ('BOARD','PROFILE_PICTURE') NULL,
     created_at   DATETIME NOT NULL DEFAULT NOW(),
     updated_at   DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW()
 );
