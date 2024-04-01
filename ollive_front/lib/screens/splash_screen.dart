@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:ollive_front/screens/home_screen.dart';
+import 'package:ollive_front/screens/user/authentication/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(milliseconds: 1500), () {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
         (Route<dynamic> route) => false,
       );
     });
