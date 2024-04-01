@@ -62,17 +62,15 @@ class UserIngredients {
 }
 
 class HateIngredients {
-  final String name;
+  String name;
+  int? dislikeIngredientId;
 
   HateIngredients({
     required this.name,
+    this.dislikeIngredientId,
   });
-}
 
-final hateIngredientList = [
-  '감자',
-  '양배추',
-  '고추',
-  '대추',
-  '부추',
-];
+  HateIngredients.fromJson(Map<String, dynamic> json)
+      : dislikeIngredientId = json['dislikeIngredientId'],
+        name = json['name'];
+}
