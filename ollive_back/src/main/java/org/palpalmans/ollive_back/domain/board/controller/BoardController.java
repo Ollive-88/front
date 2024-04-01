@@ -2,10 +2,13 @@ package org.palpalmans.ollive_back.domain.board.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
+import org.palpalmans.ollive_back.domain.board.model.dto.DeleteCommentRequest;
+import org.palpalmans.ollive_back.domain.board.model.dto.WriteCommentRequest;
 import org.palpalmans.ollive_back.domain.board.model.dto.request.UpdateBoardRequest;
 import org.palpalmans.ollive_back.domain.board.model.dto.request.WriteBoardRequest;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardDetailResponse;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardsResponse;
+import org.palpalmans.ollive_back.domain.board.model.dto.response.GetCommentResponse;
 import org.palpalmans.ollive_back.domain.board.model.dto.response.WriteBoardResponse;
 import org.palpalmans.ollive_back.domain.board.service.BoardService;
 import org.springframework.http.ResponseEntity;
@@ -76,6 +79,27 @@ public class BoardController {
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails
     ) {
         boardService.deleteBoard(boardId, customMemberDetails);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{boardId}/comments")
+    public ResponseEntity<GetCommentResponse> createComment(
+            @PathVariable(name = "boardId") Long boardId,
+            @Validated @RequestBody WriteCommentRequest writeCommentRequest,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
+    ) {
+        GetCommentResponse getCommentResponse =
+                boardService.writeComment(writeCommentRequest, boardId, customMemberDetails.getMember());
+        return ResponseEntity.status(CREATED).body(getCommentResponse);
+    }
+
+    @DeleteMapping("/{boardId}/comments")
+    public ResponseEntity<WriteBoardResponse> deleteComment(
+            @Validated @RequestBody
+            DeleteCommentRequest deleteCommentRequest,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
+    ) {
+        boardService.deleteComment(deleteCommentRequest, customMemberDetails.getMember());
         return ResponseEntity.ok().build();
     }
 }

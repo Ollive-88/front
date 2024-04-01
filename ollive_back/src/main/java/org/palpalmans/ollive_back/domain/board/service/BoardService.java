@@ -3,12 +3,11 @@ package org.palpalmans.ollive_back.domain.board.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
+import org.palpalmans.ollive_back.domain.board.model.dto.DeleteCommentRequest;
+import org.palpalmans.ollive_back.domain.board.model.dto.WriteCommentRequest;
 import org.palpalmans.ollive_back.domain.board.model.dto.request.UpdateBoardRequest;
 import org.palpalmans.ollive_back.domain.board.model.dto.request.WriteBoardRequest;
-import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardDetailResponse;
-import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardResponse;
-import org.palpalmans.ollive_back.domain.board.model.dto.response.GetBoardsResponse;
-import org.palpalmans.ollive_back.domain.board.model.dto.response.GetTagResponse;
+import org.palpalmans.ollive_back.domain.board.model.dto.response.*;
 import org.palpalmans.ollive_back.domain.board.model.entity.Board;
 import org.palpalmans.ollive_back.domain.board.model.entity.BoardTag;
 import org.palpalmans.ollive_back.domain.board.model.entity.Tag;
@@ -39,6 +38,7 @@ public class BoardService {
     private final TagService tagService;
     private final LikeService likeService;
     private final ViewService viewService;
+    private final CommentService commentService;
 
     private final BoardRepository boardRepository;
     private final BoardQueryRepository boardQueryRepository;
@@ -134,16 +134,30 @@ public class BoardService {
         imageService.deleteImages(updateBoardRequest.getDeleteImages());
     }
 
-    private Board writeBoard(String title, String content, Member member) {
-        return boardRepository.save(new Board(title, content, member.getId()));
-    }
-
+    @Transactional
     public void deleteBoard(Long boardId, CustomMemberDetails customMemberDetails) {
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new EntityNotFoundException(""));
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new EntityNotFoundException(BOARD_NOT_FOUND.getMessage()));
 
         if (board.getMemberId() != customMemberDetails.getId()) {
-            throw new AuthorizationServiceException("권한이 없습니다.");
+            throw new AuthorizationServiceException(NOT_AUTHORIZED.getMessage());
         }
         boardRepository.delete(board);
+    }
+
+    @Transactional
+    public GetCommentResponse writeComment(WriteCommentRequest writeCommentRequest, Long boardId, Member member) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new EntityNotFoundException(BOARD_NOT_FOUND.getMessage()));
+        return commentService.writeComment(writeCommentRequest, board, member);
+    }
+
+    @Transactional
+    public void deleteComment(DeleteCommentRequest deleteCommentRequest, Member member) {
+        commentService.deleteComment(deleteCommentRequest, member);
+    }
+
+    private Board writeBoard(String title, String content, Member member) {
+        return boardRepository.save(new Board(title, content, member.getId()));
     }
 }
