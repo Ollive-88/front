@@ -19,13 +19,13 @@ class SettingScreen extends StatelessWidget {
   ];
 
   final List<Widget> pages = [
-    const TermOfServiceScreen(),
-    const TermOfServiceScreen(),
+    TermOfServiceScreen(),
+    TermOfServiceScreen(),
     const ProfileImageScreen(),
-    const TermOfServiceScreen(),
-    const TermOfServiceScreen(),
-    const TermOfServiceScreen(),
-    const UnregisterScreen(),
+    TermOfServiceScreen(),
+    TermOfServiceScreen(),
+    TermOfServiceScreen(),
+    UnregisterScreen(),
   ];
 
   final TextEditingController _passwordController = TextEditingController();
@@ -52,22 +52,15 @@ class SettingScreen extends StatelessWidget {
                       title: Text(settings[i]),
                       onTap: () {
                         if (i == 0) {
-                          showdialog(
-                            context,
-                            '비밀번호 수정',
-                            _passwordController,
-                            true,
-                            '새 비밀번호',
-                          );
+                          showdialog(context, '비밀번호 수정', _passwordController,
+                              true, '새 비밀번호', true, () {});
                         } else if (i == 1) {
                           _nicknameController.text = 'hihi';
-                          showdialog(
-                            context,
-                            '닉네임 수정',
-                            _nicknameController,
-                            false,
-                            '닉네임을 입력하세요.',
-                          );
+                          showdialog(context, '닉네임 수정', _nicknameController,
+                              false, '닉네임을 입력하세요.', true, () {});
+                        } else if (i == 5) {
+                          showdialog(context, '로그아웃 하시겠습니까?',
+                              TextEditingController(), false, '', false, () {});
                         } else {
                           Navigator.push(
                             context,
@@ -100,6 +93,8 @@ class SettingScreen extends StatelessWidget {
     TextEditingController controller,
     bool isObscure,
     String hintText,
+    bool textTrue,
+    void pressAction,
   ) {
     return showDialog(
       context: context,
@@ -119,29 +114,31 @@ class SettingScreen extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        content: SizedBox(
-          height: 100,
-          child: Center(
-            child: Expanded(
-              child: TextField(
-                autofocus: true,
-                obscureText: isObscure,
-                obscuringCharacter: '●',
-                controller: controller,
-                cursorColor: const Color(0xFF30AF98),
-                decoration: InputDecoration(
-                  hintText: hintText,
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
+        content: textTrue
+            ? SizedBox(
+                height: 100,
+                child: Center(
+                  child: Expanded(
+                    child: TextField(
+                      autofocus: true,
+                      obscureText: isObscure,
+                      obscuringCharacter: '●',
+                      controller: controller,
+                      cursorColor: const Color(0xFF30AF98),
+                      decoration: InputDecoration(
+                        hintText: hintText,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            borderSide: BorderSide(color: Color(0xFF30AF98))),
+                      ),
+                    ),
                   ),
-                  focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Color(0xFF30AF98))),
                 ),
-              ),
-            ),
-          ),
-        ),
+              )
+            : null,
         actions: [
           TextButton(
               onPressed: () {

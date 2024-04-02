@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/screens/board/board_screen.dart';
 import 'package:ollive_front/screens/cloth/cloth_screen.dart';
-import 'package:ollive_front/screens/user/mypage_screen.dart';
 import 'package:ollive_front/screens/recipe/recipe_screen.dart';
+import 'package:ollive_front/screens/user/mypage_screen.dart';
 import 'package:ollive_front/widgets/global/navigationbar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 3,
-            child: MyPageScreen(),
+            child: const MyPageScreen(),
           ),
         ],
       ),

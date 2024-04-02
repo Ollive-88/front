@@ -92,13 +92,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 50,
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      Text('Ollive'),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/image/ollive_logo.png',
+                      width: 100,
+                      height: 35,
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),

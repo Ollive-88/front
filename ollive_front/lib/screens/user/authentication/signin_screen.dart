@@ -19,6 +19,18 @@ class _SigninScreenState extends State<SigninScreen> {
   bool isVisible = false;
   String? _gender;
 
+  bool isDateAfterToday(String dateString) {
+    // 입력된 문자열을 날짜로 파싱
+    DateTime inputDate = DateTime.parse(
+        '${dateString.substring(0, 4)}-${dateString.substring(4, 6)}-${dateString.substring(6, 8)}');
+
+    // 오늘 날짜 구하기
+    DateTime today = DateTime.now();
+
+    // 입력된 날짜가 오늘 날짜보다 미래인지 확인
+    return inputDate.isAfter(today);
+  }
+
   @override
   Widget build(BuildContext context) {
     final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
@@ -42,13 +54,14 @@ class _SigninScreenState extends State<SigninScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      Text('Ollive'),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/image/ollive_logo.png',
+                      width: 100,
+                      height: 35,
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -58,7 +71,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       child: Column(
                         children: <Widget>[
                           CustomTextFormField(
-                            hint: '아이디',
+                            hint: '이메일',
                             prefixIcon: const Icon(
                               Icons.account_circle_outlined,
                               color: Colors.grey,
@@ -67,7 +80,12 @@ class _SigninScreenState extends State<SigninScreen> {
                             onSaved: (String? val) => _userInfo.email = val!,
                             validator: (String? val) {
                               if (val!.isEmpty) {
-                                return '아이디: 필수 정보입니다.';
+                                return '이메일: 필수 정보입니다.';
+                              }
+                              RegExp reg =
+                                  RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                              if (!reg.hasMatch(val)) {
+                                return '이메일 형식이 올바르지 않습니다.';
                               }
                               return null;
                             },
@@ -87,6 +105,9 @@ class _SigninScreenState extends State<SigninScreen> {
                             validator: (String? val) {
                               if (val!.isEmpty) {
                                 return '비밀번호: 필수 정보입니다.';
+                              }
+                              if (val.length < 4 || val.length > 8) {
+                                return '비밀번호는 4~8자 사이로 입력 해주세요.';
                               }
                               return null;
                             },
@@ -124,6 +145,13 @@ class _SigninScreenState extends State<SigninScreen> {
                             validator: (String? val) {
                               if (val!.isEmpty) {
                                 return '생년월일: 필수 정보입니다.';
+                              }
+                              if (val.length != 8) {
+                                return '생년월일 8자리 입력은 필수입니다.';
+                              }
+
+                              if (isDateAfterToday(val)) {
+                                return '유효한 생년월일을 입력하세요.';
                               }
                               return null;
                             },

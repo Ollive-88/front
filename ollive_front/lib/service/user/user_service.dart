@@ -149,4 +149,8 @@ class UserService {
     Response response = await _dio.get('/memberinfo');
     return UserSimpleModel.fromJsonmypage(response.data);
   }
+
+  static Future<dynamic> logoutAction() async {
+    await _dio.post('/logout');
+  }
 }
