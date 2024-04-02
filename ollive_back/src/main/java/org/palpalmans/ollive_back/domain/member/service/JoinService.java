@@ -53,7 +53,7 @@ public class JoinService {
                     .gender("undefined")
                     .birthday(birthday)
                     .name(name)
-                    .nickname("띠디딩딩")
+                    .nickname(name)
                     .role(role) // role 설정
                     .build();
 
@@ -73,7 +73,7 @@ public class JoinService {
                     .gender(gender)
                     .birthday(birthday)
                     .name(name)
-                    .nickname("띠디딩딩")
+                    .nickname(name)
                     .role(role) // role 설정
                     .build();
 
