@@ -238,6 +238,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                       if (await UserService.registerUser(
                                           _userInfo)) {
                                         // 다음 페이지로 이동시키기 (pushedName으로 바꾸기)
+                                        // ignore: use_build_context_synchronously
                                         Navigator.pop(context);
                                       }
                                     } else {

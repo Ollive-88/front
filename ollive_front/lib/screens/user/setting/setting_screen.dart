@@ -34,7 +34,7 @@ class _SettingScreenState extends State<SettingScreen> {
     TermOfServiceScreen(),
     TermOfServiceScreen(),
     const ProfileImageScreen(),
-    TermOfUserInfoScreen(),
+    const TermOfUserInfoScreen(),
     TermOfServiceScreen(),
     TermOfServiceScreen(),
     UnregisterScreen(),
@@ -52,6 +52,7 @@ class _SettingScreenState extends State<SettingScreen> {
       await storage.delete(key: 'accessToken');
       await storage.delete(key: 'refreshToken');
       Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(builder: (context) => const LoginScreen()),
       );

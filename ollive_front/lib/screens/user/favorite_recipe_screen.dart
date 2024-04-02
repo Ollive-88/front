@@ -79,7 +79,6 @@ class _FavoriteRecipeScreenState extends State<FavoriteRecipeScreen> {
         title: const Text('즐겨찾는 레시피'),
         centerTitle: true,
       ),
-      // 이거 Future Builder로 만들어야함!
       body: FutureBuilder(
           future: recipes,
           builder: (context, snapshot) {

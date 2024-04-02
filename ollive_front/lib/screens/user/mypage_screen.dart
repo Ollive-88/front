@@ -34,7 +34,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
     const HateInventoryScreen(),
     const FavoriteRecipeScreen(),
     const SeenClothesScreen(),
-    const MyArticleScreen(),
+    MyArticleScreen(),
     const SettingScreen(),
   ];
 

@@ -125,6 +125,7 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
                     child: TextButton(
                       onPressed: () async {
                         await _pickImg();
+                        // ignore: use_build_context_synchronously
                         Navigator.of(context).pop();
                       },
                       style: TextButton.styleFrom(
@@ -215,14 +216,10 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
   }
 
   void updateImage() async {
-    print('hihihihihii');
     UserService.updateProfileImage(
             ['profilePicture', convertXFileToMultipartFile(_pickedImg!)])
         .then((value) {
-      print('성공!');
       Navigator.pop(context);
-    }).catchError((e) {
-      print('Error: $e');
-    });
+    }).catchError((e) {});
   }
 }

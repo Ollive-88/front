@@ -202,6 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               _isEmpty = true;
                                             });
                                             // 모든 포커스 해제
+                                            // ignore: use_build_context_synchronously
                                             FocusScope.of(context).unfocus();
                                           }
                                         }
@@ -292,6 +293,7 @@ class _LoginScreenState extends State<LoginScreen> {
         accessToken: accessToken,
         refreshToken: refreshToken,
       ));
+      // ignore: use_build_context_synchronously
       Navigator.popAndPushNamed(context, '/home');
     }
   }

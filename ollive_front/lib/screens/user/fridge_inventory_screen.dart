@@ -276,6 +276,7 @@ class _FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                                 // 입력 필드 초기화
                                 _ingredientController.clear();
                                 expirationDate = DateTime.now();
+                                // ignore: use_build_context_synchronously
                                 Navigator.of(context).pop();
                               }
                             },

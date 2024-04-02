@@ -56,7 +56,7 @@ class ClothService {
     // );
 
     final Map<String, dynamic> result = {
-      "cloths": [
+      "clothes": [
         {
           "id": 3590525,
           "rank": 5,
@@ -115,7 +115,7 @@ class ClothService {
       ]
     };
 
-    List<ClothModel> clothList = (result['cloths']).map<ClothModel>((json) {
+    List<ClothModel> clothList = (result['clothes']).map<ClothModel>((json) {
       return ClothModel.fromJson(json);
     }).toList();
 

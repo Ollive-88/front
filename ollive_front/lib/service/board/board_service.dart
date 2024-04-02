@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ollive_front/models/board/board_detail_model.dart';
@@ -161,5 +162,27 @@ class BoardService {
     } else {
       return "${difference.inSeconds}초 전";
     }
+  }
+
+  // 내 게시글 조회
+  static Future<List<BoardModel>> getMyBoardList(
+      List<String>? tags, int lastIndex, int size, bool isMyView) async {
+    final Response response;
+
+    response = await _dio.get(
+      "/api/v1/boards",
+      queryParameters: {
+        "tags": tags,
+        "lastIndex": lastIndex,
+        "size": size,
+        "isMyView": isMyView,
+      },
+    );
+
+    List<BoardModel> boards = response.data['boards'].map<BoardModel>((json) {
+      return BoardModel.fromJson(json);
+    }).toList();
+
+    return boards;
   }
 }

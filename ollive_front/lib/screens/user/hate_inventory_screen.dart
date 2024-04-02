@@ -191,6 +191,7 @@ class _HateInventoryScreenState extends State<HateInventoryScreen> {
                       fetchData();
                     }
                     _ingredientController.clear();
+                    // ignore: use_build_context_synchronously
                     Navigator.of(context).pop();
                   }
                 }

@@ -111,6 +111,7 @@ class UserService {
       for (var ingredient in response.data) {
         ingredientInstances.add(HateIngredients.fromJson(ingredient));
       }
+      // ignore: empty_catches
     } catch (e) {}
 
     return ingredientInstances;
@@ -166,8 +167,7 @@ class UserService {
     try {
       Response response = await _dio.post('/logout');
       if (response.statusCode == 302) {}
-    } catch (e) {
-      print('Error: $e');
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 }
