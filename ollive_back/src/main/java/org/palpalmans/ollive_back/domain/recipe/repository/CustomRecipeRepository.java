@@ -10,4 +10,5 @@ public interface CustomRecipeRepository {
     List<Recipe> findRecipesByIngredientsAndScoredRecipeIds(RecipeRecommendRequest request, List<Long> scoredRecipeIds);
 
     List<Recipe> findRecipesByScoredIds(List<Long> scoredRecipeIds);
+    List<Recipe> findRecipesByScrapedIds(List<Long> scrapedRecipeIds, Long lastRecipeId, int size);
 }

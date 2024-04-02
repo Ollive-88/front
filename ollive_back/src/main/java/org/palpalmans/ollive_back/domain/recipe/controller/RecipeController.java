@@ -8,6 +8,7 @@ import org.palpalmans.ollive_back.domain.recipe.model.dto.RecipeSummaryDto;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.request.RecipeRecommendRequest;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.request.RecipeScoreRequest;
 import org.palpalmans.ollive_back.domain.recipe.model.dto.request.RecipeSearchRequest;
+import org.palpalmans.ollive_back.domain.recipe.model.dto.request.ScrapRequest;
 import org.palpalmans.ollive_back.domain.recipe.service.RecipeRecommendService;
 import org.palpalmans.ollive_back.domain.recipe.service.RecipeService;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,17 @@ public class RecipeController {
         return ResponseEntity.ok().body(recipeService.getRecipe(recipeId));
     }
 
+    @GetMapping("/scraps")
+    public ResponseEntity<List<RecipeSummaryDto>> getScrapedRecipes(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+            @RequestParam Long lastRecipeId,
+            @RequestParam int size
+    ) {
+        long memberId = customMemberDetails.getId();
+
+        return ResponseEntity.ok().body(recipeService.getScrapedRecipes(memberId, lastRecipeId, size));
+    }
+
     @PostMapping
     public ResponseEntity<List<RecipeSummaryDto>> getRecipesByCategory(@Valid @RequestBody RecipeSearchRequest recipeSearchRequest) {
         return ResponseEntity.ok().body(recipeService.getRecipesByCategory(recipeSearchRequest));
@@ -45,11 +57,21 @@ public class RecipeController {
     }
 
     @PostMapping("/recommendations")
-    public ResponseEntity<?> recommendRecipes(
+    public ResponseEntity<List<RecipeSummaryDto>> recommendRecipes(
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
             @Valid @RequestBody RecipeRecommendRequest request
     ){
         long memberId = customMemberDetails.getId();
         return ResponseEntity.ok().body(recipeRecommendService.getRecommendCandidates(memberId, request));
+    }
+
+    @PostMapping("/scraps")
+    public ResponseEntity<Long> scrapOrUnScrapRecipe(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+            @Valid @RequestBody ScrapRequest request
+    ){
+        long memberId = customMemberDetails.getId();
+
+        return ResponseEntity.ok().body(recipeService.scrapOrUnScrapRecipe(memberId, request));
     }
 }

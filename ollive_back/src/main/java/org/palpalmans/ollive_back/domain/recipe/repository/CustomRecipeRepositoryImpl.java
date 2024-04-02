@@ -98,4 +98,18 @@ public class CustomRecipeRepositoryImpl implements CustomRecipeRepository {
         Query query = Query.query(criteria).with(Sort.by(Sort.Direction.DESC, "score")).limit(50);
         return mongoTemplate.find(query, Recipe.class);
     }
+
+    @Override
+    public List<Recipe> findRecipesByScrapedIds(List<Long> scrapedRecipeIds, Long lastRecipeId, int size) {
+        Criteria criteria = Criteria.where("recipeId").gt(lastRecipeId);
+
+        if (!scrapedRecipeIds.isEmpty()){
+            Criteria exCriteria = new Criteria("recipeId").in(scrapedRecipeIds);
+            criteria.andOperator(exCriteria);
+        }
+
+        Query query = Query.query(criteria).limit(size);
+
+        return mongoTemplate.find(query, Recipe.class);
+    }
 }
