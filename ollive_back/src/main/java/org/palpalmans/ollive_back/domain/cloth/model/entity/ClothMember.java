@@ -34,4 +34,9 @@ public class ClothMember extends BaseTimeEntity {
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
+
+	public ClothMember(Cloth cloth, Member member){
+		this.cloth = cloth;
+		this.member = member;
+	}
 }

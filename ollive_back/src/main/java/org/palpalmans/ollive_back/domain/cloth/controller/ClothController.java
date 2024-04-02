@@ -2,14 +2,15 @@ package org.palpalmans.ollive_back.domain.cloth.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.cloth.model.dto.request.ClothRecommendationRequest;
 import org.palpalmans.ollive_back.domain.cloth.model.dto.response.ClothRecommendationResponse;
+import org.palpalmans.ollive_back.domain.cloth.model.dto.response.ClothResponse;
+import org.palpalmans.ollive_back.domain.cloth.model.dto.response.GetClothesResponse;
 import org.palpalmans.ollive_back.domain.cloth.service.ClothService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -21,5 +22,18 @@ public class ClothController {
     @PostMapping("/recommendation")
     public ResponseEntity<ClothRecommendationResponse> recommendCloth(@RequestBody ClothRecommendationRequest clothRecommendationRequest) throws Exception {
         return ResponseEntity.ok(clothService.recommendCloth(clothRecommendationRequest));
+    }
+
+    @PostMapping("/{clothId}")
+    public ResponseEntity<ClothResponse> seenCloth(@PathVariable(name="clothId") Long clothId,
+                                                   @AuthenticationPrincipal CustomMemberDetails customMemberDetails) throws Exception {
+        clothService.seenCloth(clothId, customMemberDetails.getMember());
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/seen")
+    public ResponseEntity<GetClothesResponse> getSeenCloth(
+                                                           @AuthenticationPrincipal CustomMemberDetails customMemberDetails) throws Exception {
+        return ResponseEntity.ok(clothService.getSeenCloth(customMemberDetails.getMember()));
     }
 }
