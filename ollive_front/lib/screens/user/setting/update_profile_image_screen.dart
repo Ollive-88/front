@@ -1,6 +1,9 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ollive_front/service/user/user_service.dart';
 
 class ProfileImageScreen extends StatefulWidget {
   const ProfileImageScreen({super.key});
@@ -33,10 +36,18 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
       appBar: AppBar(
         title: const Text('사진 편집'),
         centerTitle: true,
+        surfaceTintColor: const Color(0xFFFFFFFC),
+        shadowColor: Colors.black,
+        elevation: 0,
         actions: [
           TextButton(
-            onPressed: () {},
-            child: const Text('완료'),
+            onPressed: () {
+              updateImage();
+            },
+            child: const Text(
+              '완료',
+              style: TextStyle(color: Colors.black),
+            ),
           ),
         ],
       ),
@@ -52,13 +63,19 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
                   ),
                   Center(
                     child: ClipOval(
-                      child: Image.asset(
-                        // 'https://i.ytimg.com/vi/gpFSXXhonVk/maxresdefault.jpg',
-                        'assets/image/icons/basic_profile_img.png',
-                        width: 250,
-                        height: 250,
-                        fit: BoxFit.cover,
-                      ),
+                      child: (_pickedImg == null)
+                          ? Image.asset(
+                              'assets/image/icons/basic_profile_img.png',
+                              width: 250,
+                              height: 250,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.file(
+                              File(_pickedImg!.path),
+                              width: 250,
+                              height: 250,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
                 ],
@@ -106,8 +123,9 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
                 children: [
                   Expanded(
                     child: TextButton(
-                      onPressed: () {
-                        _pickImg();
+                      onPressed: () async {
+                        await _pickImg();
+                        Navigator.of(context).pop();
                       },
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.grey,
@@ -131,7 +149,10 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
                 children: [
                   Expanded(
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        deleteImage();
+                        Navigator.of(context).pop();
+                      },
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.grey,
                         alignment: Alignment.centerLeft,
@@ -178,15 +199,30 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
   }
 
   // 이미지 지우는 메서드
-  void deleteImage(int index) {
-    // _pickedImg.removeAt(index);
-    setState(() {});
+  void deleteImage() {
+    setState(() {
+      _pickedImg = null;
+    });
   }
 
-  // 파일 변환
-  // ignore: unused_element
-  static Future<XFile> getImageXFileByUrl(String url) async {
-    var file = await DefaultCacheManager().getSingleFile(url);
-    return XFile(file.path);
+  // XFile MultipartFile로 변환
+  static Future<MultipartFile> convertXFileToMultipartFile(XFile xFile) async {
+    File tempFile = File(xFile.path);
+    MultipartFile multipartFile = await MultipartFile.fromFile(tempFile.path,
+        filename: tempFile.path.split("/").last);
+
+    return multipartFile;
+  }
+
+  void updateImage() async {
+    print('hihihihihii');
+    UserService.updateProfileImage(
+            ['profilePicture', convertXFileToMultipartFile(_pickedImg!)])
+        .then((value) {
+      print('성공!');
+      Navigator.pop(context);
+    }).catchError((e) {
+      print('Error: $e');
+    });
   }
 }

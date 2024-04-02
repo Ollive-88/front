@@ -14,6 +14,9 @@ class _MyArticleScreenState extends State<MyArticleScreen> {
       appBar: AppBar(
         title: const Text('내 게시글'),
         centerTitle: true,
+        surfaceTintColor: const Color(0xFFFFFFFC),
+        shadowColor: Colors.black,
+        elevation: 0,
       ),
       // 이거 Future Builder로 만들어야함!
       body: const SafeArea(

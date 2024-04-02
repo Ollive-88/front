@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ollive_front/models/user/user_simple_model.dart';
 import 'package:ollive_front/screens/user/favorite_recipe_screen.dart';
 import 'package:ollive_front/screens/user/fridge_inventory_screen.dart';
@@ -7,6 +8,7 @@ import 'package:ollive_front/screens/user/seen_clothes_screen.dart';
 import 'package:ollive_front/screens/user/setting/my_article_screen.dart';
 import 'package:ollive_front/screens/user/setting/setting_screen.dart';
 import 'package:ollive_front/service/user/user_service.dart';
+import 'package:ollive_front/util/controller/getx_controller.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -38,10 +40,18 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
   late Future<UserSimpleModel> userInfo;
 
+  final StatusController _userInfoController = Get.put(StatusController());
+
   @override
   void initState() {
     super.initState();
-    userInfo = UserService.getUserInfo();
+    userInfo = UserService.getUserInfo().then((value) {
+      _userInfoController.setNickname(value.nickname);
+      if (value.imgUrl != null) {
+        _userInfoController.setImgUrl(value.imgUrl!);
+      }
+      return value;
+    });
   }
 
   @override
@@ -63,28 +73,37 @@ class _MyPageScreenState extends State<MyPageScreen> {
                       Center(
                         child: Column(
                           children: [
-                            (snapshot.data?.imgUrl != null)
-                                ? MakeCircleImage(
-                                    imageUrl: snapshot.data!.imgUrl!,
-                                    width: 200,
-                                    height: 200,
-                                  )
-                                : ClipOval(
-                                    child: Image.asset(
-                                      'assets/image/icons/basic_profile_img.png',
+                            Obx(
+                              () => (_userInfoController.imgUrl != '')
+                                  ? MakeCircleImage(
+                                      imageUrl: _userInfoController.imgUrl,
                                       width: 200,
                                       height: 200,
-                                      fit: BoxFit.cover,
+                                    )
+                                  : ClipOval(
+                                      child: Image.asset(
+                                        'assets/image/icons/basic_profile_img.png',
+                                        width: 200,
+                                        height: 200,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                  ),
+                            ),
                             const SizedBox(
                               height: 5,
                             ),
-                            Text(
-                              snapshot.data!.nickname,
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w700),
+                            Obx(
+                              () => Text(
+                                _userInfoController.nickname,
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w700),
+                              ),
                             ),
+                            // Text(
+                            //   snapshot.data!.nickname,
+                            //   style: const TextStyle(
+                            //       fontSize: 20, fontWeight: FontWeight.w700),
+                            // ),
                           ],
                         ),
                       ),

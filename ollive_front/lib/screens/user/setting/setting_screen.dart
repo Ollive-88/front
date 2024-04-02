@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ollive_front/models/user/user_simple_model.dart';
+import 'package:get/get.dart';
 import 'package:ollive_front/screens/user/authentication/login_screen.dart';
 import 'package:ollive_front/screens/user/setting/term_of_service_screen.dart';
+import 'package:ollive_front/screens/user/setting/term_of_userinfo_screen.dart';
 import 'package:ollive_front/screens/user/setting/unregister_screen.dart';
 import 'package:ollive_front/screens/user/setting/update_profile_image_screen.dart';
 import 'package:ollive_front/service/user/user_service.dart';
+import 'package:ollive_front/util/controller/getx_controller.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -32,7 +34,7 @@ class _SettingScreenState extends State<SettingScreen> {
     TermOfServiceScreen(),
     TermOfServiceScreen(),
     const ProfileImageScreen(),
-    TermOfServiceScreen(),
+    TermOfUserInfoScreen(),
     TermOfServiceScreen(),
     TermOfServiceScreen(),
     UnregisterScreen(),
@@ -42,6 +44,8 @@ class _SettingScreenState extends State<SettingScreen> {
   final TextEditingController _nicknameController = TextEditingController();
 
   final storage = const FlutterSecureStorage();
+
+  final StatusController _userInfoController = Get.put(StatusController());
 
   void logout(BuildContext context) {
     UserService.logoutAction().then((value) async {
@@ -63,16 +67,9 @@ class _SettingScreenState extends State<SettingScreen> {
 
   void updateNickname(BuildContext context, List input) {
     UserService.updateUserInfo(input).then((value) {
-      
+      _userInfoController.setNickname(input[1]);
       Navigator.of(context).pop();
     }).catchError((e) {});
-  }
-
-  late Future<UserSimpleModel> userInfo;
-  @override
-  void initState() {
-    super.initState();
-    userInfo = UserService.getUserInfo();
   }
 
   @override
@@ -81,87 +78,64 @@ class _SettingScreenState extends State<SettingScreen> {
       appBar: AppBar(
         title: const Text('설정'),
         centerTitle: true,
+        surfaceTintColor: const Color(0xFFFFFFFC),
+        shadowColor: Colors.black,
+        elevation: 0,
       ),
-      body: FutureBuilder(
-        future: userInfo,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Padding(
-              padding: const EdgeInsets.only(
-                top: 8.0,
-              ),
-              child: SingleChildScrollView(
-                child: Column(
+      body: Padding(
+        padding: const EdgeInsets.only(
+          top: 8.0,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              for (var i = 0; i < 7; i++)
+                Column(
                   children: [
-                    for (var i = 0; i < 7; i++)
-                      Column(
-                        children: [
-                          ListTile(
-                            title: Text(settings[i]),
-                            onTap: () {
-                              if (i == 0) {
-                                showdialog(
-                                    context,
-                                    '비밀번호 수정',
-                                    _passwordController,
-                                    true,
-                                    '새 비밀번호',
-                                    true, () {
-                                  updatePassword(context,
-                                      ['password', _passwordController.text]);
-                                });
-                              } else if (i == 1) {
-                                _nicknameController.text =
-                                    snapshot.data!.nickname;
-                                showdialog(
-                                    context,
-                                    '닉네임 수정',
-                                    _nicknameController,
-                                    false,
-                                    '닉네임을 입력하세요.',
-                                    true, () {
-                                  updateNickname(context,
-                                      ['nickname', _nicknameController.text]);
-                                });
-                              } else if (i == 5) {
-                                showdialog(
-                                    context,
-                                    '로그아웃 하시겠습니까?',
-                                    TextEditingController(),
-                                    false,
-                                    '',
-                                    false, () {
-                                  logout(context);
-                                });
-                              } else {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => pages[i],
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                          // 마지막에는 생성 X
-                          i != 6
-                              ? const Divider(
-                                  height: 2,
-                                  color: Color(0xFFEEEEEC),
-                                )
-                              : const SizedBox()
-                        ],
-                      )
+                    ListTile(
+                      title: Text(settings[i]),
+                      onTap: () {
+                        if (i == 0) {
+                          showdialog(context, '비밀번호 수정', _passwordController,
+                              true, '새 비밀번호', true, () {
+                            updatePassword(context,
+                                ['password', _passwordController.text]);
+                          });
+                        } else if (i == 1) {
+                          _nicknameController.text =
+                              _userInfoController.nickname;
+                          showdialog(context, '닉네임 수정', _nicknameController,
+                              false, '닉네임을 입력하세요.', true, () {
+                            updateNickname(context,
+                                ['nickname', _nicknameController.text]);
+                          });
+                        } else if (i == 5) {
+                          showdialog(context, '로그아웃 하시겠습니까?',
+                              TextEditingController(), false, '', false, () {
+                            logout(context);
+                          });
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => pages[i],
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    // 마지막에는 생성 X
+                    i != 6
+                        ? const Divider(
+                            height: 2,
+                            color: Color(0xFFEEEEEC),
+                          )
+                        : const SizedBox()
                   ],
-                ),
-              ),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+                )
+            ],
+          ),
+        ),
       ),
     );
   }

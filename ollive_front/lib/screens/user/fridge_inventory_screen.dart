@@ -32,6 +32,9 @@ class _FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('냉장고 관리'),
+        surfaceTintColor: const Color(0xFFFFFFFC),
+        shadowColor: Colors.black,
+        elevation: 0,
       ),
       floatingActionButton: SizedBox(
         height: 50,

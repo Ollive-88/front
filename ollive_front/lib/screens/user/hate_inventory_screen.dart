@@ -38,6 +38,9 @@ class _HateInventoryScreenState extends State<HateInventoryScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('싫어하는 재료 목록'),
+        surfaceTintColor: const Color(0xFFFFFFFC),
+        shadowColor: Colors.black,
+        elevation: 0,
       ),
       floatingActionButton: SizedBox(
         height: 50,

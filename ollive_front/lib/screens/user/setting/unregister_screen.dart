@@ -29,7 +29,7 @@ class UnregisterScreen extends StatelessWidget {
         MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
     });
-  }                                                                                                                 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +38,9 @@ class UnregisterScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('생활의 모든 것. Ollive.'),
         centerTitle: true,
+        surfaceTintColor: const Color(0xFFFFFFFC),
+        shadowColor: Colors.black,
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -76,11 +79,6 @@ class UnregisterScreen extends StatelessWidget {
                       height: 10,
                     ),
                     const Text('* 가입정보를 변경하고 싶다면 회원정보수정에서 변경할 수 있습니다.'),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text(
-                        '* 공공의 성격을 가진 게시물은 탈퇴 후에도 삭제되지 않으므로 반드시 직접 삭제하신 후 탈퇴해 주시길 바랍니다.'),
                     const SizedBox(
                       height: 10,
                     ),

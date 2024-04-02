@@ -148,18 +148,18 @@ class UserService {
     await _dio.delete('/memberinfo');
   }
 
-  static Future<dynamic> updatePassword(String password) async {
-    FormData formData = FormData.fromMap({
-      'password': password,
-    });
-    await _dio.patch('/memberinfo', data: formData);
-  }
-
   static Future<dynamic> updateUserInfo(List requestBody) async {
     FormData formData = FormData.fromMap({
       requestBody[0]: requestBody[1],
     });
     await _dio.patch('/memberinfo', data: formData);
+  }
+
+  static Future<dynamic> updateProfileImage(List requestBody) async {
+    FormData formData = FormData.fromMap({
+      requestBody[0]: requestBody[1],
+    });
+    await _dio.patch('/member-profile-picture', data: formData);
   }
 
   static Future<dynamic> logoutAction() async {

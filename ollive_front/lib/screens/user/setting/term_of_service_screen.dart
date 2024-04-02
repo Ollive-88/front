@@ -19,6 +19,9 @@ class TermOfServiceScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('생활의 모든 것. Ollive.'),
         centerTitle: true,
+        surfaceTintColor: const Color(0xFFFFFFFC),
+        shadowColor: Colors.black,
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),

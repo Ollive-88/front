@@ -56,6 +56,10 @@ class _AppState extends State<App> {
         // 폰트 전역 설정
         theme: ThemeData(
           fontFamily: 'NanumSquare',
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Color(0xFFFFFFFC),
+          ),
+          scaffoldBackgroundColor: const Color(0xFFFFFFFC),
         ),
         home: const LoginScreen(),
       ),

@@ -8,6 +8,20 @@ class StatusController extends GetxController {
   void setToken(Token newToken) {
     _token = newToken;
   }
+
+  final RxString _nickname = ''.obs;
+  final RxString _imgUrl = ''.obs;
+
+  String get nickname => _nickname.value;
+  String get imgUrl => _imgUrl.value;
+
+  void setNickname(String name) {
+    _nickname.value = name;
+  }
+
+  void setImgUrl(String url) {
+    _imgUrl.value = url;
+  }
 }
 
 class Token {
