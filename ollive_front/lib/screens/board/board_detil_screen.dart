@@ -165,14 +165,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                   return const SizedBox();
                 }
               } else {
-                return const Center(
-                  child: CircleAvatar(
-                    backgroundColor: Color(0xFFFFFFFC),
-                    backgroundImage:
-                        AssetImage("./assets/image/loding/Loding.gif"),
-                    radius: 60,
-                  ),
-                );
+                return const SizedBox();
               }
             },
           ),
@@ -639,7 +632,12 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
               );
             } else {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircleAvatar(
+                  backgroundColor: Color(0xFFFFFFFC),
+                  backgroundImage:
+                      AssetImage("./assets/image/loding/Loding.gif"),
+                  radius: 60,
+                ),
               );
             }
           },
