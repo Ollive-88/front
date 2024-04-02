@@ -116,6 +116,11 @@ public class MemberService {
         return false;
     }
 
+    public Boolean deleteMember(long id){
+        int a = memberRepository.deleteMemberById(id);
+        return a == 1;
+    }
+
 
 
 }

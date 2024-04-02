@@ -1,5 +1,6 @@
 package org.palpalmans.ollive_back.domain.member.repository;
 
+import jakarta.transaction.Transactional;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 import org.palpalmans.ollive_back.domain.member.model.entity.NormalMember;
 import org.palpalmans.ollive_back.domain.member.model.entity.SocialMember;
@@ -15,6 +16,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> { // JPA ë
     Optional<Member> getMemberById(long id);
 
     Optional<Member> getMemberByEmail(String email);
+
+    @Transactional
+    Integer deleteMemberById(long id);
 
     @Query("SELECT n FROM NormalMember n WHERE n.email = :email")
     Optional<NormalMember> getNormalMemberByEmail(@Param("email") String email);

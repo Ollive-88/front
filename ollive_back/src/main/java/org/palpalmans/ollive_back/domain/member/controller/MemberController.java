@@ -104,5 +104,15 @@ public class MemberController {
         return ResponseEntity.ok("정보 수정이 완료되었습니다");
     }
 
+    @DeleteMapping("/memberinfo")
+    public ResponseEntity<String> quit(@AuthenticationPrincipal CustomMemberDetails customMemberDetails){
+        long id = customMemberDetails.getId();
+
+        if(memberService.deleteMember(id)){
+            return ResponseEntity.ok("회원 정보가 삭제되었습니다");
+        }
+
+        return ResponseEntity.ok("회원 정보 삭제가 실패했습니다");
+    }
 
 }
