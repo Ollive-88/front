@@ -95,7 +95,7 @@ public class CustomRecipeRepositoryImpl implements CustomRecipeRepository {
             Criteria exCriteria = new Criteria("recipeId").nin(scoredRecipeIds);
             criteria.andOperator(exCriteria);
         }
-        Query query = Query.query(criteria).with(Sort.by(Sort.Direction.DESC, "score")).limit(100);
+        Query query = Query.query(criteria).with(Sort.by(Sort.Direction.DESC, "score")).limit(50);
         return mongoTemplate.find(query, Recipe.class);
     }
 }
