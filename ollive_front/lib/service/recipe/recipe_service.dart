@@ -73,7 +73,27 @@ class RecipeService {
 
   // 즐겨찾기 생성/삭제
   static void postFavorit(int recipeId) async {
-    await _dio.authDio.post("recipes/favorit", data: {"recipeId": recipeId});
+    await _dio.authDio.post("/recipes/scraps", data: {"recipeId": recipeId});
+  }
+
+  // 즐찾 레시피 조회
+  static Future<List<RecipeModel>> getFavoirtRecipeList(
+      int lastIndex, int size) async {
+    final List<RecipeModel> recipes;
+
+    final response = await _dio.authDio.get(
+      "/recipes/scraps",
+      queryParameters: {
+        "lastRecipeId": lastIndex,
+        "size": size,
+      },
+    );
+
+    recipes = (response.data).map<RecipeModel>((json) {
+      return RecipeModel.fromJson(json);
+    }).toList();
+
+    return recipes;
   }
 
   // 별점 부여 생성/삭제

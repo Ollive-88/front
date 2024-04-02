@@ -12,7 +12,7 @@ class ClothWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        await ClothService.postCloth(clothModel.id);
+        ClothService.postCloth(clothModel.id);
         await launchUrlString(clothModel.url);
       },
       child: Column(

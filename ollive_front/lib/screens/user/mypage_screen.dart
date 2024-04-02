@@ -21,7 +21,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
   final List<List<dynamic>> settings = [
     ['refrigeratorIcon.png', '냉장고 관리'],
     ['ingredientsIcon.png', '싫어하는 재료 목록'],
-    ['recipeIcon', '즐겨찾는 레시피'],
+    ['recipeIcon.png', '즐겨찾는 레시피'],
     ['clothesIcon.png', '최근 본 의류'],
     ['myBoardIcon.png', '내 게시글'],
     ['settingIcon.png', '설정'],

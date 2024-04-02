@@ -362,6 +362,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
                                   MaterialPageRoute(
                                     builder: (context) => RecipeDetailScreen(
                                       recipeId: recipes[i].recipeId,
+                                      isFavorit: false,
                                     ),
                                   ),
                                 );

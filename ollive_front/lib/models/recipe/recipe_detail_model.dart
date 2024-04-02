@@ -1,7 +1,7 @@
 class RecipeDetailModel {
   int id;
   String title, thumbnailUrl, amount, time, difficulty;
-  // bool isFavorite;
+  bool isScraped;
   double score;
   List<IngredientModel> ingredients;
   List<ProcesseModel> processes;
@@ -14,7 +14,7 @@ class RecipeDetailModel {
         time = json['time'],
         difficulty = json['difficulty'],
         score = json['score'],
-        // isFavorite = json['isFavorite'],
+        isScraped = json['isScraped'],
         ingredients = (json['ingredients'] as List<dynamic>)
             .map((ingredient) => IngredientModel.fromJson(ingredient))
             .toList(),

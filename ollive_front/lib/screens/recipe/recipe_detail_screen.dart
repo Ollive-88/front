@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/models/recipe/recipe_detail_model.dart';
+import 'package:ollive_front/screens/user/favorite_recipe_screen.dart';
 import 'package:ollive_front/service/recipe/recipe_service.dart';
 import 'package:ollive_front/util/error/error_service.dart';
 import 'package:ollive_front/widgets/recipe/prcipe_processe_widget.dart';
@@ -11,9 +12,11 @@ import 'package:ollive_front/widgets/recipe/recipe_thumbnail_widget.dart';
 
 // ignore: must_be_immutable
 class RecipeDetailScreen extends StatefulWidget {
-  RecipeDetailScreen({super.key, required this.recipeId});
+  RecipeDetailScreen(
+      {super.key, required this.recipeId, required this.isFavorit});
 
   int recipeId;
+  bool isFavorit;
 
   @override
   State<RecipeDetailScreen> createState() => _RecipeDetailScreenState();
@@ -45,39 +48,55 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         elevation: 0,
         backgroundColor: const Color(0xFFFFFFFC),
         foregroundColor: Colors.black,
-        // title: Row(
-        //   mainAxisAlignment: MainAxisAlignment.end,
-        //   children: [
-        //     FutureBuilder(
-        //       future: recipeDetail,
-        //       builder: (context, snapshot) {
-        //         if (snapshot.hasData) {
-        //           return IconButton(
-        //             icon: snapshot.data!.isFavorite
-        //                 ? const Icon(
-        //                     Icons.bookmark,
-        //                     color: Colors.amber,
-        //                     size: 40,
-        //                   )
-        //                 : const Icon(
-        //                     Icons.bookmark_border,
-        //                     size: 40,
-        //                   ),
-        //             onPressed: () {
-        //               snapshot.data!.isFavorite = !snapshot.data!.isFavorite;
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (widget.isFavorit) {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const FavoriteRecipeScreen(),
+                ),
+                (Route<dynamic> route) => route.isFirst,
+              );
+            } else {
+              Navigator.pop(context);
+            }
+          },
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FutureBuilder(
+              future: recipeDetail,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return IconButton(
+                    icon: snapshot.data!.isScraped
+                        ? const Icon(
+                            Icons.bookmark,
+                            color: Colors.amber,
+                            size: 40,
+                          )
+                        : const Icon(
+                            Icons.bookmark_border,
+                            size: 40,
+                          ),
+                    onPressed: () {
+                      snapshot.data!.isScraped = !snapshot.data!.isScraped;
 
-        //               setState(() {});
+                      setState(() {});
 
-        //               RecipeService.postFavorit(snapshot.data!.id);
-        //             },
-        //           );
-        //         } else {
-        //           return const SizedBox();
-        //         }
-        //       },
-        //     )
-        //   ],
-        // ),
+                      RecipeService.postFavorit(snapshot.data!.id);
+                    },
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
+            )
+          ],
+        ),
       ),
       body: FutureBuilder(
         future: recipeDetail,
