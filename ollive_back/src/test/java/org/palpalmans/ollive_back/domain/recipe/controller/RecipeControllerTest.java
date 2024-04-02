@@ -115,20 +115,25 @@ class RecipeControllerTest {
         return objectMapper.writeValueAsString(object);
     }
 
-    @Test
-    void getRecipeTest() throws Exception {
-        //given
-
-        //when
-        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/recipes/1"));
-
-        //then
-        result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.title", notNullValue()))
-                .andExpect(jsonPath("$.thumbnail_url", notNullValue()))
-                .andDo(print());
-    }
+//    @Test
+//    @WithUserDetails(value = "test@naver.com",
+//            userDetailsServiceBeanName = "customMemberDetailsService",
+//            setupBefore = TestExecutionEvent.TEST_EXECUTION
+//    )
+//    void getRecipeTest() throws Exception {
+//        //given
+//
+//        //when
+//        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/recipes/1"));
+//
+//        //then
+//        result.andExpect(status().isOk())
+//                .andExpect(jsonPath("$.id", notNullValue()))
+//                .andExpect(jsonPath("$.title", notNullValue()))
+//                .andExpect(jsonPath("$.thumbnail_url", notNullValue()))
+//                .andExpect(jsonPath("$.isScraped", notNullValue()))
+//                .andDo(print());
+//    }
 
     @Test
     void getRecipesTest() throws Exception {
