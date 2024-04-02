@@ -13,8 +13,8 @@ DROP TABLE IF EXISTS `tag`;
 DROP TABLE IF EXISTS `board`;
 DROP TABLE IF EXISTS `normal_member`;
 DROP TABLE IF EXISTS `social_member`;
-DROP TABLE IF EXISTS `member`;
 DROP TABLE IF EXISTS `cloth_member`;
+DROP TABLE IF EXISTS `member`;
 
 
 -- member
