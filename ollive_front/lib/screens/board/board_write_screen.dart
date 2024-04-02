@@ -77,6 +77,7 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
   }
 
   // 태그 스크롤 뷰 자동 포커싱
+  // ignore: unused_element
   void _scrollToBottom() {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent +

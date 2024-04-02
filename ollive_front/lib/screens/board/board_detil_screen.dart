@@ -42,9 +42,8 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
   @override
   void initState() {
     super.initState();
-    print(widget.boardId);
+    // ignore: body_might_complete_normally_catch_error
     boardDetail = BoardService.getBoardDetail(widget.boardId).catchError((e) {
-      print(e);
       ErrorService.showToast("잘못된 요청입니다.");
       Navigator.pop(context);
     });
@@ -166,7 +165,14 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                   return const SizedBox();
                 }
               } else {
-                return const SizedBox();
+                return const Center(
+                  child: CircleAvatar(
+                    backgroundColor: Color(0xFFFFFFFC),
+                    backgroundImage:
+                        AssetImage("./assets/image/loding/Loding.gif"),
+                    radius: 60,
+                  ),
+                );
               }
             },
           ),
@@ -384,10 +390,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                     snapshot.data!.likeCount -= 1;
                                   }
 
-                                  BoardService.postLike(
-                                    snapshot.data!.boardId,
-                                    snapshot.data!.isLiked,
-                                  );
+                                  BoardService.postLike(snapshot.data!.boardId);
                                   setState(() {});
                                 },
                                 icon: Icon(

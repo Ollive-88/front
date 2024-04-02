@@ -124,7 +124,11 @@ class _MyPageScreenState extends State<MyPageScreen> {
             );
           } else {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircleAvatar(
+                backgroundColor: Color(0xFFFFFFFC),
+                backgroundImage: AssetImage("./assets/image/loding/Loding.gif"),
+                radius: 60,
+              ),
             );
           }
         },

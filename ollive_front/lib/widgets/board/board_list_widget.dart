@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/models/board/board_model.dart';
 import 'package:ollive_front/service/board/board_service.dart';
-import 'package:ollive_front/widgets/board/board_tag_widget.dart';
 
 class BoardList extends StatelessWidget {
   const BoardList({super.key, required this.boardModel});
@@ -42,7 +41,7 @@ class BoardList extends StatelessWidget {
                         fontSize: 14,
                         color: Colors.black.withOpacity(0.6),
                       ),
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],

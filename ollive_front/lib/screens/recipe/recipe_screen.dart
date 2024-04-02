@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ollive_front/screens/recipe/recipe_list_screen.dart';
 import 'package:ollive_front/service/recipe/recipe_service.dart';
 import 'package:ollive_front/service/user/user_service.dart';
@@ -50,32 +48,221 @@ class _RecipeScreenState extends State<RecipeScreen> {
     setState(() {});
   }
 
-  void initIgredientsList() async {
+  // 냉장고 재료 목록 초기화
+  void initRefrigeratorsList() async {
+    refrigerators = [];
+    isRefrigeratorsSelected = [];
+
     await UserService.getFridgeIngredients().then((value) {
       for (var i = 0; i < value.length; i++) {
         refrigerators.add(value[i].name);
       }
-    }).catchError((e) {
-      ErrorService.showToast("잘못된 요청입니다.");
-    });
 
-    await UserService.getDislikeIngredients().then((value) {
-      for (var i = 0; i < value.length; i++) {
-        ingredients.add(value[i].name);
-      }
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            decoration: const BoxDecoration(
+              color: Color(0xFFFFFFFC),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15),
+              ),
+            ),
+            child: Column(
+              children: [
+                // 상단바
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 15,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Text(
+                            "전체선택",
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Expanded(
+                        flex: 2,
+                        child: Text(
+                          "냉장고 목록",
+                          style: TextStyle(fontSize: 22),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: IconButton(
+                          onPressed: () {
+                            addRefrigerators(
+                              isRefrigeratorsSelected,
+                              true,
+                            );
+                            Navigator.pop(context);
+                          },
+                          icon: const Text(
+                            "추가",
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const Divider(
+                  thickness: 2,
+                  height: 1,
+                  color: Color(0xFFEBEBE9),
+                ),
+
+                // 재료 목록
+                Wrap(
+                  children: [
+                    for (var i = 0; i < refrigerators.length; i++)
+                      RecipeTag(
+                        tagName: refrigerators[i],
+                        isSelected: isRefrigeratorsSelected[i],
+                        select: () => selstedItem(isRefrigeratorsSelected, i),
+                      )
+                  ],
+                )
+              ],
+            ),
+          );
+        },
+      );
     }).catchError((e) {
       ErrorService.showToast("잘못된 요청입니다.");
     });
 
     isRefrigeratorsSelected =
         List.generate(refrigerators.length, (index) => false);
+    setState(() {});
+  }
+
+  // 싫어하는 재료목록 초기화
+  void initIngredientsList() async {
+    await UserService.getDislikeIngredients().then((value) {
+      ingredients = [];
+      isIngredientsSelected = [];
+      for (var i = 0; i < value.length; i++) {
+        ingredients.add(value[i].name);
+      }
+
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            decoration: const BoxDecoration(
+              color: Color(0xFFFFFFFC),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15),
+              ),
+            ),
+            child: Column(
+              children: [
+                // 상단바
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 15,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Text(
+                            "전체선택",
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Expanded(
+                        flex: 2,
+                        child: Text(
+                          "싫어하는 재료 목록",
+                          style: TextStyle(fontSize: 22),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: IconButton(
+                          onPressed: () {
+                            addRefrigerators(
+                              isIngredientsSelected,
+                              false,
+                            );
+                            Navigator.pop(context);
+                          },
+                          icon: const Text(
+                            "추가",
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const Divider(
+                  thickness: 2,
+                  height: 1,
+                  color: Color(0xFFEBEBE9),
+                ),
+
+                // 재료 목록
+                Wrap(
+                  children: [
+                    for (var i = 0; i < ingredients.length; i++)
+                      RecipeTag(
+                        tagName: ingredients[i],
+                        isSelected: isIngredientsSelected[i],
+                        select: () => selstedItem(
+                          isIngredientsSelected,
+                          i,
+                        ),
+                      )
+                  ],
+                )
+              ],
+            ),
+          );
+        },
+      );
+    }).catchError((e) {
+      ErrorService.showToast("잘못된 요청입니다.");
+    });
+
     isIngredientsSelected = List.generate(ingredients.length, (index) => false);
+
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    initIgredientsList();
   }
 
   @override
@@ -201,97 +388,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     // 내가가진 식재료
                     IconButton(
                       onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Container(
-                              decoration: const BoxDecoration(
-                                color: Color(0xFFFFFFFC),
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  topRight: Radius.circular(15),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  // 상단바
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 15,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: IconButton(
-                                            onPressed: () {},
-                                            icon: const Text(
-                                              "전체선택",
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                            "냉장고 목록",
-                                            style: TextStyle(fontSize: 22),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: IconButton(
-                                            onPressed: () {
-                                              addRefrigerators(
-                                                isRefrigeratorsSelected,
-                                                true,
-                                              );
-                                              Navigator.pop(context);
-                                            },
-                                            icon: const Text(
-                                              "추가",
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  const Divider(
-                                    thickness: 2,
-                                    height: 1,
-                                    color: Color(0xFFEBEBE9),
-                                  ),
-
-                                  // 재료 목록
-                                  Wrap(
-                                    children: [
-                                      for (var i = 0;
-                                          i < refrigerators.length;
-                                          i++)
-                                        RecipeTag(
-                                          tagName: refrigerators[i],
-                                          isSelected:
-                                              isRefrigeratorsSelected[i],
-                                          select: () => selstedItem(
-                                              isRefrigeratorsSelected, i),
-                                        )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            );
-                          },
-                        );
+                        initRefrigeratorsList();
                       },
                       icon: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -328,98 +425,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     // 싫어하는 재료 목록
                     IconButton(
                       onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Container(
-                              decoration: const BoxDecoration(
-                                color: Color(0xFFFFFFFC),
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  topRight: Radius.circular(15),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  // 상단바
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 15,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: IconButton(
-                                            onPressed: () {},
-                                            icon: const Text(
-                                              "전체선택",
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                            "냉장고 목록",
-                                            style: TextStyle(fontSize: 22),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: IconButton(
-                                            onPressed: () {
-                                              addRefrigerators(
-                                                isIngredientsSelected,
-                                                false,
-                                              );
-                                              Navigator.pop(context);
-                                            },
-                                            icon: const Text(
-                                              "추가",
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  const Divider(
-                                    thickness: 2,
-                                    height: 1,
-                                    color: Color(0xFFEBEBE9),
-                                  ),
-
-                                  // 재료 목록
-                                  Wrap(
-                                    children: [
-                                      for (var i = 0;
-                                          i < ingredients.length;
-                                          i++)
-                                        RecipeTag(
-                                          tagName: ingredients[i],
-                                          isSelected: isIngredientsSelected[i],
-                                          select: () => selstedItem(
-                                            isIngredientsSelected,
-                                            i,
-                                          ),
-                                        )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            );
-                          },
-                        );
+                        initIngredientsList();
                       },
                       icon: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -444,6 +450,9 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 100,
               ),
               Padding(
                 padding:
@@ -484,13 +493,15 @@ class _RecipeScreenState extends State<RecipeScreen> {
                           color: const Color(0xFF30AF98),
                           borderRadius: BorderRadius.circular(30),
                         ),
-                        child: const Text(
-                          "검색",
-                          style: TextStyle(
-                            fontSize: 28,
-                            color: Colors.white,
+                        child: const Center(
+                          child: Text(
+                            "검색",
+                            style: TextStyle(
+                              fontSize: 28,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
                         ),
                       ),
                     ],

@@ -28,6 +28,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     recipeDetail =
         RecipeService.getRecipeDetail(widget.recipeId).catchError((onError) {
       ErrorService.showToast("잘못된 요청입니다.");
+      // ignore: invalid_return_type_for_catch_error
       return null;
     });
   }
@@ -219,7 +220,13 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
               ),
             );
           } else {
-            return const Text("잘못된 요청입니다.");
+            return const Center(
+              child: CircleAvatar(
+                backgroundColor: Color(0xFFFFFFFC),
+                backgroundImage: AssetImage("./assets/image/loding/Loding.gif"),
+                radius: 60,
+              ),
+            );
           }
         },
       ),

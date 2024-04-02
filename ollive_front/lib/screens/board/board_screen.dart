@@ -198,7 +198,11 @@ class _BoardScreenState extends State<BoardScreen> {
             );
           } else {
             return const Center(
-              child: SizedBox(),
+              child: CircleAvatar(
+                backgroundColor: Color(0xFFFFFFFC),
+                backgroundImage: AssetImage("./assets/image/loding/Loding.gif"),
+                radius: 60,
+              ),
             );
           }
         },

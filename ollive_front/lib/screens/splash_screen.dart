@@ -27,7 +27,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     const String imageLogoName = './assets/image/logo/OlliveLogo.svg';
-    const String titleName = './assets/image/logo/OlliveLogo.svg';
 
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;

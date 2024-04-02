@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ollive_front/screens/cloth/cloth_list_screen.dart';
 import 'package:ollive_front/service/cloth/cloth_service.dart';
@@ -181,6 +180,7 @@ class _ClothScreenState extends State<ClothScreen> {
 
                       if (position is Position) {
                         Navigator.push(
+                          // ignore: use_build_context_synchronously
                           context,
                           MaterialPageRoute(
                             builder: (context) => ClothListScreen(
@@ -203,13 +203,15 @@ class _ClothScreenState extends State<ClothScreen> {
                       color: const Color(0xFFFFD5D5),
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: const Text(
-                      "검색",
-                      style: TextStyle(
-                        fontSize: 28,
-                        color: Colors.white,
+                    child: const Center(
+                      child: Text(
+                        "검색",
+                        style: TextStyle(
+                          fontSize: 28,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),

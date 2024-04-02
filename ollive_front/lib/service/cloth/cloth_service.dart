@@ -42,8 +42,7 @@ class ClothService {
       await _dio.authDio.post(
         "/cloth/$clothId",
       );
-    } catch (e) {
-      print(e);
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 }

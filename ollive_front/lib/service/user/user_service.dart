@@ -19,7 +19,6 @@ class UserService {
       await _dio.post('/join', data: requestBody);
       return true;
     } catch (e) {
-      print('Error: $e');
       return false;
     }
   }
@@ -63,9 +62,8 @@ class UserService {
       for (var ingredient in response.data) {
         ingredientInstances.add(UserIngredients.fromJson(ingredient));
       }
-    } catch (e) {
-      print('$e');
-    }
+      // ignore: empty_catches
+    } catch (e) {}
     return ingredientInstances;
   }
 
@@ -79,7 +77,6 @@ class UserService {
       await _dio.post('/fridge-ingredients', data: requestBody);
       return true;
     } catch (e) {
-      print('Error: $e');
       return false;
     }
   }
@@ -89,13 +86,11 @@ class UserService {
       'name': input.name,
       'endAt': input.endAt,
     };
-    print(requestBody);
     try {
       await _dio.put('/fridge-ingredients/${input.fridgeIngredientId}',
           data: requestBody);
       return true;
     } catch (e) {
-      print('Error: $e');
       return false;
     }
   }
@@ -105,7 +100,6 @@ class UserService {
       await _dio.delete('/fridge-ingredients/$fridgeIngredientId');
       return true;
     } catch (e) {
-      print('Error: $e');
       return false;
     }
   }

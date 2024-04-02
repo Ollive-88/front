@@ -184,6 +184,7 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
   }
 
   // 파일 변환
+  // ignore: unused_element
   static Future<XFile> getImageXFileByUrl(String url) async {
     var file = await DefaultCacheManager().getSingleFile(url);
     return XFile(file.path);

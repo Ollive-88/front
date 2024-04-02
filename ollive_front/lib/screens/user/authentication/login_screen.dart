@@ -193,7 +193,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                               .login(_userInfo)) {
                                             // 로그인 성공이므로 홈페이지로 이동
                                             Navigator.popAndPushNamed(
-                                                context, '/home');
+                                                // ignore: use_build_context_synchronously
+                                                context,
+                                                '/home');
                                           } else {
                                             // 로그인 실패하면 에러메시지 띄우기
                                             setState(() {

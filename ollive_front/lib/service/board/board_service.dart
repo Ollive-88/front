@@ -102,9 +102,10 @@ class BoardService {
   }
 
   // 좋아요 생성/삭제
-  static void postLike(int boardId, bool isLiked) async {
-    // await _dio.post("boards/like",
-    //     queryParameters: {"boardId": boardId, "isLiked": isLiked});
+  static void postLike(int boardId) async {
+    await _dio.post(
+      "/api/v1/boards/$boardId/likes",
+    );
   }
 
   // 댓글 생성

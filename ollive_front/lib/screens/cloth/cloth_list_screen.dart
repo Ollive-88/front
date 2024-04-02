@@ -29,6 +29,7 @@ class _ClothListScreenState extends State<ClothListScreen> {
 
     clothList = ClothService.getRecommendClothList(widget.outing, widget.sing,
             widget.position.longitude, widget.position.latitude)
+        // ignore: body_might_complete_normally_catch_error
         .catchError((onError) {
       ErrorService.showToast("잘못된 요청입니다.");
     });
@@ -81,7 +82,12 @@ class _ClothListScreenState extends State<ClothListScreen> {
               );
             } else {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircleAvatar(
+                  backgroundColor: Color(0xFFFFFFFC),
+                  backgroundImage:
+                      AssetImage("./assets/image/loding/Loding.gif"),
+                  radius: 60,
+                ),
               );
             }
           }),

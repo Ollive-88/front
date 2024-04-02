@@ -20,7 +20,6 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
   // 태그 입력 처리 메서드
   void _handleInput(String input) {
     if (input.endsWith(' ')) {
-      print("work");
       // 해시태그를 찾기 위한 정규 표현식
       final RegExp regExp = RegExp(r"#([\w가-힣-]+)");
       // 모든 해시태그 찾기
