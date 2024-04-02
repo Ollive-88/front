@@ -144,7 +144,30 @@ class UserService {
     return UserSimpleModel.fromJsonmypage(response.data);
   }
 
+  static Future<dynamic> deleteUserInfo() async {
+    await _dio.delete('/memberinfo');
+  }
+
+  static Future<dynamic> updatePassword(String password) async {
+    FormData formData = FormData.fromMap({
+      'password': password,
+    });
+    await _dio.patch('/memberinfo', data: formData);
+  }
+
+  static Future<dynamic> updateUserInfo(List requestBody) async {
+    FormData formData = FormData.fromMap({
+      requestBody[0]: requestBody[1],
+    });
+    await _dio.patch('/memberinfo', data: formData);
+  }
+
   static Future<dynamic> logoutAction() async {
-    await _dio.post('/logout');
+    try {
+      Response response = await _dio.post('/logout');
+      if (response.statusCode == 302) {}
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 }

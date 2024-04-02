@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:ollive_front/screens/user/authentication/login_screen.dart';
+import 'package:ollive_front/service/user/user_service.dart';
 
 class UnregisterScreen extends StatelessWidget {
   UnregisterScreen({super.key});
@@ -14,6 +17,19 @@ class UnregisterScreen extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
     ),
   );
+
+  final storage = const FlutterSecureStorage();
+
+  void removeMembership(BuildContext context) {
+    UserService.deleteUserInfo().then((value) async {
+      await storage.delete(key: 'accessToken');
+      await storage.delete(key: 'refreshToken');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    });
+  }                                                                                                                 
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +95,9 @@ class UnregisterScreen extends StatelessWidget {
                         Expanded(
                           child: ElevatedButton(
                             style: buttonStyle,
-                            onPressed: () {},
+                            onPressed: () {
+                              removeMembership(context);
+                            },
                             child: const Text(
                               '확인',
                             ),

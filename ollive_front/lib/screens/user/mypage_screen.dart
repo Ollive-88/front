@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ollive_front/models/user/user_simple_model.dart';
+import 'package:ollive_front/screens/user/favorite_recipe_screen.dart';
 import 'package:ollive_front/screens/user/fridge_inventory_screen.dart';
 import 'package:ollive_front/screens/user/hate_inventory_screen.dart';
+import 'package:ollive_front/screens/user/seen_clothes_screen.dart';
+import 'package:ollive_front/screens/user/setting/my_article_screen.dart';
 import 'package:ollive_front/screens/user/setting/setting_screen.dart';
 import 'package:ollive_front/service/user/user_service.dart';
 
@@ -18,6 +21,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
   final List<List<dynamic>> settings = [
     ['refrigeratorIcon.png', '냉장고 관리'],
     ['ingredientsIcon.png', '싫어하는 재료 목록'],
+    ['recipeIcon', '즐겨찾는 레시피'],
     ['clothesIcon.png', '최근 본 의류'],
     ['myBoardIcon.png', '내 게시글'],
     ['settingIcon.png', '설정'],
@@ -26,9 +30,10 @@ class _MyPageScreenState extends State<MyPageScreen> {
   final List<Widget> pages = [
     const FridgeInventoryScreen(),
     const HateInventoryScreen(),
-    const FridgeInventoryScreen(),
-    const FridgeInventoryScreen(),
-    SettingScreen(),
+    const FavoriteRecipeScreen(),
+    const SeenClothesScreen(),
+    const MyArticleScreen(),
+    const SettingScreen(),
   ];
 
   late Future<UserSimpleModel> userInfo;
@@ -42,6 +47,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFFFFFFC),
       body: FutureBuilder(
         future: userInfo,
         builder: (context, snapshot) {
@@ -59,7 +65,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                           children: [
                             (snapshot.data?.imgUrl != null)
                                 ? MakeCircleImage(
-                                    imageUrl: snapshot.data!.imgUrl,
+                                    imageUrl: snapshot.data!.imgUrl!,
                                     width: 200,
                                     height: 200,
                                   )
@@ -89,7 +95,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                         thickness: 5,
                         color: Color(0xFFEBEBE9),
                       ),
-                      for (var i = 0; i < 5; i++)
+                      for (var i = 0; i < 6; i++)
                         Column(
                           children: [
                             ListTile(

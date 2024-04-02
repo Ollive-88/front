@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ollive_front/models/user/user_simple_model.dart';
+import 'package:ollive_front/screens/user/authentication/login_screen.dart';
 import 'package:ollive_front/screens/user/setting/term_of_service_screen.dart';
 import 'package:ollive_front/screens/user/setting/unregister_screen.dart';
 import 'package:ollive_front/screens/user/setting/update_profile_image_screen.dart';
+import 'package:ollive_front/service/user/user_service.dart';
 
-class SettingScreen extends StatelessWidget {
-  SettingScreen({super.key});
+class SettingScreen extends StatefulWidget {
+  const SettingScreen({super.key});
 
   static String baseAddress = 'assets/image/icons/';
+
+  @override
+  State<SettingScreen> createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
   final List<dynamic> settings = [
     '비밀번호 변경',
     '닉네임 변경',
@@ -31,6 +41,40 @@ class SettingScreen extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nicknameController = TextEditingController();
 
+  final storage = const FlutterSecureStorage();
+
+  void logout(BuildContext context) {
+    UserService.logoutAction().then((value) async {
+      await storage.delete(key: 'accessToken');
+      await storage.delete(key: 'refreshToken');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    });
+  }
+
+  void updatePassword(BuildContext context, List input) {
+    UserService.updateUserInfo(input).then((value) {
+      _passwordController.clear();
+      Navigator.of(context).pop();
+    }).catchError((e) {});
+  }
+
+  void updateNickname(BuildContext context, List input) {
+    UserService.updateUserInfo(input).then((value) {
+      
+      Navigator.of(context).pop();
+    }).catchError((e) {});
+  }
+
+  late Future<UserSimpleModel> userInfo;
+  @override
+  void initState() {
+    super.initState();
+    userInfo = UserService.getUserInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,51 +82,86 @@ class SettingScreen extends StatelessWidget {
         title: const Text('설정'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          top: 8.0,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              for (var i = 0; i < 7; i++)
-                Column(
+      body: FutureBuilder(
+        future: userInfo,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.only(
+                top: 8.0,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
                   children: [
-                    ListTile(
-                      title: Text(settings[i]),
-                      onTap: () {
-                        if (i == 0) {
-                          showdialog(context, '비밀번호 수정', _passwordController,
-                              true, '새 비밀번호', true, () {});
-                        } else if (i == 1) {
-                          _nicknameController.text = 'hihi';
-                          showdialog(context, '닉네임 수정', _nicknameController,
-                              false, '닉네임을 입력하세요.', true, () {});
-                        } else if (i == 5) {
-                          showdialog(context, '로그아웃 하시겠습니까?',
-                              TextEditingController(), false, '', false, () {});
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => pages[i],
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                    // 마지막에는 생성 X
-                    i != 6
-                        ? const Divider(
-                            height: 2,
-                            color: Color(0xFFEEEEEC),
-                          )
-                        : const SizedBox()
+                    for (var i = 0; i < 7; i++)
+                      Column(
+                        children: [
+                          ListTile(
+                            title: Text(settings[i]),
+                            onTap: () {
+                              if (i == 0) {
+                                showdialog(
+                                    context,
+                                    '비밀번호 수정',
+                                    _passwordController,
+                                    true,
+                                    '새 비밀번호',
+                                    true, () {
+                                  updatePassword(context,
+                                      ['password', _passwordController.text]);
+                                });
+                              } else if (i == 1) {
+                                _nicknameController.text =
+                                    snapshot.data!.nickname;
+                                showdialog(
+                                    context,
+                                    '닉네임 수정',
+                                    _nicknameController,
+                                    false,
+                                    '닉네임을 입력하세요.',
+                                    true, () {
+                                  updateNickname(context,
+                                      ['nickname', _nicknameController.text]);
+                                });
+                              } else if (i == 5) {
+                                showdialog(
+                                    context,
+                                    '로그아웃 하시겠습니까?',
+                                    TextEditingController(),
+                                    false,
+                                    '',
+                                    false, () {
+                                  logout(context);
+                                });
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => pages[i],
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          // 마지막에는 생성 X
+                          i != 6
+                              ? const Divider(
+                                  height: 2,
+                                  color: Color(0xFFEEEEEC),
+                                )
+                              : const SizedBox()
+                        ],
+                      )
                   ],
-                )
-            ],
-          ),
-        ),
+                ),
+              ),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
@@ -94,7 +173,7 @@ class SettingScreen extends StatelessWidget {
     bool isObscure,
     String hintText,
     bool textTrue,
-    void pressAction,
+    pressAction,
   ) {
     return showDialog(
       context: context,
@@ -151,12 +230,7 @@ class SettingScreen extends StatelessWidget {
               )),
           TextButton(
               onPressed: () {
-                if (controller.text.isEmpty) {
-                  showToast(context, '필수값입니다.');
-                } else {
-                  controller.clear();
-                  Navigator.of(context).pop();
-                }
+                pressAction();
               },
               child: const Text('확인',
                   style: TextStyle(

@@ -210,7 +210,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                   ),
                                   child: ClipOval(
                                     child: Image.network(
-                                      snapshot.data!.writer.imgUrl,
+                                      snapshot.data!.writer.imgUrl!,
                                       width:
                                           MediaQuery.of(context).size.width / 8,
                                       height:

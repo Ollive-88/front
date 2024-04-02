@@ -34,28 +34,28 @@ class CustomNavigationbar extends StatelessWidget {
                 OlliveIcons.boardicon,
                 color: Colors.black,
               ),
-              label: 'Board',
+              label: '주',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 OlliveIcons.recipeicon,
                 color: Colors.black,
               ),
-              label: 'Recipe',
+              label: '식',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 OlliveIcons.clothseicon,
                 color: Colors.black,
               ),
-              label: 'Clothse',
+              label: '의',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 OlliveIcons.profileicon,
                 color: Colors.black,
               ),
-              label: 'Profile',
+              label: '내정보',
             ),
           ],
           currentIndex: selectedIndex,
