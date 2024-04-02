@@ -27,8 +27,13 @@ public class RecipeController {
     private final RecipeRecommendService recipeRecommendService;
 
     @GetMapping("/{recipeId}")
-    public ResponseEntity<RecipeDto> getRecipe(@PathVariable Long recipeId) {
-        return ResponseEntity.ok().body(recipeService.getRecipe(recipeId));
+    public ResponseEntity<RecipeDto> getRecipe(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+            @PathVariable Long recipeId
+    ) {
+        long memberId = customMemberDetails.getId();
+
+        return ResponseEntity.ok().body(recipeService.getRecipe(memberId, recipeId));
     }
 
     @GetMapping("/scraps")

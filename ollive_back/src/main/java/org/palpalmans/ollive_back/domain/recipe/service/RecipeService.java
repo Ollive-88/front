@@ -27,9 +27,11 @@ public class RecipeService {
 	private final RecipeScoreRepository recipeScoreRepository;
 	private final ScrapRepository scrapRepository;
 
-	public RecipeDto getRecipe(Long recipeId) {
+	public RecipeDto getRecipe(Long memberId, Long recipeId) {
 		Recipe recipe = recipeRepository.findByRecipeId(recipeId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 레시피 입니다."));
-		return RecipeMapper.toRecipeDto(recipe);
+		boolean isScraped = scrapRepository.findByMemberIdAndRecipeId(memberId, recipeId).isPresent();
+
+		return RecipeMapper.toRecipeDto(recipe, isScraped);
 	}
 
 	 public List<RecipeSummaryDto> getRecipesByCategory(RecipeSearchRequest recipeSearchRequest) {

@@ -3,10 +3,10 @@ package org.palpalmans.ollive_back.domain.recipe.model.dto;
 import org.palpalmans.ollive_back.domain.recipe.model.entity.Recipe;
 
 public class RecipeMapper {
-    public static RecipeDto toRecipeDto(Recipe recipe){
+    public static RecipeDto toRecipeDto(Recipe recipe, boolean isScraped){
         return new RecipeDto(
                 recipe.getRecipeId(), recipe.getTitle(), recipe.getThumbnailUrl(), recipe.getAmount(),
-                recipe.getTime(), recipe.getDifficulty(), recipe.getScore(), recipe.getCategories(), recipe.getIngredients(), recipe.getProcess()
+                recipe.getTime(), recipe.getDifficulty(), recipe.getScore(), isScraped, recipe.getCategories(), recipe.getIngredients(), recipe.getProcess()
         );
     }
 
