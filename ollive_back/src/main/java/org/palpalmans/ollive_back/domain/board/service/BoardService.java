@@ -85,7 +85,7 @@ public class BoardService {
         int viewCount = viewService.getViewCount(board);
         int likeCount = likeService.getLikeCount(board);
         boolean isLiked = likeService.isLikedMember(board, customMemberDetails.getMember());
-        boolean isMine = customMemberDetails.getMember() == board.getMember();
+        boolean isMine = customMemberDetails.getMember().getId() == board.getMember().getId();
 
         List<GetImageResponse> images = imageService.getImages(BOARD, boardId);
         List<GetTagResponse> tags = board.getBoardTags()

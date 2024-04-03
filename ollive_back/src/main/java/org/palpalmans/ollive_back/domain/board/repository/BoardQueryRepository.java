@@ -34,6 +34,7 @@ public class BoardQueryRepository {
                     .join(qBoard.member).fetchJoin()
                     .leftJoin(qBoard.boardTags).fetchJoin() //.fetchJoin()
                     .orderBy(qBoard.id.desc())
+                    .where((boardListCondition(keyword, lastIndex, memberId, tagNames)))
                     .limit(size)
                     .fetch();
         }
