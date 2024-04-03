@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/recipes")
+@RequestMapping("/api/v1/recipes")
 @Validated
 public class RecipeController {
     private final RecipeService recipeService;

@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/fridge-ingredients")
+@RequestMapping("/api/v1/fridge-ingredients")
 public class FridgeIngredientController {
     private final FridgeIngredientService fridgeIngredientService;
 

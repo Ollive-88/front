@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/dislike-ingredients")
+@RequestMapping("/api/v1/dislike-ingredients")
 public class DislikeIngredientController {
     private final DislikeIngredientService dislikeIngredientService;
 
