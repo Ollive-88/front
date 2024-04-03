@@ -12,13 +12,13 @@ public class CommentMapper {
     }
 
     public static GetCommentResponse toGetCommentResponse(
-            Comment comment, Member member
+            Comment comment, Member loginMember
     ) {
         return GetCommentResponse.builder()
                 .commentId(comment.getId())
                 .content(comment.getContent())
                 .memberId(comment.getMember().getId())
-                .isMine(member.getId() == comment.getMember().getId())
+                .isMine(loginMember.getId() == comment.getMember().getId())
                 .nickname(comment.getMember().getNickname())
                 .memberProfile(comment.getMember().getProfilePicture())
                 .createdAt(comment.getCreatedAt())

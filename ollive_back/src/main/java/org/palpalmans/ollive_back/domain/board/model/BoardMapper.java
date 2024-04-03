@@ -44,8 +44,8 @@ public class BoardMapper {
     }
 
     public static GetBoardDetailResponse toGetBoardDetailResponse(
-            Board board, int viewCount, int likeCount,
-            boolean isLiked, boolean isMine,
+            Board board, Member loginMember,
+            int viewCount, int likeCount, boolean isLiked,
             List<GetImageResponse> images, List<GetTagResponse> tags
     ) {
         Member writer = board.getMember();
@@ -55,7 +55,7 @@ public class BoardMapper {
                 .content(board.getContent())
                 .isLiked(isLiked)
                 .writer(new Writer(writer.getNickname(), writer.getProfilePicture()))
-                .isMine(isMine)
+                .isMine(writer.getId() == loginMember.getId())
                 .createdAt(board.getCreatedAt())
                 .viewCount(viewCount)
                 .likeCount(likeCount)
@@ -63,7 +63,7 @@ public class BoardMapper {
                 .tags(tags)
                 .comments(board.getComments()
                         .stream()
-                        .map(comment -> toGetCommentResponse(comment, comment.getMember()))
+                        .map(comment -> toGetCommentResponse(comment, loginMember))
                         .sorted(comparing(GetCommentResponse::createdAt))
                         .toList())
                 .build();
