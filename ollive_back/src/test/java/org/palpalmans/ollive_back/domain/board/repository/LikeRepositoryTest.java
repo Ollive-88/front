@@ -37,7 +37,6 @@ class LikeRepositoryTest {
     @DisplayName("Like Save Test")
     @Transactional
     void saveLike() {
-        Board board = new Board("title", "content", 1L);
         Member member = Member.builder()
                 .name("name")
                 .nickname("nickname")
@@ -47,8 +46,10 @@ class LikeRepositoryTest {
                 .role(MemberRole.ROLE_REGISTERED_MEMBER)
                 .build();
 
-        boardRepository.save(board);
+        Board board = new Board("title", "content", member);
+
         memberRepository.save(member);
+        boardRepository.save(board);
 
         Like like = likeRepository.save(new Like(board, member));
         List<Like> likes = likeRepository.findAll();

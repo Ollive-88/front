@@ -35,7 +35,6 @@ class ViewRepositoryTest {
     @DisplayName("save view test")
     @Transactional
     void saveView() {
-        Board board = new Board("title", "content", 1L);
         Member member = Member.builder()
                 .name("name")
                 .nickname("nickname")
@@ -44,7 +43,7 @@ class ViewRepositoryTest {
                 .gender("gender")
                 .role(MemberRole.ROLE_REGISTERED_MEMBER)
                 .build();
-
+        Board board = new Board("title", "content", member);
 
         memberRepository.save(member);
         boardRepository.save(board);

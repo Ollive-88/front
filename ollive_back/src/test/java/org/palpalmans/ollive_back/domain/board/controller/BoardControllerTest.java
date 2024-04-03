@@ -133,10 +133,10 @@ class BoardControllerTest {
     @Transactional
     void getBoardsSetup(List<Board> boardList, List<Tag> tagList) {
         // when
-        Board board1 = boardRepository.save(new Board("title1 hello", "content1", 1L));
-        Board board2 = boardRepository.save(new Board("title2 hi", "content2", 1L));
-        Board board3 = boardRepository.save(new Board("title3 nice", "content3", 1L));
-        Board board4 = boardRepository.save(new Board("title4 to meet you", "content4", 1L));
+        Board board1 = boardRepository.save(new Board("title1 hello", "content1", normalMember));
+        Board board2 = boardRepository.save(new Board("title2 hi", "content2", normalMember));
+        Board board3 = boardRepository.save(new Board("title3 nice", "content3", normalMember));
+        Board board4 = boardRepository.save(new Board("title4 to meet you", "content4", normalMember));
         boardList.add(board1);
         boardList.add(board2);
         boardList.add(board3);
@@ -249,7 +249,7 @@ class BoardControllerTest {
     )
     void getBoardDetail() throws Exception {
         // when
-        Board savedBoard = new Board("title", "content", normalMember.getId());
+        Board savedBoard = new Board("title", "content", normalMember);
         List<Comment> comments = new ArrayList<>();
         List<Image> images = new ArrayList<>();
         List<Tag> tags = new ArrayList<>();
@@ -265,7 +265,7 @@ class BoardControllerTest {
                 .andExpect(jsonPath("$.content").value(savedBoard.getContent()))
                 .andExpect(jsonPath("$.likeCount").value(0))
                 .andExpect(jsonPath("$.viewCount").value(0))
-                .andExpect(jsonPath("$.isMine").value(true))
+                .andExpect(jsonPath("$.isMine").value(false))
                 .andExpect(jsonPath("$.isLiked").value(false))
                 .andExpect(jsonPath("$.comments").isArray())
                 .andExpect(jsonPath("$.images").isArray())
