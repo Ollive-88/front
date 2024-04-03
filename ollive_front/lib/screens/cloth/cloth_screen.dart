@@ -15,6 +15,28 @@ class _ClothScreenState extends State<ClothScreen> {
   final TextEditingController _outingController = TextEditingController();
   final TextEditingController _singController = TextEditingController();
 
+  final Map<String, String> outing = {
+    "편안한 차림으로 나가고 싶어요": "casual",
+    "포멀하게 입고 싶어요": "formal",
+    "운동하러 가고 싶어요": "sporty",
+    "데이트하러 가고싶어요": "fancy",
+  };
+
+  final List<String> outingWord = [
+    "",
+    "편안한 차림으로 나가고 싶어요",
+    "포멀하게 입고 싶어요",
+    "운동하러 가고 싶어요",
+    "데이트하러 가고싶어요",
+  ];
+
+  int selectedOuting = 0;
+
+  void changeOuting(int index) {
+    selectedOuting = index;
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
@@ -100,22 +122,86 @@ class _ClothScreenState extends State<ClothScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color(0xFFFFD5D5),
-                            width: 2,
+                        border: Border.all(
+                          color: const Color(0xFFFFD5D5),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(25),
+                        color: const Color(0xFFEBEBE9),
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      child: TextButton(
+                        style:
+                            const ButtonStyle(alignment: Alignment.centerLeft),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFFFFFFC),
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15),
+                                    topRight: Radius.circular(15),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    // 상단바
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 15,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "외출 목적을 선택해 주세요.",
+                                            style: TextStyle(fontSize: 22),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const Divider(
+                                      thickness: 2,
+                                      height: 1,
+                                      color: Color(0xFFEBEBE9),
+                                    ),
+                                    for (var i = 1; i < outingWord.length; i++)
+                                      GestureDetector(
+                                        onTap: () {
+                                          changeOuting(i);
+                                          Navigator.pop(context);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 10,
+                                          ),
+                                          child: Text(
+                                            outingWord[i],
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          outingWord[selectedOuting],
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
                           ),
-                          borderRadius: BorderRadius.circular(25),
-                          color: const Color(0xFFEBEBE9)),
-                      // ignore: deprecated_member_use
-                      child: TextField(
-                        controller: _outingController,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
                         ),
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
-                        textAlign: TextAlign.start,
                       ),
                     ),
 
@@ -175,6 +261,8 @@ class _ClothScreenState extends State<ClothScreen> {
                     FocusScope.of(context).unfocus();
                     if (_singController.text.isEmpty) {
                       ErrorService.showToast("노래가사를 입력해주세요.");
+                    } else if (selectedOuting == 0) {
+                      ErrorService.showToast("외출목적을 선택해 주세요.");
                     } else {
                       dynamic position = await ClothService.getPosition();
 
@@ -184,7 +272,7 @@ class _ClothScreenState extends State<ClothScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ClothListScreen(
-                              outing: _outingController.text,
+                              outing: outing[outingWord[selectedOuting]]!,
                               sing: _singController.text,
                               position: position,
                             ),

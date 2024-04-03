@@ -9,9 +9,14 @@ import 'package:ollive_front/widgets/board/board_tag_widget.dart';
 
 // ignore: must_be_immutable
 class BoardDetailScreen extends StatefulWidget {
-  const BoardDetailScreen({super.key, required this.boardId});
+  const BoardDetailScreen(
+      {super.key,
+      required this.boardId,
+      required this.index,
+      required this.addLike});
 
-  final int boardId;
+  final int boardId, index;
+  final addLike;
 
   @override
   State<BoardDetailScreen> createState() => _BoardDetailScreenState();
@@ -382,7 +387,8 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                   } else {
                                     snapshot.data!.likeCount -= 1;
                                   }
-
+                                  widget.addLike(
+                                      widget.index, snapshot.data!.isLiked);
                                   BoardService.postLike(snapshot.data!.boardId);
                                   setState(() {});
                                 },
@@ -686,6 +692,10 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                 child: IconButton(
                     icon: const Icon(Icons.send),
                     onPressed: () async {
+                      if (_commetController.text.isEmpty) {
+                        ErrorService.showToast("댓글을 입력해주세요");
+                        return;
+                      }
                       addComment();
                     }),
               ),

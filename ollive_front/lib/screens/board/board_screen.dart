@@ -83,6 +83,18 @@ class _BoardScreenState extends State<BoardScreen> {
     }
   }
 
+  void addLike(int i, bool isLiked) async {
+    List<BoardModel> currntBoard = await boards;
+    if (isLiked) {
+      currntBoard[i].likes++;
+    } else {
+      currntBoard[i].likes--;
+    }
+
+    boards = Future.value(currntBoard);
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
@@ -175,6 +187,8 @@ class _BoardScreenState extends State<BoardScreen> {
                         MaterialPageRoute(
                           builder: (context) => BoardDetailScreen(
                             boardId: boardModel.boardId,
+                            index: index,
+                            addLike: addLike,
                           ),
                         ),
                       );

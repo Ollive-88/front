@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:ollive_front/screens/recipe/recipe_list_screen.dart';
 import 'package:ollive_front/service/recipe/recipe_service.dart';
 import 'package:ollive_front/service/user/user_service.dart';
@@ -80,41 +82,26 @@ class _RecipeScreenState extends State<RecipeScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: const Text(
-                            "전체선택",
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
+                      const SizedBox(
+                        width: 40,
                       ),
-                      const Expanded(
-                        flex: 2,
-                        child: Text(
-                          "냉장고 목록",
-                          style: TextStyle(fontSize: 22),
-                          textAlign: TextAlign.center,
-                        ),
+                      const Text(
+                        "냉장고 목록",
+                        style: TextStyle(fontSize: 22),
+                        textAlign: TextAlign.center,
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: IconButton(
-                          onPressed: () {
-                            addRefrigerators(
-                              isRefrigeratorsSelected,
-                              true,
-                            );
-                            Navigator.pop(context);
-                          },
-                          icon: const Text(
-                            "추가",
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
+                      IconButton(
+                        onPressed: () {
+                          addRefrigerators(
+                            isRefrigeratorsSelected,
+                            true,
+                          );
+                          Navigator.pop(context);
+                        },
+                        icon: const Text(
+                          "추가",
+                          style: TextStyle(
+                            fontSize: 20,
                           ),
                         ),
                       ),
@@ -184,41 +171,26 @@ class _RecipeScreenState extends State<RecipeScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: const Text(
-                            "전체선택",
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
+                      const SizedBox(
+                        width: 40,
                       ),
-                      const Expanded(
-                        flex: 2,
-                        child: Text(
-                          "싫어하는 재료 목록",
-                          style: TextStyle(fontSize: 22),
-                          textAlign: TextAlign.center,
-                        ),
+                      const Text(
+                        "싫어하는 재료 목록",
+                        style: TextStyle(fontSize: 22),
+                        textAlign: TextAlign.center,
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: IconButton(
-                          onPressed: () {
-                            addRefrigerators(
-                              isIngredientsSelected,
-                              false,
-                            );
-                            Navigator.pop(context);
-                          },
-                          icon: const Text(
-                            "추가",
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
+                      IconButton(
+                        onPressed: () {
+                          addRefrigerators(
+                            isIngredientsSelected,
+                            false,
+                          );
+                          Navigator.pop(context);
+                        },
+                        icon: const Text(
+                          "추가",
+                          style: TextStyle(
+                            fontSize: 20,
                           ),
                         ),
                       ),

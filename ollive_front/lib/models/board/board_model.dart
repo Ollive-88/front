@@ -1,6 +1,7 @@
 class BoardModel {
   final String title, content, thumbnailAddress, createdAt;
-  final int boardId, views, likes, commentCount;
+  final int boardId, views, commentCount;
+  int likes;
   final List<String> tags;
 
   BoardModel.fromJson(Map<String, dynamic> json)

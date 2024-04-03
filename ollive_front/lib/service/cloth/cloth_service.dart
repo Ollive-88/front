@@ -26,7 +26,7 @@ class ClothService {
     final response = await _dio.authDio.post(
       "/api/v1/cloth/recommendation",
       data: {
-        // "outing": outing,
+        "goal": outing,
         "text": sing,
         "longitude": longitude,
         "latitude": latitude,
