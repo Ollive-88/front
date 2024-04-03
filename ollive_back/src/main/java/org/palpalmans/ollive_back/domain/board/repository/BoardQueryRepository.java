@@ -7,6 +7,7 @@ import org.palpalmans.ollive_back.domain.board.model.entity.Board;
 import org.palpalmans.ollive_back.domain.board.model.entity.QBoard;
 import org.palpalmans.ollive_back.domain.board.model.entity.QBoardTag;
 import org.palpalmans.ollive_back.domain.board.model.entity.QTag;
+import org.palpalmans.ollive_back.domain.member.model.entity.QMember;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class BoardQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
     private static final QBoard qBoard = QBoard.board;
+    private static final QMember qMember = QMember.member;
     private static final QBoardTag qBoardTag = QBoardTag.boardTag;
     private static final QTag qTag = QTag.tag;
 
@@ -29,8 +31,8 @@ public class BoardQueryRepository {
             return jpaQueryFactory
                     .select(qBoard)
                     .from(qBoard)
-                    .leftJoin(qBoard.comments).fetchJoin()
-                    .where(boardListCondition(keyword, lastIndex, memberId, tagNames))
+                    .join(qBoard.member).fetchJoin()
+                    .leftJoin(qBoard.boardTags).fetchJoin() //.fetchJoin()
                     .orderBy(qBoard.id.desc())
                     .limit(size)
                     .fetch();
@@ -38,9 +40,10 @@ public class BoardQueryRepository {
         return jpaQueryFactory
                 .select(qBoard)
                 .from(qBoard)
-                .leftJoin(qBoard.comments).fetchJoin()
+                .join(qBoard.member).fetchJoin()
                 .join(qBoardTag).on(qBoard.eq(qBoardTag.board)).fetchJoin()
-                .join(qTag).on(qBoardTag.tag.eq(qTag)).fetchJoin()
+                .join(qTag).on(qBoardTag.tag.eq(qTag).and(qTag.name.in(tagNames))).fetchJoin()
+                .leftJoin(qBoard.comments).fetchJoin()
                 .where(boardListCondition(keyword, lastIndex, memberId, tagNames))
                 .orderBy(qBoard.id.desc())
                 .limit(size)
@@ -54,6 +57,6 @@ public class BoardQueryRepository {
         return indexCondition
                 .and(keyword == null ? null : qBoard.title.contains(keyword))
                 .and(tagNames.isEmpty() ? null : qTag.name.in(tagNames))
-                .and(memberId == 0 ? null : qBoard.memberId.eq(memberId));
+                .and(memberId == 0 ? null : qBoard.member.id.eq(memberId));
     }
 }

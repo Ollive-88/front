@@ -85,6 +85,7 @@ public class BoardService {
         int viewCount = viewService.getViewCount(board);
         int likeCount = likeService.getLikeCount(board);
         boolean isLiked = likeService.isLikedMember(board, customMemberDetails.getMember());
+        boolean isMine = customMemberDetails.getMember() == board.getMember();
 
         List<GetImageResponse> images = imageService.getImages(BOARD, boardId);
         List<GetTagResponse> tags = board.getBoardTags()
@@ -95,8 +96,7 @@ public class BoardService {
                 .toList();
 
         return toGetBoardDetailResponse(
-                board, customMemberDetails.getMember(),
-                viewCount, likeCount, isLiked,
+                board, viewCount, likeCount, isLiked, isMine,
                 images, tags
         );
     }
@@ -108,7 +108,7 @@ public class BoardService {
             CustomMemberDetails customMemberDetails
     ) {
         Board board = getBoard(boardId);
-        if (board.getMemberId() != customMemberDetails.getId()) {
+        if (board.getMember().getId() != customMemberDetails.getId()) {
             throw new AuthorizationServiceException(NOT_AUTHORIZED.getMessage());
         }
 
@@ -134,7 +134,7 @@ public class BoardService {
     @Transactional
     public void deleteBoard(Long boardId, CustomMemberDetails customMemberDetails) {
         Board board = getBoard(boardId);
-        if (board.getMemberId() != customMemberDetails.getId()) {
+        if (board.getMember().getId() != customMemberDetails.getId()) {
             throw new AuthorizationServiceException(NOT_AUTHORIZED.getMessage());
         }
         boardRepository.delete(board);
@@ -160,12 +160,11 @@ public class BoardService {
     }
 
     private Board writeBoard(String title, String content, Member member) {
-        return boardRepository.save(new Board(title, content, member.getId()));
+        return boardRepository.save(new Board(title, content, member));
     }
 
     private Board getBoard(Long boardId) {
-        Board board = boardRepository.findById(boardId)
+        return boardRepository.findById(boardId)
                 .orElseThrow(() -> new EntityNotFoundException(BOARD_NOT_FOUND.getMessage()));
-        return board;
     }
 }
