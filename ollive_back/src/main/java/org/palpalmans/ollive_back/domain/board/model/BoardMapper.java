@@ -12,9 +12,9 @@ import static java.util.Comparator.comparing;
 import static org.palpalmans.ollive_back.domain.board.model.CommentMapper.toGetCommentResponse;
 
 public class BoardMapper {
-    public static Board toBoard(WriteBoardRequest writeBoardRequest, Long memberId) {
+    public static Board toBoard(WriteBoardRequest writeBoardRequest, Member member) {
         return new Board(
-                writeBoardRequest.getTitle(), writeBoardRequest.getContent(), memberId
+                writeBoardRequest.getTitle(), writeBoardRequest.getContent(), member
         );
     }
 

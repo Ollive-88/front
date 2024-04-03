@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.palpalmans.ollive_back.common.BaseTimeEntity;
+import org.palpalmans.ollive_back.domain.member.model.entity.Member;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.PERSIST;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -26,8 +28,9 @@ public class Board extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private Long memberId;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @OneToMany(mappedBy = "board", cascade = PERSIST, orphanRemoval = true)
     private final List<Comment> comments = new ArrayList<>();
@@ -35,17 +38,17 @@ public class Board extends BaseTimeEntity {
     @OneToMany(mappedBy = "board", cascade = PERSIST, orphanRemoval = true)
     private final List<BoardTag> boardTags = new ArrayList<>();
 
-    public Board(Long id, String title, Long memberId, String content) {
+    public Board(Long id, String title, Member member, String content) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.memberId = memberId;
+        this.member = member;
     }
 
-    public Board(String title, String content, Long memberId) {
+    public Board(String title, String content, Member member) {
         this.title = title;
         this.content = content;
-        this.memberId = memberId;
+        this.member = member;
     }
 
     public void changeTitle(String title) {
@@ -62,7 +65,7 @@ public class Board extends BaseTimeEntity {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", content='" + (content.length() < 7 ? content : content.substring(0, 7) + "...") + '\'' +
-                ", memberId=" + memberId +
+                ", memberId=" + member.getId() +
                 ", comments=" + comments +
                 ", boardTags=" + boardTags +
                 '}';
