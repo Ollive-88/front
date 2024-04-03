@@ -23,6 +23,7 @@ class _RecipeScrollerButtonState extends State<RecipeScrollerButton> {
       child: const Icon(
         Icons.arrow_upward,
         size: 28,
+        color: Colors.white,
       ),
     );
   }

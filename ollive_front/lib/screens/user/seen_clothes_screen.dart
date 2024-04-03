@@ -84,22 +84,32 @@ class _SeenClothesScreenState extends State<SeenClothesScreen> {
           future: clothes,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return SingleChildScrollView(
-                controller: _scrollController,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Wrap(
-                    children: [
-                      for (ClothModel cloth in snapshot.data!)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 15, bottom: 15),
-                          child: ClothWidget(clothModel: cloth),
+              return (snapshot.data!.isNotEmpty)
+                  ? SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: Wrap(
+                          children: [
+                            for (ClothModel cloth in snapshot.data!)
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 15, bottom: 15),
+                                child: ClothWidget(clothModel: cloth),
+                              ),
+                          ],
                         ),
-                    ],
-                  ),
-                ),
-              );
+                      ),
+                    )
+                  : const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('의류를 본 이력이 없어요.'),
+                        ],
+                      ),
+                    );
             } else {
               return const Center(
                 child: CircleAvatar(

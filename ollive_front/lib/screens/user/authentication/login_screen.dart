@@ -223,11 +223,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: const Text('비밀번호 찾기')),
-                            const Text('|'),
-                            Container(
                               margin:
                                   const EdgeInsets.symmetric(horizontal: 10),
                               child: GestureDetector(

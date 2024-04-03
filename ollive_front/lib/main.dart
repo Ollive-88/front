@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ollive_front/screens/board/board_search_screen.dart';
 import 'package:ollive_front/screens/board/board_write_screen.dart';
 import 'package:ollive_front/screens/home_screen.dart';
+import 'package:ollive_front/screens/recipe/recipe_screen.dart';
 import 'package:ollive_front/screens/user/authentication/login_screen.dart';
 import 'package:ollive_front/screens/user/authentication/signin_screen.dart';
 import 'package:ollive_front/util/controller/getx_controller.dart';
@@ -37,6 +38,7 @@ class _AppState extends State<App> {
           '/board/write': (context) => BoardWriteScreen(),
           '/login': (context) => const LoginScreen(),
           '/signin': (context) => const SigninScreen(),
+          '/recipe': (context) => const RecipeScreen(),
         },
         navigatorKey: navigatorKey,
         // 한글 사용 설정

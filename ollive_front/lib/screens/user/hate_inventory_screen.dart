@@ -64,50 +64,62 @@ class _HateInventoryScreenState extends State<HateInventoryScreen> {
         future: ingredients,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Column(
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                Expanded(
-                  child: SlidableAutoCloseBehavior(
-                    closeWhenOpened: true,
-                    child: ListView.separated(
-                        separatorBuilder: (context, index) => const Divider(
-                              height: 0,
-                            ),
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          final ingredient = snapshot.data![index];
-                          return Slidable(
-                            key: Key(snapshot.data![index].dislikeIngredientId
-                                .toString()),
-                            endActionPane: ActionPane(
-                              extentRatio: 0.2,
-                              motion: const BehindMotion(),
-                              children: [
-                                SlidableAction(
-                                  backgroundColor: Colors.red,
-                                  label: '삭제',
-                                  onPressed: (context) async {
-                                    if (await UserService
-                                        .deleteDislikeIngredients(snapshot
-                                            .data![index]
-                                            .dislikeIngredientId!)) {
-                                      fetchData();
-                                      _onDismissed();
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                            child: buildIngredientListTitle(ingredient),
-                          );
-                        }),
-                  ),
-                )
-              ],
-            );
+            return (snapshot.data!.isNotEmpty)
+                ? Column(
+                    children: [
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      Expanded(
+                        child: SlidableAutoCloseBehavior(
+                          closeWhenOpened: true,
+                          child: ListView.separated(
+                              separatorBuilder: (context, index) =>
+                                  const Divider(
+                                    height: 0,
+                                  ),
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                final ingredient = snapshot.data![index];
+                                return Slidable(
+                                  key: Key(snapshot
+                                      .data![index].dislikeIngredientId
+                                      .toString()),
+                                  endActionPane: ActionPane(
+                                    extentRatio: 0.2,
+                                    motion: const BehindMotion(),
+                                    children: [
+                                      SlidableAction(
+                                        backgroundColor: Colors.red,
+                                        label: '삭제',
+                                        onPressed: (context) async {
+                                          if (await UserService
+                                              .deleteDislikeIngredients(snapshot
+                                                  .data![index]
+                                                  .dislikeIngredientId!)) {
+                                            fetchData();
+                                            _onDismissed();
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  child: buildIngredientListTitle(ingredient),
+                                );
+                              }),
+                        ),
+                      )
+                    ],
+                  )
+                : const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('아직 등록된 재료가 없어요.'),
+                        Text('아래 버튼을 눌러 재료를 추가하세요.'),
+                      ],
+                    ),
+                  );
           } else {
             return const Center(
               child: CircleAvatar(

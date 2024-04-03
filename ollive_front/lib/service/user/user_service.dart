@@ -16,7 +16,7 @@ class UserService {
     };
 
     try {
-      await _dio.post('/join', data: requestBody);
+      await _dio.post('/api/v1/join', data: requestBody);
       return true;
     } catch (e) {
       return false;
@@ -58,7 +58,7 @@ class UserService {
   static Future<List<UserIngredients>> getFridgeIngredients() async {
     List<UserIngredients> ingredientInstances = [];
     try {
-      Response response = await _dio.get('/fridge-ingredients');
+      Response response = await _dio.get('/api/v1/fridge-ingredients');
       for (var ingredient in response.data) {
         ingredientInstances.add(UserIngredients.fromJson(ingredient));
       }
@@ -74,7 +74,7 @@ class UserService {
     };
 
     try {
-      await _dio.post('/fridge-ingredients', data: requestBody);
+      await _dio.post('/api/v1/fridge-ingredients', data: requestBody);
       return true;
     } catch (e) {
       return false;
@@ -87,7 +87,7 @@ class UserService {
       'endAt': input.endAt,
     };
     try {
-      await _dio.put('/fridge-ingredients/${input.fridgeIngredientId}',
+      await _dio.put('/api/v1/fridge-ingredients/${input.fridgeIngredientId}',
           data: requestBody);
       return true;
     } catch (e) {
@@ -97,7 +97,7 @@ class UserService {
 
   static Future<dynamic> deleteFridgeIngredients(int fridgeIngredientId) async {
     try {
-      await _dio.delete('/fridge-ingredients/$fridgeIngredientId');
+      await _dio.delete('/api/v1/fridge-ingredients/$fridgeIngredientId');
       return true;
     } catch (e) {
       return false;
@@ -107,7 +107,7 @@ class UserService {
   static Future<List<HateIngredients>> getDislikeIngredients() async {
     List<HateIngredients> ingredientInstances = [];
     try {
-      Response response = await _dio.get('/dislike-ingredients');
+      Response response = await _dio.get('/api/v1/dislike-ingredients');
       for (var ingredient in response.data) {
         ingredientInstances.add(HateIngredients.fromJson(ingredient));
       }
@@ -123,7 +123,7 @@ class UserService {
     };
 
     try {
-      await _dio.post('/dislike-ingredients', data: requestBody);
+      await _dio.post('/api/v1/dislike-ingredients', data: requestBody);
       return true;
     } catch (e) {
       return false;
@@ -133,7 +133,7 @@ class UserService {
   static Future<dynamic> deleteDislikeIngredients(
       int dislikeIngredientId) async {
     try {
-      await _dio.delete('/dislike-ingredients/$dislikeIngredientId');
+      await _dio.delete('/api/v1/dislike-ingredients/$dislikeIngredientId');
       return true;
     } catch (e) {
       return false;
@@ -141,26 +141,26 @@ class UserService {
   }
 
   static Future<UserSimpleModel> getUserInfo() async {
-    Response response = await _dio.get('/memberinfo');
+    Response response = await _dio.get('/api/v1/memberinfo');
     return UserSimpleModel.fromJsonmypage(response.data);
   }
 
   static Future<dynamic> deleteUserInfo() async {
-    await _dio.delete('/memberinfo');
+    await _dio.delete('/api/v1/memberinfo');
   }
 
   static Future<dynamic> updateUserInfo(List requestBody) async {
     FormData formData = FormData.fromMap({
       requestBody[0]: requestBody[1],
     });
-    await _dio.patch('/memberinfo', data: formData);
+    await _dio.patch('/api/v1/memberinfo', data: formData);
   }
 
   static Future<dynamic> updateProfileImage(List requestBody) async {
     FormData formData = FormData.fromMap({
       requestBody[0]: requestBody[1],
     });
-    await _dio.patch('/member-profile-picture', data: formData);
+    await _dio.patch('/api/v1/member-profile-picture', data: formData);
   }
 
   static Future<dynamic> logoutAction() async {

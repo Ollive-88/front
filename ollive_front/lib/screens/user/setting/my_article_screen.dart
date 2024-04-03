@@ -94,6 +94,18 @@ class _MyArticleScreenState extends State<MyArticleScreen> {
     super.dispose();
   }
 
+  final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
+    backgroundColor: const Color(0xFFFFD5D5),
+    minimumSize: const Size(0, 50),
+    foregroundColor: Colors.black,
+    textStyle: const TextStyle(
+      fontSize: 18,
+    ),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,42 +121,65 @@ class _MyArticleScreenState extends State<MyArticleScreen> {
         future: boards,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ListView.separated(
-              controller: _scrollController,
-              scrollDirection: Axis.vertical,
-              itemCount: snapshot.data!.length,
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              itemBuilder: (context, index) {
-                var boardModel = snapshot.data![index];
-                updateLastIndex(boardModel.boardId);
-                return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BoardDetailScreen(
-                            boardId: boardModel.boardId,
+            return (snapshot.data!.isNotEmpty)
+                ? ListView.separated(
+                    controller: _scrollController,
+                    scrollDirection: Axis.vertical,
+                    itemCount: snapshot.data!.length,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    itemBuilder: (context, index) {
+                      var boardModel = snapshot.data![index];
+                      updateLastIndex(boardModel.boardId);
+                      return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BoardDetailScreen(
+                                  boardId: boardModel.boardId,
+                                ),
+                              ),
+                            );
+                          },
+                          child: BoardList(boardModel: boardModel));
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Column(
+                        children: [
+                          Divider(
+                            thickness: 2,
+                            height: 1,
+                            color: Color(0xFFEEEEEC),
                           ),
-                        ),
+                          SizedBox(
+                            height: 20,
+                          )
+                        ],
                       );
                     },
-                    child: BoardList(boardModel: boardModel));
-              },
-              separatorBuilder: (context, index) {
-                return const Column(
-                  children: [
-                    Divider(
-                      thickness: 2,
-                      height: 1,
-                      color: Color(0xFFEEEEEC),
+                  )
+                : Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('첫 게시글을 등록해보세요.'),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/home', (route) => false);
+                          },
+                          style: buttonStyle,
+                          child: const Text(
+                            '게시판으로 이동',
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 20,
-                    )
-                  ],
-                );
-              },
-            );
+                  );
           } else {
             return const Center(
               child: CircleAvatar(

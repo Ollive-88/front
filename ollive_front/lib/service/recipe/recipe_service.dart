@@ -11,7 +11,7 @@ class RecipeService {
     List<String>? dislikeIngredients,
   ) async {
     final response = await _dio.authDio.post(
-      "/recipes/recommendations",
+      "/api/v1/recipes/recommendations",
       data: {
         "havingIngredients": havingIngredients,
         "dislikeIngredients": dislikeIngredients,
@@ -41,7 +41,7 @@ class RecipeService {
     }
 
     final response = await _dio.authDio.post(
-      "/recipes",
+      "/api/v1/recipes",
       data: {
         "havingIngredients": havingIngredients,
         "dislikeIngredients": dislikeIngredients,
@@ -63,7 +63,7 @@ class RecipeService {
   static Future<RecipeDetailModel> getRecipeDetail(int recipeId) async {
     RecipeDetailModel instance;
     final response = await _dio.authDio.get(
-      "/recipes/$recipeId",
+      "/api/v1/recipes/$recipeId",
     );
 
     instance = RecipeDetailModel.fromJson(response.data);
@@ -73,7 +73,8 @@ class RecipeService {
 
   // 즐겨찾기 생성/삭제
   static void postFavorit(int recipeId) async {
-    await _dio.authDio.post("/recipes/scraps", data: {"recipeId": recipeId});
+    await _dio.authDio
+        .post("/api/v1/recipes/scraps", data: {"recipeId": recipeId});
   }
 
   // 즐찾 레시피 조회
@@ -82,7 +83,7 @@ class RecipeService {
     final List<RecipeModel> recipes;
 
     final response = await _dio.authDio.get(
-      "/recipes/scraps",
+      "/api/v1/recipes/scraps",
       queryParameters: {
         "lastRecipeId": lastIndex,
         "size": size,
@@ -98,7 +99,7 @@ class RecipeService {
 
   // 별점 부여 생성/삭제
   static void postStar(int recipeId, int score) async {
-    await _dio.authDio.post("/recipes/scores", data: {
+    await _dio.authDio.post("/api/v1/recipes/scores", data: {
       "recipeId": recipeId,
       "score": score,
     });
