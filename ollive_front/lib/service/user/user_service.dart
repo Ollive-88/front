@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ollive_front/models/user/user_model.dart';
 import 'package:ollive_front/models/user/user_simple_model.dart';
 import 'package:ollive_front/util/dio/dio_service.dart';
@@ -156,11 +159,28 @@ class UserService {
     await _dio.patch('/api/v1/memberinfo', data: formData);
   }
 
+  static Future<dynamic> convertXFileToMultipartFile(XFile? xFile) async {
+    if (xFile == null) {
+      return null;
+    } else {
+      File tempFile = File(xFile.path);
+      MultipartFile multipartFile = await MultipartFile.fromFile(tempFile.path);
+
+      return multipartFile;
+    }
+  }
+
   static Future<dynamic> updateProfileImage(List requestBody) async {
-    FormData formData = FormData.fromMap({
-      requestBody[0]: requestBody[1],
-    });
-    await _dio.patch('/api/v1/member-profile-picture', data: formData);
+    var newDio = DioService().authDio;
+    newDio.options.contentType = 'multipart/form-data';
+    if (requestBody[1] == null) {
+      await _dio.patch('/api/v1/member-profile-picture');
+    } else {
+      FormData formData = FormData.fromMap({
+        requestBody[0]: requestBody[1],
+      });
+      await newDio.patch('/api/v1/member-profile-picture', data: formData);
+    }
   }
 
   static Future<dynamic> logoutAction() async {

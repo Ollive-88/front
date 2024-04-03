@@ -1,9 +1,10 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ollive_front/service/user/user_service.dart';
+import 'package:ollive_front/util/controller/getx_controller.dart';
 
 class ProfileImageScreen extends StatefulWidget {
   const ProfileImageScreen({super.key});
@@ -29,6 +30,7 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
   final ImagePicker _picker = ImagePicker();
   XFile? _pickedImg;
   bool _pickInProgress = false;
+  final StatusController _userInfoController = Get.put(StatusController());
 
   @override
   Widget build(BuildContext context) {
@@ -206,20 +208,14 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
     });
   }
 
-  // XFile MultipartFile로 변환
-  static Future<MultipartFile> convertXFileToMultipartFile(XFile xFile) async {
-    File tempFile = File(xFile.path);
-    MultipartFile multipartFile = await MultipartFile.fromFile(tempFile.path,
-        filename: tempFile.path.split("/").last);
-
-    return multipartFile;
-  }
-
   void updateImage() async {
-    UserService.updateProfileImage(
-            ['profilePicture', convertXFileToMultipartFile(_pickedImg!)])
-        .then((value) {
-      Navigator.pop(context);
-    }).catchError((e) {});
+    await UserService.convertXFileToMultipartFile(_pickedImg).then((value) {
+      UserService.updateProfileImage(['profilePicture', value]).then((value) {
+        _userInfoController.setImgUrl((value == null) ? '' : value);
+        Navigator.pop(context);
+      }).catchError((e) {
+        print(e);
+      });
+    });
   }
 }

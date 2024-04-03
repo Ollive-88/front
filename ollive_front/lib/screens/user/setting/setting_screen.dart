@@ -160,7 +160,7 @@ class _SettingScreenState extends State<SettingScreen> {
           left: 10,
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFFFFFFC),
         title: Text(
           title,
           style: const TextStyle(

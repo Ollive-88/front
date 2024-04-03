@@ -139,7 +139,7 @@ class _HateInventoryScreenState extends State<HateInventoryScreen> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFFFFFFC),
         title: const Text(
           '재료 추가하기',
           style: TextStyle(

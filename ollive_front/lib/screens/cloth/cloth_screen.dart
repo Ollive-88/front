@@ -135,6 +135,7 @@ class _ClothScreenState extends State<ClothScreen> {
                             context: context,
                             builder: (BuildContext context) {
                               return Container(
+                                height: 300,
                                 decoration: const BoxDecoration(
                                   color: Color(0xFFFFFFFC),
                                   borderRadius: BorderRadius.only(
@@ -143,6 +144,8 @@ class _ClothScreenState extends State<ClothScreen> {
                                   ),
                                 ),
                                 child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     // 상단바
                                     const Padding(
@@ -250,8 +253,8 @@ class _ClothScreenState extends State<ClothScreen> {
                         if (_singController.text.isEmpty) {
                           ErrorService.showToast("노래가사를 입력해주세요.");
                         } else if (selectedOuting == 0) {
-                      ErrorService.showToast("외출목적을 선택해 주세요.");
-                    } else {
+                          ErrorService.showToast("외출목적을 선택해 주세요.");
+                        } else {
                           dynamic position = await ClothService.getPosition();
 
                           if (position is Position) {

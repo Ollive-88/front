@@ -39,7 +39,11 @@ class RecipeTag extends StatelessWidget {
           children: [
             Flexible(
               // Flexible 또는 Expanded로 감쌀 수 있습니다.
-              child: Text(tagName, overflow: TextOverflow.ellipsis),
+              child: Text(
+                tagName,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: Colors.black),
+              ),
             ),
           ],
         ),

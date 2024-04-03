@@ -169,7 +169,7 @@ class _FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
               decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xFFFFFFFC),
                   borderRadius:
                       BorderRadius.vertical(top: Radius.circular(20))),
               child: Padding(
