@@ -107,7 +107,7 @@ class DislikeIngredientControllerTest {
         dislikeIngredientSetup(list);
 
         //when
-        mockMvc.perform(get("/dislike-ingredients"))
+        mockMvc.perform(get("/api/v1/dislike-ingredients"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].dislikeIngredientId").value(list.get(0).getId()))
                 .andExpect(jsonPath("$[0].name").value(list.get(0).getName()))
@@ -135,7 +135,7 @@ class DislikeIngredientControllerTest {
         DislikeIngredientRegisterRequest request = request();
 
         //when
-        mockMvc.perform(post("/dislike-ingredients").contentType(APPLICATION_JSON).content(objectToJson(request)))
+        mockMvc.perform(post("/api/v1/dislike-ingredients").contentType(APPLICATION_JSON).content(objectToJson(request)))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -155,7 +155,7 @@ class DislikeIngredientControllerTest {
         dislikeIngredientSetup(list);
 
         //when
-        mockMvc.perform(delete("/dislike-ingredients/{dislikeIngredientId}", list.get(0).getId()))
+        mockMvc.perform(delete("/api/v1/dislike-ingredients/{dislikeIngredientId}", list.get(0).getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(list.get(0).getId().toString()))
                 .andDo(print());

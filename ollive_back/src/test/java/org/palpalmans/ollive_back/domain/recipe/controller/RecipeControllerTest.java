@@ -142,7 +142,7 @@ class RecipeControllerTest {
 
         //when
         ResultActions result = mockMvc.perform(
-                post("/recipes")
+                post("/api/v1/recipes")
                         .contentType(APPLICATION_JSON)
                         .content(objectToJson(request))
         );
@@ -160,7 +160,7 @@ class RecipeControllerTest {
 
         //when
         ResultActions result = mockMvc.perform(
-                post("/recipes")
+                post("/api/v1/recipes")
                         .contentType(APPLICATION_JSON)
                         .content(objectToJson(request))
         );
@@ -188,7 +188,7 @@ class RecipeControllerTest {
         RecipeScoreRequest request = recipeScoreRequest();
 
         //when
-        mockMvc.perform(post("/recipes/scores")
+        mockMvc.perform(post("/api/v1/recipes/scores")
                         .contentType(APPLICATION_JSON)
                         .content(objectToJson(request))
                 ).andExpect(status().isOk())
