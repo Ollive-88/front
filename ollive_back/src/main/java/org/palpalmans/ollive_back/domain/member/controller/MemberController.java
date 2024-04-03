@@ -2,11 +2,12 @@ package org.palpalmans.ollive_back.domain.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.JoinRequest;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.ModifyMemberInfoRequest;
 import org.palpalmans.ollive_back.domain.member.model.dto.response.MemberInfoResponse;
+import org.palpalmans.ollive_back.domain.member.model.dto.response.ModifyProfilePictureResponse;
 import org.palpalmans.ollive_back.domain.member.model.status.JoinRequestStatus;
-import org.palpalmans.ollive_back.common.security.details.CustomMemberDetails;
 import org.palpalmans.ollive_back.domain.member.service.JoinService;
 import org.palpalmans.ollive_back.domain.member.service.MemberService;
 import org.springframework.http.HttpStatus;
@@ -30,13 +31,13 @@ public class MemberController {
 
 
     @PostMapping("/join")
-    public ResponseEntity<String> join(@RequestBody JoinRequest joinRequest){
+    public ResponseEntity<String> join(@RequestBody JoinRequest joinRequest) {
 
 
         JoinRequestStatus status = joinService.joinProcess(joinRequest);
 
 
-        return switch(status){
+        return switch (status) {
             case JOIN_SUCCESS -> ResponseEntity.status(HttpStatus.OK).body("회원가입이 성공적으로 완료되었습니다.");
             case NULL_EXIST -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body("필수 입력 항목이 누락되었습니다.");
             case EMAIL_DUPLICATED -> ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 이메일입니다.");
@@ -45,7 +46,7 @@ public class MemberController {
     }
 
     @GetMapping("/memberinfo")
-    public ResponseEntity<MemberInfoResponse> getMyInfo(@AuthenticationPrincipal CustomMemberDetails customMemberDetails){
+    public ResponseEntity<MemberInfoResponse> getMyInfo(@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
         long id = customMemberDetails.getId();
 
@@ -55,7 +56,7 @@ public class MemberController {
     }
 
     @PatchMapping("/memberinfo")
-    public ResponseEntity<String> modifyMemberInfo(@AuthenticationPrincipal CustomMemberDetails customMemberDetails, ModifyMemberInfoRequest modifyMemberInfoRequest){
+    public ResponseEntity<String> modifyMemberInfo(@AuthenticationPrincipal CustomMemberDetails customMemberDetails, ModifyMemberInfoRequest modifyMemberInfoRequest) {
 
         //현재 사용자 id값 가져오기
         long id = customMemberDetails.getId();
@@ -93,23 +94,22 @@ public class MemberController {
     }
 
     @PatchMapping("/member-profile-picture")
-    public ResponseEntity<String> modifyProfilePicture(@AuthenticationPrincipal CustomMemberDetails customMemberDetails, List<MultipartFile> profilePicture){
+    public ResponseEntity<ModifyProfilePictureResponse> modifyProfilePicture(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+            @RequestPart(required = false)
+            List<MultipartFile> profilePicture
+    ) {
         long id = customMemberDetails.getId();
-
-        // profilePicture 값이 있으면 수정
-        if (!profilePicture.isEmpty()) {
-            Boolean isDone = memberService.modifyProfilePicture(id, profilePicture);
-            log.info("picture isDone = {}", isDone);
-        }
-
-        return ResponseEntity.ok("정보 수정이 완료되었습니다");
+        String profile = memberService.modifyProfilePicture(id, profilePicture);
+        log.debug("picture isDone = {}", profile);
+        return ResponseEntity.ok().body(new ModifyProfilePictureResponse(profile));
     }
 
     @DeleteMapping("/memberinfo")
-    public ResponseEntity<String> quit(@AuthenticationPrincipal CustomMemberDetails customMemberDetails){
+    public ResponseEntity<String> quit(@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
         long id = customMemberDetails.getId();
 
-        if(memberService.deleteMember(id)){
+        if (memberService.deleteMember(id)) {
             return ResponseEntity.ok("회원 정보가 삭제되었습니다");
         }
 

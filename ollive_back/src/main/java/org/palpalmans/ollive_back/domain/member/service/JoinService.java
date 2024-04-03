@@ -1,8 +1,6 @@
 package org.palpalmans.ollive_back.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
-import org.palpalmans.ollive_back.domain.image.model.ImageType;
-import org.palpalmans.ollive_back.domain.image.model.dto.GetImageResponse;
 import org.palpalmans.ollive_back.domain.image.service.ImageService;
 import org.palpalmans.ollive_back.domain.member.model.dto.request.JoinRequest;
 import org.palpalmans.ollive_back.domain.member.model.entity.Member;
@@ -15,11 +13,10 @@ import org.palpalmans.ollive_back.domain.member.repository.MemberRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+
+import static org.palpalmans.ollive_back.domain.member.model.status.MemberRole.ROLE_NON_REGISTERED_MEMBER;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +26,7 @@ public class JoinService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ImageService imageService;
 
-    public JoinRequestStatus joinProcess(@RequestBody JoinRequest joinRequest){
+    public JoinRequestStatus joinProcess(@RequestBody JoinRequest joinRequest) {
 
         String email = joinRequest.getEmail();
         String password = joinRequest.getPassword();
@@ -40,13 +37,13 @@ public class JoinService {
 
 
         Boolean isExist = memberRepository.existsByEmail(email);
-        if(isExist) return JoinRequestStatus.EMAIL_DUPLICATED;
+        if (isExist) return JoinRequestStatus.EMAIL_DUPLICATED;
 
         //컬럼들이 notnull
         //정보를 무조건 가져와야하는건 일반회원가입멤버
         //소셜은 충분한 정보 없을 수 있음
 
-        if(role == MemberRole.ROLE_NON_REGISTERED_MEMBER){
+        if (role == ROLE_NON_REGISTERED_MEMBER) {
             //ROLE_NON_REGISTERD_MEMBER 면 SocialMember Entity 이용해서 회원가입
             Member member = Member.builder()
                     .email(email)
@@ -62,9 +59,9 @@ public class JoinService {
             memberRepository.save(joinMember);
 
 
-        }else if(role == MemberRole.ROLE_REGISTERED_MEMBER){
+        } else if (role == MemberRole.ROLE_REGISTERED_MEMBER) {
 
-            if(email == null || name == null){
+            if (email == null || name == null) {
                 return JoinRequestStatus.NULL_EXIST;
             }
             //ROLE_REGISTERED_MEMBER 면 NormalMember Entity 이용해서 회원가입
