@@ -17,6 +17,7 @@ import org.palpalmans.ollive_back.domain.recipe.repository.RecipeScoreRepository
 import org.palpalmans.ollive_back.domain.recipe.repository.ScrapRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,8 +80,12 @@ public class RecipeService {
 
 	public List<RecipeSummaryDto> getScrapedRecipes(long memberId, Long lastRecipeId, int size) {
 		List<Scrap> scrapedRecipes = scrapRepository.findByMemberId(memberId);
-		List<Long> scrapedRecipeIds = scrapedRecipes.stream().map(Scrap::getRecipeId).toList();
 
+		if(scrapedRecipes.isEmpty()){
+			return new ArrayList<>();
+		}
+
+		List<Long> scrapedRecipeIds = scrapedRecipes.stream().map(Scrap::getRecipeId).toList();
 		List<Recipe> recipesByScoredIds = recipeRepository.findRecipesByScrapedIds(scrapedRecipeIds, lastRecipeId, size);
 
 		return recipesByScoredIds.stream().map(RecipeMapper::toRecipeSummaryDto).toList();
