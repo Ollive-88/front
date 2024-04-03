@@ -62,6 +62,9 @@ class _AppState extends State<App> {
             backgroundColor: Color(0xFFFFFFFC),
           ),
           scaffoldBackgroundColor: const Color(0xFFFFFFFC),
+          textSelectionTheme: const TextSelectionThemeData(
+            cursorColor: Color(0xFF30AF98), // 여기에서 원하는 커서 색상을 설정하세요.
+          ),
         ),
         home: const LoginScreen(),
       ),

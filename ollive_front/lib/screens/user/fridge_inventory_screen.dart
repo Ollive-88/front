@@ -346,7 +346,9 @@ class _FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
 
   String calculateRemainingDate(initDateStr) {
     DateTime initDate = DateTime.parse(initDateStr);
-    DateTime today = DateTime.now();
+    DateTime now = DateTime.now();
+
+    DateTime today = DateTime(now.year, now.month, now.day);
 
     Duration difference = today.difference(initDate);
 

@@ -62,7 +62,7 @@ class _ClothListScreenState extends State<ClothListScreen> {
                 child: Column(
                   children: [
                     ClothListWidget(
-                      category: "아웃터",
+                      category: "아우터",
                       clothList: snapshot.data!.outerList,
                     ),
                     ClothListWidget(

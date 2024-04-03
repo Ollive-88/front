@@ -342,22 +342,8 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     ),
 
                     const SizedBox(
-                      height: 10,
-                    )
-                  ],
-                ),
-              ),
-              const Divider(
-                thickness: 3,
-                height: 1,
-                color: Color(0xFFEBEBE9),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                child: Column(
-                  children: [
-                    // 내가가진 식재료
+                      height: 15,
+                    ),
                     IconButton(
                       onPressed: () {
                         initRefrigeratorsList();
@@ -420,64 +406,59 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 100,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 26, vertical: 5),
-                child: GestureDetector(
-                  onTap: () async {
-                    FocusScope.of(context).unfocus();
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        FocusScope.of(context).unfocus();
 
-                    if (havingIngredients.isEmpty) {
-                      ErrorService.showToast("포함시킬 재료를 선택해주세요");
-                    } else {
-                      await RecipeService.getRecommendRecipeList(
-                        havingIngredients,
-                        dislikeIngredients,
-                      ).then((value) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RecipeListScreen(
-                              likeTagNames: havingIngredients,
-                              hateTagNames: dislikeIngredients,
-                              recommendrecipes: value,
+                        if (havingIngredients.isEmpty) {
+                          ErrorService.showToast("포함시킬 재료를 선택해주세요");
+                        } else {
+                          await RecipeService.getRecommendRecipeList(
+                            havingIngredients,
+                            dislikeIngredients,
+                          ).then((value) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RecipeListScreen(
+                                  likeTagNames: havingIngredients,
+                                  hateTagNames: dislikeIngredients,
+                                  recommendrecipes: value,
+                                ),
+                              ),
+                            );
+                          }).catchError((onError) {
+                            ErrorService.showToast("잘못된 요청입니다.");
+                          });
+                        }
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 65,
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF30AF98),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                "검색",
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
-                        );
-                      }).catchError((onError) {
-                        ErrorService.showToast("잘못된 요청입니다.");
-                      });
-                    }
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width / 1.1,
-                        height: MediaQuery.of(context).size.height / 11,
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF30AF98),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "검색",
-                            style: TextStyle(
-                              fontSize: 28,
-                              color: Colors.white,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],

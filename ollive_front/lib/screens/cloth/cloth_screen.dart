@@ -53,20 +53,17 @@ class _ClothScreenState extends State<ClothScreen> {
         appBar: AppBar(
           toolbarHeight: MediaQuery.of(context).size.height / 10,
           backgroundColor: const Color(0xFFFFFFFC),
-          title: const Center(
-            child: Text(
-              "코디 어때?",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+          centerTitle: true,
+          title: const Text(
+            "코디 어때?",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
         body: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
@@ -210,7 +207,7 @@ class _ClothScreenState extends State<ClothScreen> {
                     ),
 
                     const Text(
-                      "  노래 제목",
+                      "  노래 가사",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -234,6 +231,7 @@ class _ClothScreenState extends State<ClothScreen> {
                       // ignore: deprecated_member_use
                       child: TextField(
                         controller: _singController,
+                        cursorColor: const Color(0xFFFFD5D5),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
@@ -243,67 +241,58 @@ class _ClothScreenState extends State<ClothScreen> {
                         textAlign: TextAlign.start,
                       ),
                     ),
-
                     const SizedBox(
-                      height: 10,
+                      height: 50,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        FocusScope.of(context).unfocus();
+                        if (_singController.text.isEmpty) {
+                          ErrorService.showToast("노래가사를 입력해주세요.");
+                        } else if (selectedOuting == 0) {
+                      ErrorService.showToast("외출목적을 선택해 주세요.");
+                    } else {
+                          dynamic position = await ClothService.getPosition();
+
+                          if (position is Position) {
+                            Navigator.push(
+                              // ignore: use_build_context_synchronously
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ClothListScreen(
+                                  outing: outing[outingWord[selectedOuting]]!,
+                                  sing: _singController.text,
+                                  position: position,
+                                ),
+                              ),
+                            );
+                          } else {
+                            ErrorService.showToast("위치 정보를 동의해 주세요.");
+                          }
+                        }
+                      },
+                      child: Container(
+                        height: 65,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFD5D5),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            "검색",
+                            style: TextStyle(
+                              fontSize: 28,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 200,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                child: GestureDetector(
-                  onTap: () async {
-                    FocusScope.of(context).unfocus();
-                    if (_singController.text.isEmpty) {
-                      ErrorService.showToast("노래가사를 입력해주세요.");
-                    } else if (selectedOuting == 0) {
-                      ErrorService.showToast("외출목적을 선택해 주세요.");
-                    } else {
-                      dynamic position = await ClothService.getPosition();
-
-                      if (position is Position) {
-                        Navigator.push(
-                          // ignore: use_build_context_synchronously
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ClothListScreen(
-                              outing: outing[outingWord[selectedOuting]]!,
-                              sing: _singController.text,
-                              position: position,
-                            ),
-                          ),
-                        );
-                      } else {
-                        ErrorService.showToast("위치 정보를 동의해 주세요.");
-                      }
-                    }
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 1.1,
-                    height: MediaQuery.of(context).size.height / 11,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFD5D5),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "검색",
-                        style: TextStyle(
-                          fontSize: 28,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ),
-              )
             ],
           ),
         ),

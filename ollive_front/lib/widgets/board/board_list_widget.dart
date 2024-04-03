@@ -62,7 +62,7 @@ class BoardList extends StatelessWidget {
                             "User-Agent":
                                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
                           },
-                          fit: BoxFit.fitHeight,
+                          fit: BoxFit.cover,
                         ),
                       ),
                     )
@@ -83,7 +83,9 @@ class BoardList extends StatelessWidget {
                 children: [
                   Image.asset(
                     "assets/image/icons/comentIcon.png",
-                    fit: BoxFit.contain,
+                    width: 18,
+                    height: 18,
+                    fit: BoxFit.cover,
                   ),
                   const SizedBox(
                     width: 10,
