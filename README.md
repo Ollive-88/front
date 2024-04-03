@@ -79,17 +79,34 @@
 
 ## 📚 개발환경
 ### Front-End
-- Flutter 3.19.3
 - Dart 3.3.1
+- Flutter 3.19.3
+  - GetX 4.6.6 (전역 상태 관리)
+  - Dio 5.4.1 (http 요청)
+  - flutter_secure_storage 9.0.0 (로컬 스토리지 관리)
 
 ### Back-End
 - Java 17
 - Spring Boot 3.2.3
+  - Spring Batch
+  - Spring Data JPA
+  - Spring Data MongoDB
+  - QueryDSL
+  - Spring Security
+- Python 3.12.0
+- FastAPI 0.110.1
+  - hypercorn 0.16.0
+
+### AI & Crawling 
+- Hugging Face
+- Scrapy
+- BeautifulSoup
 
 ### Database
 - MySQL 8.0.36
 - MongoDB 7.0.7
 - Minio
+
 ### Dev/Ops
 - AWS EC2
 - Jenkins 2.448
