@@ -101,7 +101,7 @@ public class MemberController {
     ) {
         long id = customMemberDetails.getId();
         String profile = memberService.modifyProfilePicture(id, profilePicture);
-        log.debug("picture isDone = {}", profile);
+        log.info("picture profile = {}", profile);
         return ResponseEntity.ok().body(new ModifyProfilePictureResponse(profile));
     }
 
@@ -115,5 +115,4 @@ public class MemberController {
 
         return ResponseEntity.ok("회원 정보 삭제가 실패했습니다");
     }
-
 }

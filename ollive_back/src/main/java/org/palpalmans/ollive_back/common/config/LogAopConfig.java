@@ -8,10 +8,12 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.UUID;
+
 //콘솔창에 프린트가 아닌 로그를 띄워서 디버깅을 쉽게한다.
 @Slf4j
 @Aspect
@@ -22,7 +24,7 @@ public class LogAopConfig {
     private final ThreadLocal<String> traceId = new ThreadLocal<>();
 
     @Pointcut("execution(* org.palpalmans..*.*(..)) && !within(*..*Filter)")
-    private void cut(){
+    private void cut() {
     }
 
 
@@ -41,15 +43,13 @@ public class LogAopConfig {
                 .append("-->").append(method.getDeclaringClass().getSimpleName())
                 .append(".").append(method.getName()).append("()");
 
-
-
         // 파라미터 받아오기
         Object[] args = joinPoint.getArgs();
         for (Object arg : args) {
-            if(arg == null) continue;
+            if (arg == null) continue;
             logData.append("\t").append(arg.getClass().getSimpleName()).append(": ").append(arg);
         }
-        log.info(logData.toString());
+        log.debug(logData.toString());
     }
 
     // Poincut에 의해 필터링된 경로로 들어오는 경우 메서드 리턴 후에 적용
@@ -63,19 +63,18 @@ public class LogAopConfig {
         long startMs = callStack.get().pop();
 
 
-        if(returnObj == null) {
-            log.info("[{}] {}()  time={}ms", getTraceId(), getIndentation(depth) + "<--" +
+        if (returnObj == null) {
+            log.debug("[{}] {}()  time={}ms", getTraceId(), getIndentation(depth) + "<--" +
                             method.getDeclaringClass().getSimpleName() + "." + method.getName(),
                     System.currentTimeMillis() - startMs);
-        }
-        else{
-            log.info("[{}] {}() returned {}: {}  time={}ms", getTraceId(), getIndentation(depth) + "<--" +
+        } else {
+            log.debug("[{}] {}() returned {}: {}  time={}ms", getTraceId(), getIndentation(depth) + "<--" +
                             method.getDeclaringClass().getSimpleName() + "." + method.getName(),
                     returnObj.getClass().getSimpleName(), returnObj,
                     System.currentTimeMillis() - startMs);
         }
 
-        if(callStack.get().isEmpty()) callStack.remove();
+        if (callStack.get().isEmpty()) callStack.remove();
     }
 
     // JoinPoint로 메서드 정보 가져오기
@@ -86,7 +85,7 @@ public class LogAopConfig {
 
     // Trace ID 생성
     private String getTraceId() {
-        if(traceId.get() == null){
+        if (traceId.get() == null) {
             traceId.set(UUID.randomUUID().toString().substring(0, 8));
         }
 
