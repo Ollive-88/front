@@ -171,15 +171,18 @@ class UserService {
   }
 
   static Future<dynamic> updateProfileImage(List requestBody) async {
-    var newDio = DioService().authDio;
-    newDio.options.contentType = 'multipart/form-data';
     if (requestBody[1] == null) {
-      await _dio.patch('/api/v1/member-profile-picture');
+      FormData formData = FormData();
+      final reponse =
+          await _dio.patch('/api/v1/member-profile-picture', data: formData);
+      return reponse.data!['profileImage'];
     } else {
       FormData formData = FormData.fromMap({
-        requestBody[0]: requestBody[1],
+        "profilePicture": requestBody[1],
       });
-      await newDio.patch('/api/v1/member-profile-picture', data: formData);
+      final reponse =
+          await _dio.patch('/api/v1/member-profile-picture', data: formData);
+      return reponse.data!['profileImage'];
     }
   }
 

@@ -12,7 +12,6 @@ class ClothScreen extends StatefulWidget {
 }
 
 class _ClothScreenState extends State<ClothScreen> {
-  final TextEditingController _outingController = TextEditingController();
   final TextEditingController _singController = TextEditingController();
 
   final Map<String, String> outing = {

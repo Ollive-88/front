@@ -209,13 +209,11 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
   }
 
   void updateImage() async {
-    await UserService.convertXFileToMultipartFile(_pickedImg).then((value) {
-      UserService.updateProfileImage(['profilePicture', value]).then((value) {
-        _userInfoController.setImgUrl((value == null) ? '' : value);
-        Navigator.pop(context);
-      }).catchError((e) {
-        print(e);
-      });
+    final img = await UserService.convertXFileToMultipartFile(_pickedImg);
+
+    await UserService.updateProfileImage(['profilePicture', img]).then((value) {
+      _userInfoController.setImgUrl(value);
+      Navigator.pop(context);
     });
   }
 }
