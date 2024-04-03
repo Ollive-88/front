@@ -32,8 +32,8 @@ public class ClothController {
     }
 
     @GetMapping("/seen")
-    public ResponseEntity<GetClothesResponse> getSeenCloth(
+    public ResponseEntity<GetClothesResponse> getSeenCloth(@RequestParam int lastIndex, @RequestParam int size,
                                                            @AuthenticationPrincipal CustomMemberDetails customMemberDetails) throws Exception {
-        return ResponseEntity.ok(clothService.getSeenCloth(customMemberDetails.getMember()));
+        return ResponseEntity.ok( clothService.getSeenCloth(lastIndex, size,customMemberDetails.getMember()));
     }
 }

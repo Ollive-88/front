@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.palpalmans.ollive_back.common.error.ErrorMessage.BOARD_NOT_FOUND;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -75,8 +73,10 @@ public class ClothService {
         }
     }
 
-    public GetClothesResponse getSeenCloth(Member member) {
-        List<ClothMember> clothMembers = clothMemberService.getSeenCloth(member);
+    public GetClothesResponse getSeenCloth(int lastIndex, int size, Member member) {
+
+
+        List<ClothMember> clothMembers = clothMemberService.getSeenCloth(lastIndex, size, member);
 
         List<ClothResponse> clothResponses = new ArrayList<>();
 

@@ -17,8 +17,13 @@ public class ClothMemberService {
     private final ClothMemberRepository clothMemberRepository;
 
     @Transactional
-    public List<ClothMember> getSeenCloth(Member member) {
-        return clothMemberRepository.findAllByMember(member);
+    public List<ClothMember> getSeenCloth(int lastIndex, int size, Member member) {
+        if(lastIndex == 0){
+            return clothMemberRepository.findAllByMemberZeroIndex(lastIndex, size, member.getId());
+        }else {
+            return clothMemberRepository.findAllByMember(lastIndex, size, member.getId());
+
+        }
     }
 
     @Transactional(readOnly = true)

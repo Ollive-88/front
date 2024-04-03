@@ -12,6 +12,9 @@ import java.util.Optional;
 public interface ClothMemberRepository extends JpaRepository<ClothMember, Long> {
     Optional<ClothMember> findByClothAndMember(Cloth cloth, Member member);
 
-    @Query(value = "select c from ClothMember c where c.member = :member order by c.createdAt")
-    List<ClothMember> findAllByMember(Member member);
+    @Query(value = "SELECT * FROM cloth_member c WHERE c.id > :lastIndex AND c.member_id = :member ORDER BY c.created_at DESC LIMIT :sized", nativeQuery = true)
+    List<ClothMember> findAllByMemberZeroIndex(int lastIndex, int sized, Long member);
+
+    @Query(value = "SELECT * FROM cloth_member c WHERE c.id < :lastIndex AND c.member_id = :member ORDER BY c.created_at DESC LIMIT :sized", nativeQuery = true)
+    List<ClothMember> findAllByMember(int lastIndex, int sized, Long member);
 }
