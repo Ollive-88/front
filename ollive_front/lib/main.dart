@@ -57,10 +57,13 @@ class _AppState extends State<App> {
         ],
         // 폰트 전역 설정
         theme: ThemeData(
-          fontFamily: 'NanumSquare',
+          fontFamily: 'Pretendard',
           appBarTheme: const AppBarTheme(
-            backgroundColor: Color(0xFFFFFFFC),
-          ),
+              backgroundColor: Color(0xFFFFFFFC),
+              titleTextStyle: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black)),
           scaffoldBackgroundColor: const Color(0xFFFFFFFC),
           textSelectionTheme: const TextSelectionThemeData(
             cursorColor: Color(0xFF30AF98), // 여기에서 원하는 커서 색상을 설정하세요.

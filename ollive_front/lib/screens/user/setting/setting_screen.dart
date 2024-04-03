@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:ollive_front/screens/user/authentication/login_screen.dart';
 import 'package:ollive_front/screens/user/setting/term_of_service_screen.dart';
 import 'package:ollive_front/screens/user/setting/term_of_userinfo_screen.dart';
 import 'package:ollive_front/screens/user/setting/unregister_screen.dart';
@@ -51,11 +50,10 @@ class _SettingScreenState extends State<SettingScreen> {
     UserService.logoutAction().then((value) async {
       await storage.delete(key: 'accessToken');
       await storage.delete(key: 'refreshToken');
-      Navigator.pushReplacement(
-        // ignore: use_build_context_synchronously
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
+      _userInfoController
+          .setToken(Token(accessToken: null, refreshToken: null));
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/login', (Route<dynamic> route) => false);
     });
   }
 
@@ -77,7 +75,9 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('설정'),
+        title: const Text(
+          '설정',
+        ),
         centerTitle: true,
         surfaceTintColor: const Color(0xFFFFFFFC),
         shadowColor: Colors.black,

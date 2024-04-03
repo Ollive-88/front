@@ -254,10 +254,6 @@ class _RecipeScreenState extends State<RecipeScreen> {
             child: Text(
               "레시피를 부탁해",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
             ),
           ),
         ),
@@ -277,7 +273,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     RichText(
                       text: const TextSpan(
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           // fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -368,7 +364,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                           ),
                           const Text(
                             "내가 가진 식재료",
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 18),
                           ),
                           const SizedBox(
                             width: 50,
@@ -405,7 +401,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                           ),
                           const Text(
                             "싫어하는 재료 목록",
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 18),
                           ),
                           const SizedBox(
                             width: 50,

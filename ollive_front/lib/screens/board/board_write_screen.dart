@@ -190,10 +190,6 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
               const Expanded(
                 child: Text(
                   "글쓰기",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
                   textAlign: TextAlign.center,
                 ),
               ),

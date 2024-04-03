@@ -49,6 +49,8 @@ class _MyPageScreenState extends State<MyPageScreen> {
       _userInfoController.setNickname(value.nickname);
       if (value.imgUrl != null) {
         _userInfoController.setImgUrl(value.imgUrl!);
+      } else {
+        _userInfoController.setImgUrl('');
       }
       return value;
     });

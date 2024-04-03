@@ -55,10 +55,6 @@ class _ClothScreenState extends State<ClothScreen> {
           centerTitle: true,
           title: const Text(
             "코디 어때?",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
           ),
         ),
         body: SingleChildScrollView(
@@ -75,7 +71,7 @@ class _ClothScreenState extends State<ClothScreen> {
                     RichText(
                       text: const TextSpan(
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           // fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -287,7 +283,7 @@ class _ClothScreenState extends State<ClothScreen> {
                             "검색",
                             style: TextStyle(
                               fontSize: 22,
-                              color: Colors.white,
+                              color: Colors.black87,
                             ),
                             textAlign: TextAlign.center,
                           ),

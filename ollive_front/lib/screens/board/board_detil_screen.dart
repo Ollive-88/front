@@ -371,13 +371,9 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                 runSpacing: 4.0,
                                 children: [
                                   for (var tag in snapshot.data!.tags)
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 10, bottom: 10),
-                                      child: Tag(
-                                        tagModel: TagModel(tag.tagName),
-                                        isSearch: false,
-                                      ),
+                                    Tag(
+                                      tagModel: TagModel(tag.tagName),
+                                      isSearch: false,
                                     )
                                 ],
                               ),

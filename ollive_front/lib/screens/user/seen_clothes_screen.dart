@@ -78,7 +78,6 @@ class _SeenClothesScreenState extends State<SeenClothesScreen> {
       appBar: AppBar(
         title: const Text(
           '최근 본 의류',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
       ),
@@ -91,14 +90,12 @@ class _SeenClothesScreenState extends State<SeenClothesScreen> {
                   ? SingleChildScrollView(
                       controller: _scrollController,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
+                        padding: const EdgeInsets.all(15),
                         child: Wrap(
                           children: [
                             for (ClothModel cloth in snapshot.data!)
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 15, bottom: 15),
+                                padding: const EdgeInsets.all(5),
                                 child: ClothWidget(clothModel: cloth),
                               ),
                           ],

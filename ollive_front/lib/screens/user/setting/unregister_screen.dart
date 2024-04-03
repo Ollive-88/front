@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:ollive_front/screens/user/authentication/login_screen.dart';
 import 'package:ollive_front/service/user/user_service.dart';
 import 'package:ollive_front/util/controller/getx_controller.dart';
 
@@ -30,11 +29,8 @@ class UnregisterScreen extends StatelessWidget {
       _userInfoController
           .setToken(Token(accessToken: null, refreshToken: null));
 
-      Navigator.pushReplacement(
-        // ignore: use_build_context_synchronously
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/login', (Route<dynamic> route) => false);
     });
   }
 

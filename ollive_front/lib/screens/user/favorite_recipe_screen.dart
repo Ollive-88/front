@@ -78,7 +78,6 @@ class _FavoriteRecipeScreenState extends State<FavoriteRecipeScreen> {
       appBar: AppBar(
         title: const Text(
           '즐겨찾는 레시피',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
       ),
@@ -93,10 +92,7 @@ class _FavoriteRecipeScreenState extends State<FavoriteRecipeScreen> {
                         children: [
                           // 레시피 리스트
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 10,
-                            ),
+                            padding: const EdgeInsets.all(15),
                             child: Wrap(
                               spacing: 20.0,
                               runSpacing: 5.0,
@@ -107,10 +103,6 @@ class _FavoriteRecipeScreenState extends State<FavoriteRecipeScreen> {
                                         maxWidth:
                                             MediaQuery.of(context).size.width /
                                                 2.3),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 5,
-                                      vertical: 5,
-                                    ),
                                     child: Column(
                                       children: [
                                         Container(

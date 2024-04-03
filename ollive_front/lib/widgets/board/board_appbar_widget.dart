@@ -18,7 +18,6 @@ class BoardAppBar extends StatelessWidget {
             children: [
               const Text(
                 "사람사는 이야기",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 textAlign: TextAlign.center,
               ),
               IconButton(
