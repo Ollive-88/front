@@ -12,13 +12,15 @@ class RecipeInfo extends StatelessWidget {
       children: [
         Image.asset(
           iconUrl,
+          height: 50,
+          width: 50,
         ),
         const SizedBox(
           height: 5,
         ),
         Text(
           text,
-          style: const TextStyle(fontSize: 18),
+          style: const TextStyle(fontSize: 16),
         )
       ],
     );

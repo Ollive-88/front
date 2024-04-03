@@ -250,11 +250,7 @@ class _FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                             onPressed: () async {
                               if (_ingredientController.text.isEmpty) {
                                 FocusScope.of(context).unfocus();
-                                // 약간의 딜레이 후에 토스트 메시지를 띄운다.
-                                Future.delayed(
-                                    const Duration(milliseconds: 100), () {
-                                  showToast();
-                                });
+                                showToast('재료명을 입력해주세요.');
                               } else {
                                 if (index != null) {
                                   final input = UserIngredients(
@@ -318,15 +314,15 @@ class _FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
   void _onDismissed(Actions action) {
     switch (action) {
       case Actions.delete:
-        _showSnackBar(context, '삭제되었습니다.', Colors.grey);
+        showToast('삭제되었습니다.');
       case Actions.change:
-        _showSnackBar(context, '변경되었습니다.', Colors.grey);
+        showToast('변경되었습니다.');
     }
   }
 
-  void showToast() {
+  void showToast(String msg) {
     Fluttertoast.showToast(
-      msg: '재료명을 입력해주세요.',
+      msg: msg,
     );
   }
 

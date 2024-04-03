@@ -31,9 +31,8 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
     final comment =
         await BoardService.postComment(widget.boardId, _commetController.text);
     setState(() {
-      boardDetail.then((value) {
-        value.comments.add(comment);
-      }); // 새로운 댓글을 comments 리스트에 추가
+      boardDetail = BoardService.getBoardDetail(
+          widget.boardId); // 새로운 댓글을 comments 리스트에 추가
       _commetController.clear(); // 입력 필드 초기화
       FocusScope.of(context).unfocus();
       _scrollController.animateTo(
@@ -115,16 +114,20 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                           ),
                                         );
                                       },
-                                      child: const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 15,
-                                        ),
-                                        child: Text(
-                                          "수정",
-                                          style: TextStyle(
-                                            fontSize: 20,
+                                      child: const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              "수정",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
                                     ),
                                     const Divider(
@@ -146,16 +149,18 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                           return null;
                                         });
                                       },
-                                      child: const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 15,
-                                        ),
-                                        child: Text(
-                                          "삭제",
-                                          style: TextStyle(
-                                            fontSize: 20,
+                                      child: const Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              "삭제",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
                                     )
                                   ],
@@ -251,16 +256,19 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                   ),
                                 ),
                                 Container(
+                                  height: MediaQuery.of(context).size.width / 9,
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 0),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         snapshot.data!.writer.nickname,
                                         style: const TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -268,7 +276,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                         BoardService.timeAgo(
                                             snapshot.data!.createdAt),
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 13,
                                           color: Colors.black.withOpacity(0.7),
                                         ),
                                       )
@@ -287,7 +295,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                             child: Text(
                               snapshot.data!.title,
                               style: const TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.bold),
+                                  fontSize: 19, fontWeight: FontWeight.bold),
                             ),
                           ),
 
@@ -346,7 +354,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                             child: Text(
                               snapshot.data!.content,
                               style: const TextStyle(
-                                fontSize: 20,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -385,7 +393,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                             children: [
                               const Icon(
                                 Icons.remove_red_eye,
-                                size: 30,
+                                size: 18,
                               ),
                               const SizedBox(
                                 width: 7,
@@ -393,7 +401,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                               Text(
                                 "${snapshot.data!.viewCount}",
                                 style: const TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 15,
                                 ),
                               ),
                               const SizedBox(
@@ -418,16 +426,13 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                   snapshot.data!.isLiked
                                       ? Icons.favorite_rounded
                                       : Icons.favorite_outline,
-                                  size: 30,
+                                  size: 18,
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 7,
                               ),
                               Text(
                                 "${snapshot.data!.likeCount}",
                                 style: const TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 15,
                                 ),
                               )
                             ],
@@ -497,20 +502,23 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                       ),
                                     ),
                                     child: ClipOval(
-                                      child: (snapshot.data!.writer.imgUrl !=
+                                      child: (snapshot.data!.comments[i]
+                                                      .memberProfile !=
                                                   "" &&
-                                              snapshot.data!.writer.imgUrl !=
+                                              snapshot.data!.comments[i]
+                                                      .memberProfile !=
                                                   null)
                                           ? Image.network(
-                                              snapshot.data!.writer.imgUrl!,
+                                              snapshot.data!.comments[i]
+                                                  .memberProfile!,
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width /
-                                                  7,
+                                                  9,
                                               height: MediaQuery.of(context)
                                                       .size
                                                       .width /
-                                                  7,
+                                                  9,
                                               headers: const {
                                                 "User-Agent":
                                                     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
@@ -522,11 +530,11 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width /
-                                                  7,
+                                                  9,
                                               height: MediaQuery.of(context)
                                                       .size
                                                       .width /
-                                                  7,
+                                                  9,
                                               fit: BoxFit.cover,
                                             ),
                                     ),
@@ -551,8 +559,9 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                             Text(
                                               snapshot
                                                   .data!.comments[i].nickname,
-                                              style:
-                                                  const TextStyle(fontSize: 18),
+                                              style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w600),
                                             ),
                                             snapshot.data!.comments[i].isMine
                                                 ? IconButton(

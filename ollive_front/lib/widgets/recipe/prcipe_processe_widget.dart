@@ -17,13 +17,13 @@ class RecipeProcesses extends StatelessWidget {
           children: [
             Text(
               "${processeModel.cookOrder}. ",
-              style: const TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             Flexible(
               child: Text(
                 processeModel.content,
                 maxLines: 10,
-                style: const TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 16),
                 overflow: TextOverflow.ellipsis,
               ),
             ),

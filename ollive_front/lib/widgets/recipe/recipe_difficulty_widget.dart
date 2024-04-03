@@ -32,7 +32,7 @@ class RecipeDifficulty extends StatelessWidget {
         ),
         Text(
           difficulty,
-          style: const TextStyle(fontSize: 18),
+          style: const TextStyle(fontSize: 16),
         )
       ],
     );

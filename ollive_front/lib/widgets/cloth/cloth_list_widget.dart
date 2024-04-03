@@ -19,9 +19,7 @@ class ClothListWidget extends StatelessWidget {
         children: [
           Text(
             category,
-            style: const TextStyle(
-              fontSize: 18,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(

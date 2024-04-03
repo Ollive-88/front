@@ -77,20 +77,20 @@ class _MyPageScreenState extends State<MyPageScreen> {
                               () => (_userInfoController.imgUrl != '')
                                   ? MakeCircleImage(
                                       imageUrl: _userInfoController.imgUrl,
-                                      width: 200,
-                                      height: 200,
+                                      width: 150,
+                                      height: 150,
                                     )
                                   : ClipOval(
                                       child: Image.asset(
                                         'assets/image/icons/basic_profile_img.png',
-                                        width: 200,
-                                        height: 200,
+                                        width: 150,
+                                        height: 150,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
                             ),
                             const SizedBox(
-                              height: 5,
+                              height: 10,
                             ),
                             Obx(
                               () => Text(

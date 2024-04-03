@@ -18,9 +18,11 @@ class Tag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 4,
-        horizontal: 5,
+      padding: const EdgeInsets.only(
+        top: 2,
+        bottom: 2,
+        left: 8,
+        right: 8,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -43,14 +45,18 @@ class Tag extends StatelessWidget {
         children: [
           Flexible(
             // Flexible 또는 Expanded로 감쌀 수 있습니다.
-            child: Text(tagModel.tagName, overflow: TextOverflow.ellipsis),
+            child: Text(
+              tagModel.tagName,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
           // Text(tagName),
           if (isSearch)
             IconButton(
               onPressed: deleteTag,
               icon: const Icon(
-                Icons.delete,
+                size: 18,
+                Icons.close_outlined,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

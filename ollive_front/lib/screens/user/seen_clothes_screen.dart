@@ -76,7 +76,10 @@ class _SeenClothesScreenState extends State<SeenClothesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('최근 본 의류'),
+        title: const Text(
+          '최근 본 의류',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        ),
         centerTitle: true,
       ),
       // 이거 Future Builder로 만들어야함!

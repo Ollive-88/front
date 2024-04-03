@@ -17,6 +17,7 @@ class BoardImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
+      clipBehavior: Clip.none,
       children: <Widget>[
         Container(
           width: heght,
@@ -31,10 +32,13 @@ class BoardImage extends StatelessWidget {
         ),
         // 삭제 버튼
         Positioned(
-          right: -15, // 우측 상단에 조금 튀어나오게 조정
-          top: -15, // 상단에 조금 튀어나오게 조정
+          right: -20, // 우측 상단에 조금 튀어나오게 조정
+          top: -20, // 상단에 조금 튀어나오게 조정
           child: IconButton(
-            icon: const Icon(Icons.cancel, color: Colors.red),
+            icon: const Icon(
+              Icons.cancel,
+              color: Colors.red,
+            ),
             onPressed: deleteImage,
           ),
         ),

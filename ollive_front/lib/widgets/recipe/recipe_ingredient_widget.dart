@@ -33,13 +33,13 @@ class RecipeIngredient extends StatelessWidget {
               Text(
                 ingredient.name,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                 ),
               ),
               Text(
                 ingredient.amount,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                 ),
               )
             ],

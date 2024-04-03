@@ -56,7 +56,7 @@ class _ClothScreenState extends State<ClothScreen> {
           title: const Text(
             "코디 어때?",
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -75,7 +75,7 @@ class _ClothScreenState extends State<ClothScreen> {
                     RichText(
                       text: const TextSpan(
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 20,
                           // fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -158,7 +158,9 @@ class _ClothScreenState extends State<ClothScreen> {
                                         children: [
                                           Text(
                                             "외출 목적을 선택해 주세요.",
-                                            style: TextStyle(fontSize: 22),
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w600),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -183,7 +185,7 @@ class _ClothScreenState extends State<ClothScreen> {
                                           child: Text(
                                             outingWord[i],
                                             style: const TextStyle(
-                                              fontSize: 20,
+                                              fontSize: 17,
                                             ),
                                           ),
                                         ),
@@ -284,7 +286,7 @@ class _ClothScreenState extends State<ClothScreen> {
                           child: Text(
                             "검색",
                             style: TextStyle(
-                              fontSize: 28,
+                              fontSize: 22,
                               color: Colors.white,
                             ),
                             textAlign: TextAlign.center,

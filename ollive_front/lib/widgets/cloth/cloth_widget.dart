@@ -39,6 +39,7 @@ class ClothWidget extends StatelessWidget {
             child: Text(
               clothModel.name,
               overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 14),
             ),
           ),
         ],

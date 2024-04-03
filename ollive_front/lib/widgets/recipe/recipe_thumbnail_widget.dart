@@ -21,14 +21,14 @@ class RecipeThumbnail extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(30),
         child: Image.network(
-          // width: MediaQuery.of(context).size.width / 2.3,
-          // height: MediaQuery.of(context).size.width / 2.3,
+          width: MediaQuery.of(context).size.width / 2,
+          height: MediaQuery.of(context).size.width / 2,
           thumbnailUrl,
           headers: const {
             "User-Agent":
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
           },
-          fit: BoxFit.fitHeight,
+          fit: BoxFit.cover,
         ),
       ),
     );

@@ -18,9 +18,7 @@ class BoardAppBar extends StatelessWidget {
             children: [
               const Text(
                 "사람사는 이야기",
-                style: TextStyle(
-                  fontSize: 24,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 textAlign: TextAlign.center,
               ),
               IconButton(
@@ -37,23 +35,24 @@ class BoardAppBar extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                  height: 40,
+                  height: 50,
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: const Color(0xFFEBEBE9)),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                    ),
-                    child: Text(
-                      keyword!,
-                      style: const TextStyle(
-                        fontSize: 24,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        keyword!,
+                        style: const TextStyle(
+                          fontSize: 20,
+                        ),
+                        textAlign: TextAlign.start,
                       ),
-                      textAlign: TextAlign.start,
-                    ),
+                    ],
                   ),
                 ),
               ),

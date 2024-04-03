@@ -76,7 +76,10 @@ class _FavoriteRecipeScreenState extends State<FavoriteRecipeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('즐겨찾는 레시피'),
+        title: const Text(
+          '즐겨찾는 레시피',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        ),
         centerTitle: true,
       ),
       body: FutureBuilder(
@@ -164,7 +167,7 @@ class _FavoriteRecipeScreenState extends State<FavoriteRecipeScreen> {
                                         Text(
                                           snapshot.data![i].title,
                                           style: const TextStyle(
-                                            fontSize: 18,
+                                            fontSize: 16,
                                           ),
                                           maxLines: 2, // 최대 줄 수를 2로 설정
                                           overflow: TextOverflow

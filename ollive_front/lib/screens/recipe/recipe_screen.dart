@@ -85,7 +85,10 @@ class _RecipeScreenState extends State<RecipeScreen> {
                       ),
                       const Text(
                         "냉장고 목록",
-                        style: TextStyle(fontSize: 22),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                       IconButton(
@@ -99,7 +102,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                         icon: const Text(
                           "추가",
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 17,
                           ),
                         ),
                       ),
@@ -174,7 +177,8 @@ class _RecipeScreenState extends State<RecipeScreen> {
                       ),
                       const Text(
                         "싫어하는 재료 목록",
-                        style: TextStyle(fontSize: 22),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center,
                       ),
                       IconButton(
@@ -188,7 +192,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                         icon: const Text(
                           "추가",
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 17,
                           ),
                         ),
                       ),
@@ -251,7 +255,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
               "레시피를 부탁해",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -273,7 +277,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     RichText(
                       text: const TextSpan(
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 20,
                           // fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -317,6 +321,16 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     RecipeTextField(
                       ingredients: havingIngredients,
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        '여러개의 재료 입력시 각 재료는 띄어쓰기로 구분해 주세요.',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
 
                     const SizedBox(
                       height: 20,
@@ -354,7 +368,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                           ),
                           const Text(
                             "내가 가진 식재료",
-                            style: TextStyle(fontSize: 24),
+                            style: TextStyle(fontSize: 20),
                           ),
                           const SizedBox(
                             width: 50,
@@ -391,7 +405,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                           ),
                           const Text(
                             "싫어하는 재료 목록",
-                            style: TextStyle(fontSize: 24),
+                            style: TextStyle(fontSize: 20),
                           ),
                           const SizedBox(
                             width: 50,
@@ -446,7 +460,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                               child: Text(
                                 "검색",
                                 style: TextStyle(
-                                  fontSize: 28,
+                                  fontSize: 22,
                                   color: Colors.white,
                                 ),
                                 textAlign: TextAlign.center,

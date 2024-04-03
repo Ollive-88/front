@@ -191,10 +191,12 @@ class _HateInventoryScreenState extends State<HateInventoryScreen> {
           TextButton(
               onPressed: () async {
                 if (_ingredientController.text.isEmpty) {
-                  showToast(context, '재료명을 입력해주세요.');
+                  FocusScope.of(context).unfocus();
+                  showToast('재료명을 입력해주세요.');
                 } else {
                   if (ingredientSet.contains(_ingredientController.text)) {
-                    showToast(context, '이미 목록에 있는 재료입니다.');
+                    FocusScope.of(context).unfocus();
+                    showToast('이미 목록에 있는 재료입니다.');
                     _ingredientController.clear();
                   } else {
                     // api 연결하기
@@ -217,17 +219,13 @@ class _HateInventoryScreenState extends State<HateInventoryScreen> {
   }
 
   void _onDismissed() {
-    _showSnackBar(context, '삭제되었습니다.');
+    showToast('삭제되었습니다.');
   }
 
-  void showToast(context, msg) {
-    FocusScope.of(context).unfocus();
-    // 약간의 딜레이 후에 토스트 메시지를 띄운다.
-    Future.delayed(const Duration(milliseconds: 100), () {
-      Fluttertoast.showToast(
-        msg: msg,
-      );
-    });
+  void showToast(msg) {
+    Fluttertoast.showToast(
+      msg: msg,
+    );
   }
 
   void _showSnackBar(BuildContext context, String msg) {

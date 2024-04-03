@@ -31,6 +31,13 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
   XFile? _pickedImg;
   bool _pickInProgress = false;
   final StatusController _userInfoController = Get.put(StatusController());
+  late String profileUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    profileUrl = Get.find<StatusController>().imgUrl;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +73,19 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
                   Center(
                     child: ClipOval(
                       child: (_pickedImg == null)
-                          ? Image.asset(
-                              'assets/image/icons/basic_profile_img.png',
-                              width: 250,
-                              height: 250,
-                              fit: BoxFit.cover,
-                            )
+                          ? (profileUrl == '')
+                              ? Image.asset(
+                                  'assets/image/icons/basic_profile_img.png',
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                                  profileUrl,
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                )
                           : Image.file(
                               File(_pickedImg!.path),
                               width: 250,
@@ -205,6 +219,7 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
   void deleteImage() {
     setState(() {
       _pickedImg = null;
+      profileUrl = '';
     });
   }
 

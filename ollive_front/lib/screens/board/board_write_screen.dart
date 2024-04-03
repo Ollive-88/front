@@ -89,7 +89,9 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
 
   // 이미지 선택 메서드
   Future<void> _pickImg() async {
-    final List<XFile> images = await _picker.pickMultiImage();
+    final List<XFile> images = await _picker.pickMultiImage(
+      imageQuality: 30,
+    );
 
     setState(() {
       bool isFull = false;
@@ -175,7 +177,6 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
       child: Scaffold(
         backgroundColor: const Color(0xFFFFFFFC),
         appBar: AppBar(
-          toolbarHeight: MediaQuery.of(context).size.height / 10,
           centerTitle: true,
           surfaceTintColor: const Color(0xFFFFFFFC),
           shadowColor: Colors.black,
@@ -190,7 +191,7 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                 child: Text(
                   "글쓰기",
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,
@@ -267,7 +268,7 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                 child: const Text(
                   "완료",
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,
@@ -288,21 +289,23 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
               alignment: Alignment.topCenter,
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom / 4,
-                    right: 15,
-                    left: 15,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFormField(
+                        style: const TextStyle(
+                          fontSize: 17.0, // 텍스트 크기
+                          fontWeight: FontWeight.w600, // 텍스트 두께
+                        ),
                         controller: _titleController,
                         decoration: const InputDecoration(
                           hintText: "제목을 입력하세요",
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                              width: 3,
+                              width: 2,
                               color: Color(0xFFEBEBE9),
                             ),
                           ),
@@ -320,12 +323,16 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                           border: Border(
                             bottom: BorderSide(
                               color: Color(0xFFEBEBE9), // 여기서 원하는 색상을 선택하세요
-                              width: 3, // 밑줄의 두께를 지정하세요
+                              width: 2, // 밑줄의 두께를 지정하세요
                             ),
                           ),
                         ),
                         height: MediaQuery.of(context).size.height / 2,
                         child: TextFormField(
+                          style: const TextStyle(
+                            fontSize: 15.0, // 텍스트 크기
+                            fontWeight: FontWeight.w500, // 텍스트 두께
+                          ),
                           controller: _contentController,
                           maxLines: 100,
                           decoration: const InputDecoration(
@@ -342,9 +349,13 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                       // ignore: deprecated_member_use
                       TextFormField(
                         onChanged: _handleInput,
+                        style: const TextStyle(
+                          fontSize: 15.0, // 텍스트 크기
+                          fontWeight: FontWeight.w500, // 텍스트 두께
+                        ),
                         controller: _inputController,
                         decoration: const InputDecoration(
-                          hintText: "태그를 입력하세요",
+                          hintText: "태그 입력 시 각 태그는 띄어쓰기로 구분해 주세요.",
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide.none,
                           ),
@@ -359,15 +370,41 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                           controller: _scrollController,
                           scrollDirection: Axis.horizontal,
                           child: Row(
-                            children: [
-                              for (int i = 0; i < tagNames.length; i++)
-                                Tag(
-                                  tagModel: tagNames[i],
-                                  isSearch: true,
-                                  deleteTag: () => deleteTags(tagNames[i], i),
-                                )
-                            ],
+                            children: List.generate(tagNames.length, (index) {
+                              return Row(
+                                children: [
+                                  Tag(
+                                    tagModel: tagNames[index],
+                                    isSearch: true,
+                                    deleteTag: () =>
+                                        deleteTags(tagNames[index], index),
+                                  ),
+                                  const SizedBox(
+                                      width: 8), // 각 Tag 위젯 사이에 공백 추가
+                                ],
+                              );
+                            }),
                           ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      SingleChildScrollView(
+                        child: Row(
+                          children: [
+                            for (var i = 0; i < _pickedImgs.length; i++)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 5),
+                                child: BoardImage(
+                                  image: _pickedImgs[i].imgFile,
+                                  heght:
+                                      MediaQuery.of(context).size.height / 10,
+                                  deleteImage: () =>
+                                      deleteImage(_pickedImgs[i], i),
+                                ),
+                              )
+                          ],
                         ),
                       ),
                     ],
@@ -401,21 +438,10 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
                       _pickImg();
                     },
                   ),
-                  SingleChildScrollView(
-                    child: Row(
-                      children: [
-                        for (var i = 0; i < _pickedImgs.length; i++)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5),
-                            child: BoardImage(
-                              image: _pickedImgs[i].imgFile,
-                              heght: MediaQuery.of(context).size.height / 10,
-                              deleteImage: () => deleteImage(_pickedImgs[i], i),
-                            ),
-                          )
-                      ],
-                    ),
-                  )
+                  const Text(
+                    '사진',
+                    style: TextStyle(fontSize: 13),
+                  ),
                 ],
               );
             },

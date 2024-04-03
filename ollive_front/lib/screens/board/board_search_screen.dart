@@ -91,8 +91,7 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
             children: [
               Flexible(
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: const Color(0xFFEBEBE9)),
@@ -106,7 +105,7 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
                       suffixIcon: Icon(Icons.search),
                     ),
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                     ),
                     textAlign: TextAlign.start,
                   ),

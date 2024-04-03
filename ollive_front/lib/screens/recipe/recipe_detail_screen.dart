@@ -76,11 +76,11 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                         ? const Icon(
                             Icons.bookmark,
                             color: Colors.amber,
-                            size: 40,
+                            size: 30,
                           )
                         : const Icon(
                             Icons.bookmark_border,
-                            size: 40,
+                            size: 30,
                           ),
                     onPressed: () {
                       snapshot.data!.isScraped = !snapshot.data!.isScraped;
@@ -125,7 +125,8 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                         // 제목
                         Text(
                           snapshot.data!.title,
-                          style: const TextStyle(fontSize: 24),
+                          style: const TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.w600),
                         ),
 
                         const SizedBox(
@@ -178,7 +179,8 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                       children: [
                         const Text(
                           "재료",
-                          style: TextStyle(fontSize: 26),
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(
                           height: 10,
@@ -211,7 +213,8 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                       children: [
                         const Text(
                           "조리순서",
-                          style: TextStyle(fontSize: 26),
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(
                           height: 10,
@@ -219,12 +222,19 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                         for (int i = 0;
                             i < snapshot.data!.processes.length;
                             i++)
-                          RecipeProcesses(
-                            processeModel: snapshot.data!.processes[i],
+                          Column(
+                            children: [
+                              RecipeProcesses(
+                                processeModel: snapshot.data!.processes[i],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                            ],
                           ),
 
                         const SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
 
                         // 별점

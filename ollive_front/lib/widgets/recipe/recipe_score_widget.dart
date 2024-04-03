@@ -40,7 +40,7 @@ class RecipeScore extends StatelessWidget {
           Text(
             score.toStringAsFixed(1),
             style: const TextStyle(
-              fontSize: 24,
+              fontSize: 20,
             ),
           ),
         ],

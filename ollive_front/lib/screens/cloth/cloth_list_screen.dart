@@ -49,9 +49,7 @@ class _ClothListScreenState extends State<ClothListScreen> {
         foregroundColor: Colors.black,
         title: const Text(
           "오늘의 패션",
-          style: TextStyle(
-            fontSize: 24,
-          ),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
       ),
       body: FutureBuilder(

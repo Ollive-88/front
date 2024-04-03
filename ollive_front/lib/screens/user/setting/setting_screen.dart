@@ -170,29 +170,26 @@ class _SettingScreenState extends State<SettingScreen> {
         ),
         content: textTrue
             ? SizedBox(
-                height: 100,
-                child: Center(
-                  child: Expanded(
-                    child: TextField(
-                      autofocus: true,
-                      obscureText: isObscure,
-                      obscuringCharacter: '●',
-                      controller: controller,
-                      cursorColor: const Color(0xFF30AF98),
-                      decoration: InputDecoration(
-                        hintText: hintText,
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            borderSide: BorderSide(color: Color(0xFF30AF98))),
-                      ),
+                width: 180,
+                child: TextField(
+                  autofocus: true,
+                  obscureText: isObscure,
+                  obscuringCharacter: '●',
+                  controller: controller,
+                  style: const TextStyle(fontSize: 14),
+                  cursorColor: const Color(0xFF30AF98),
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
                     ),
+                    focusedBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(color: Color(0xFF30AF98))),
                   ),
                 ),
               )
-            : null,
+            : const SizedBox(),
         actions: [
           TextButton(
               onPressed: () {

@@ -390,7 +390,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
                           Text(
                             recipes[i].title,
                             style: const TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                             ),
                             maxLines: 2, // 최대 줄 수를 2로 설정
                             overflow:
