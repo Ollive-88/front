@@ -1,5 +1,4 @@
 ![ollive_logo.png](README%20images%2Follive_metadata%2Follive_logo.png)
-![ollive_description.png](README%20images%2Follive_metadata%2Follive_description.png)
 ---
 - [📢 프로젝트 개요](#-프로젝트-개요)
     * [기획배경](#기획배경)
@@ -114,5 +113,5 @@
 ---
 
 ## 🌐 아키텍처
-
+![ollive_architecture.png](README%20images%2Follive_metadata%2Follive_architecture.png)
 
