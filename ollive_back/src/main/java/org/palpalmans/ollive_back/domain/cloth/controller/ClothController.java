@@ -20,20 +20,23 @@ public class ClothController {
     private final ClothService clothService;
 
     @PostMapping("/recommendation")
-    public ResponseEntity<ClothRecommendationResponse> recommendCloth(@RequestBody ClothRecommendationRequest clothRecommendationRequest) throws Exception {
-        return ResponseEntity.ok(clothService.recommendCloth(clothRecommendationRequest));
+    public ResponseEntity<ClothRecommendationResponse> recommendCloth(
+            @RequestBody ClothRecommendationRequest clothRecommendationRequest,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
+    ) {
+        return ResponseEntity.ok(clothService.recommendCloth(clothRecommendationRequest, customMemberDetails.getMember()));
     }
 
     @PostMapping("/{clothId}")
     public ResponseEntity<ClothResponse> seenCloth(@PathVariable(name="clothId") Long clothId,
-                                                   @AuthenticationPrincipal CustomMemberDetails customMemberDetails) throws Exception {
+                                                   @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
         clothService.seenCloth(clothId, customMemberDetails.getMember());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/seen")
     public ResponseEntity<GetClothesResponse> getSeenCloth(@RequestParam int lastIndex, @RequestParam int size,
-                                                           @AuthenticationPrincipal CustomMemberDetails customMemberDetails) throws Exception {
+                                                           @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
         return ResponseEntity.ok( clothService.getSeenCloth(lastIndex, size,customMemberDetails.getMember()));
     }
 }

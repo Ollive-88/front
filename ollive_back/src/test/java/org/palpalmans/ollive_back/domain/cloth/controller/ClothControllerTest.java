@@ -21,11 +21,5 @@ public class ClothControllerTest {
     }
 
 
-    @Test
-    public void recommendClothTest() { // given, when, then
-        ClothRecommendationRequest clothRecommendationRequest = new ClothRecommendationRequest(
-                "Test", 37.56356, 126.98);
-    }
-
 
 }

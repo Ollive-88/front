@@ -34,13 +34,18 @@ public class ClothService {
     private final ClothRepository clothRepository;
     private final ClothMemberService clothMemberService;
 
-    public ClothRecommendationResponse recommendCloth(ClothRecommendationRequest clothRecommendationRequest) {
+    public ClothRecommendationResponse recommendCloth(
+            ClothRecommendationRequest clothRecommendationRequest,
+            Member member
+    ) {
         WeatherRequest weatherRequest = clothRecommendationRequest.extractWeatherRequest();
         double temperature = weatherService.getTemperatureFromKMA(weatherRequest);
         log.info("현재 기온: {}", temperature);
 
         return doRecommend(new ClothRecommendationRequestToData(
                 clothRecommendationRequest.text(),
+                member.getGender(),
+                clothRecommendationRequest.goal(),
                 temperature));
     }
 
@@ -50,8 +55,8 @@ public class ClothService {
                 .baseUrl(fastApiProperties.getBaseUrl())
                 .requestFactory(ClientHttpRequestFactories
                         .get(ClientHttpRequestFactorySettings.DEFAULTS
-                                .withConnectTimeout(Duration.ofSeconds(15))
-                                .withReadTimeout(Duration.ofSeconds(15))))
+                                .withConnectTimeout(Duration.ofSeconds(10))
+                                .withReadTimeout(Duration.ofSeconds(10))))
                 .build();
 
         return restClient
@@ -68,7 +73,7 @@ public class ClothService {
         Cloth cloth = clothRepository.findById(clothId).orElseThrow(() -> new EntityNotFoundException("옷을 찾을 수 없습니다."));
 
         Optional<ClothMember> clothMember = clothMemberService.findClothMember(cloth, member);
-        if(!clothMember.isPresent()){
+        if (clothMember.isEmpty()) {
             clothMemberService.saveClothMember(cloth, member);
         }
     }
@@ -80,16 +85,16 @@ public class ClothService {
 
         List<ClothResponse> clothResponses = new ArrayList<>();
 
-        for(ClothMember clothMember : clothMembers){
+        for (ClothMember clothMember : clothMembers) {
             Cloth cloth = clothMember.getCloth();
             clothResponses.add(ClothResponse.builder()
-                            .id(cloth.getId())
-                            .rank(0)
-                            .productName(cloth.getProductName())
-                            .brand(cloth.getBrand())
-                            .brandEnglish(cloth.getBrandEnglish())
-                            .productUrl(cloth.getProductUrl())
-                            .imgUrl(cloth.getImgUrl())
+                    .id(cloth.getId())
+                    .rank(0)
+                    .productName(cloth.getProductName())
+                    .brand(cloth.getBrand())
+                    .brandEnglish(cloth.getBrandEnglish())
+                    .productUrl(cloth.getProductUrl())
+                    .imgUrl(cloth.getImgUrl())
                     .build());
         }
 
