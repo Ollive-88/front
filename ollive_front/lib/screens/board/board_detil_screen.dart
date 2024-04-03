@@ -216,35 +216,38 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                     ),
                                   ),
                                   child: ClipOval(
-                                    child: (snapshot.data!.writer.imgUrl != "")
-                                        ? Image.network(
-                                            snapshot.data!.writer.imgUrl!,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                9,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                9,
-                                            headers: const {
-                                              "User-Agent":
-                                                  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
-                                            },
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Image.asset(
-                                            './assets/image/icons/basic_profile_img.png',
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                9,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                9,
-                                            fit: BoxFit.cover,
-                                          ),
+                                    child:
+                                        (snapshot.data!.writer.imgUrl != "" &&
+                                                snapshot.data!.writer.imgUrl !=
+                                                    null)
+                                            ? Image.network(
+                                                snapshot.data!.writer.imgUrl!,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    9,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    9,
+                                                headers: const {
+                                                  "User-Agent":
+                                                      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+                                                },
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.asset(
+                                                './assets/image/icons/basic_profile_img.png',
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    9,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    9,
+                                                fit: BoxFit.cover,
+                                              ),
                                   ),
                                 ),
                                 Container(
@@ -494,36 +497,38 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                       ),
                                     ),
                                     child: ClipOval(
-                                      child:
-                                          (snapshot.data!.writer.imgUrl != "")
-                                              ? Image.network(
-                                                  snapshot.data!.writer.imgUrl!,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      7,
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      7,
-                                                  headers: const {
-                                                    "User-Agent":
-                                                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
-                                                  },
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Image.asset(
-                                                  'assets/image/icons/basic_profile_img.png',
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      7,
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      7,
-                                                  fit: BoxFit.cover,
-                                                ),
+                                      child: (snapshot.data!.writer.imgUrl !=
+                                                  "" &&
+                                              snapshot.data!.writer.imgUrl !=
+                                                  null)
+                                          ? Image.network(
+                                              snapshot.data!.writer.imgUrl!,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  7,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  7,
+                                              headers: const {
+                                                "User-Agent":
+                                                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+                                              },
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.asset(
+                                              'assets/image/icons/basic_profile_img.png',
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  7,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  7,
+                                              fit: BoxFit.cover,
+                                            ),
                                     ),
                                   ),
 
