@@ -63,7 +63,7 @@ public class BoardMapper {
                 .tags(tags)
                 .comments(board.getComments()
                         .stream()
-                        .map(comment -> toGetCommentResponse(comment, writer))
+                        .map(comment -> toGetCommentResponse(comment, comment.getMember()))
                         .sorted(comparing(GetCommentResponse::createdAt))
                         .toList())
                 .build();
