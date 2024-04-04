@@ -42,14 +42,16 @@ public class WeatherService {
                 .build();
 
 
-        WeatherResponse responseBody = restClient
-                .get()
-                .uri(buildTemperatureRequestUri(weatherRequest, baseDate, baseTime))
-                .accept(APPLICATION_JSON)
-                .retrieve()
-                .body(WeatherResponse.class);
+
 
         try {
+            WeatherResponse responseBody = restClient
+                    .get()
+                    .uri(buildTemperatureRequestUri(weatherRequest, baseDate, baseTime))
+                    .accept(APPLICATION_JSON)
+                    .retrieve()
+                    .body(WeatherResponse.class);
+
             return Objects
                     .requireNonNull(responseBody)
                     .response()
