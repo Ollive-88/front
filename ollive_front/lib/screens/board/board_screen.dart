@@ -168,64 +168,82 @@ class _BoardScreenState extends State<BoardScreen> {
               ),
             )
           : null,
-      body: SafeArea(
-        child: FutureBuilder(
-          future: boards,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: ListView.separated(
-                  controller: _scrollController,
-                  scrollDirection: Axis.vertical,
-                  itemCount: snapshot.data!.length,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  itemBuilder: (context, index) {
-                    var boardModel = snapshot.data![index];
-                    updateLastIndex(boardModel.boardId);
-                    return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BoardDetailScreen(
-                                boardId: boardModel.boardId,
-                                index: index,
-                                addLike: addLike,
-                              ),
-                            ),
-                          );
-                        },
-                        child: BoardList(boardModel: boardModel));
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Column(
-                      children: [
-                        Divider(
-                          thickness: 2,
-                          height: 1,
-                          color: Color(0xFFEEEEEC),
-                        ),
-                        // SizedBox(
-                        //   height: 20,
-                        // )
-                      ],
-                    );
-                  },
-                ),
-              );
-            } else {
-              return const Center(
-                child: CircleAvatar(
-                  backgroundColor: Color(0xFFFFFFFC),
-                  backgroundImage:
-                      AssetImage("./assets/image/loding/Loding.gif"),
-                  radius: 60,
-                ),
-              );
+      body: RefreshIndicator(
+        color: const Color(0xFFFFD5D5), // 화살표 색상 변경
+        backgroundColor: const Color(0xFFFFFFFC), // 새로고침 배경색 변경
+        onRefresh: () async {
+          setState(() {
+            lastIndex = 0;
+            List<String> tagList = [];
+            if (widget.tagNames != null) {
+              for (var i = 0; i < widget.tagNames!.length; i++) {
+                tagList.add(widget.tagNames![i].tagName);
+              }
             }
-          },
+
+            boards = BoardService.getBoardList(
+                tagList, widget.keyword, lastIndex, size);
+          });
+        },
+        child: SafeArea(
+          child: FutureBuilder(
+            future: boards,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                  child: ListView.separated(
+                    controller: _scrollController,
+                    scrollDirection: Axis.vertical,
+                    itemCount: snapshot.data!.length,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    itemBuilder: (context, index) {
+                      var boardModel = snapshot.data![index];
+                      updateLastIndex(boardModel.boardId);
+                      return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BoardDetailScreen(
+                                  boardId: boardModel.boardId,
+                                  index: index,
+                                  addLike: addLike,
+                                ),
+                              ),
+                            );
+                          },
+                          child: BoardList(boardModel: boardModel));
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Column(
+                        children: [
+                          Divider(
+                            thickness: 2,
+                            height: 1,
+                            color: Color(0xFFEEEEEC),
+                          ),
+                          // SizedBox(
+                          //   height: 20,
+                          // )
+                        ],
+                      );
+                    },
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: CircleAvatar(
+                    backgroundColor: Color(0xFFFFFFFC),
+                    backgroundImage:
+                        AssetImage("./assets/image/loding/Loding.gif"),
+                    radius: 60,
+                  ),
+                );
+              }
+            },
+          ),
         ),
       ),
       floatingActionButton: GestureDetector(
