@@ -120,3 +120,11 @@
 ## 🌐 아키텍처
 ![ollive_architecture.png](README%20images%2Follive_metadata%2Follive_architecture.png)
 
+---
+
+## 문서
+[🌐 Figma 링크](https://www.figma.com/file/XNHn6FfhsM49wjNVZma2oT/%EC%8A%AC%EA%B8%B0%EB%A1%9C%EC%9A%B4-%EC%9E%90%EC%B7%A8-%EC%9A%A9%EC%82%AC?type=design&node-id=0-1&mode=design&t=UyvPMo4O8Ef1mryr-0)
+<br>
+[🌐 ERD 링크](https://www.erdcloud.com/d/o7geA5tsoHJtwagR2)
+<br>
+[🌐 Notion 링크](https://alloy-junhyun-0301.notion.site/88-a7d63387e81c4d9e9ef8ac2b1f234ebb?pvs=74)
