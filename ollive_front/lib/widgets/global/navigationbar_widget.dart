@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ollive_front/util/icons/ollive_icons.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CustomNavigationbar extends StatelessWidget {
   const CustomNavigationbar({
@@ -28,32 +28,36 @@ class CustomNavigationbar extends StatelessWidget {
         ),
         child: BottomNavigationBar(
           backgroundColor: const Color(0xFFF6F6F4),
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(
-                OlliveIcons.boardicon,
-                color: Colors.black,
+              icon: SvgPicture.asset(
+                './assets/icon/Community-icon.svg',
+                width: 28,
+                height: 28,
               ),
               label: '주',
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                OlliveIcons.recipeicon,
-                color: Colors.black,
+              icon: SvgPicture.asset(
+                './assets/icon/cook_icon.svg',
+                width: 28,
+                height: 28,
               ),
               label: '식',
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                OlliveIcons.clothseicon,
-                color: Colors.black,
+              icon: SvgPicture.asset(
+                './assets/icon/clothes_icon.svg',
+                width: 28,
+                height: 28,
               ),
               label: '의',
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                OlliveIcons.profileicon,
-                color: Colors.black,
+              icon: SvgPicture.asset(
+                './assets/icon/mypage_icon.svg',
+                width: 28,
+                height: 28,
               ),
               label: '내정보',
             ),

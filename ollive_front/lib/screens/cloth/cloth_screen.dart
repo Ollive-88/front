@@ -30,6 +30,7 @@ class _ClothScreenState extends State<ClothScreen> {
   ];
 
   int selectedOuting = 0;
+  bool isSearch = false;
 
   void changeOuting(int index) {
     selectedOuting = index;
@@ -246,29 +247,33 @@ class _ClothScreenState extends State<ClothScreen> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        FocusScope.of(context).unfocus();
-                        if (_singController.text.isEmpty) {
-                          ErrorService.showToast("노래가사를 입력해주세요.");
-                        } else if (selectedOuting == 0) {
-                          ErrorService.showToast("외출목적을 선택해 주세요.");
-                        } else {
-                          dynamic position = await ClothService.getPosition();
-
-                          if (position is Position) {
-                            Navigator.push(
-                              // ignore: use_build_context_synchronously
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ClothListScreen(
-                                  outing: outing[outingWord[selectedOuting]]!,
-                                  sing: _singController.text,
-                                  position: position,
-                                ),
-                              ),
-                            );
+                        if (!isSearch) {
+                          isSearch = true;
+                          FocusScope.of(context).unfocus();
+                          if (_singController.text.isEmpty) {
+                            ErrorService.showToast("노래가사를 입력해주세요.");
+                          } else if (selectedOuting == 0) {
+                            ErrorService.showToast("외출목적을 선택해 주세요.");
                           } else {
-                            ErrorService.showToast("위치 정보를 동의해 주세요.");
+                            dynamic position = await ClothService.getPosition();
+
+                            if (position is Position) {
+                              Navigator.push(
+                                // ignore: use_build_context_synchronously
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ClothListScreen(
+                                    outing: outing[outingWord[selectedOuting]]!,
+                                    sing: _singController.text,
+                                    position: position,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              ErrorService.showToast("위치 정보를 동의해 주세요.");
+                            }
                           }
+                          isSearch = false;
                         }
                       },
                       child: Container(

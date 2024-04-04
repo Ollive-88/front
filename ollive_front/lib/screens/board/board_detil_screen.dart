@@ -26,6 +26,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
   late Future<BoardDetailModel> boardDetail;
   final TextEditingController _commetController = TextEditingController();
   late final ScrollController _scrollController = ScrollController();
+  bool isApi = false;
 
   void addComment() async {
     final comment =
@@ -104,15 +105,19 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                BoardWriteScreen(
-                                              boardDetail: snapshot.data!,
+                                        if (!isApi) {
+                                          isApi = true;
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BoardWriteScreen(
+                                                boardDetail: snapshot.data!,
+                                              ),
                                             ),
-                                          ),
-                                        );
+                                          );
+                                          isApi = false;
+                                        }
                                       },
                                       child: const Row(
                                         mainAxisAlignment:
@@ -137,17 +142,22 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                     ),
                                     GestureDetector(
                                       onTap: () async {
-                                        await BoardService.deleteBoard(
-                                                snapshot.data!.boardId)
-                                            .then((value) => Navigator
-                                                .pushNamedAndRemoveUntil(
-                                                    context,
-                                                    '/home',
-                                                    (route) => false))
-                                            .catchError((e) {
-                                          ErrorService.showToast("잘못된 요청입니다.");
-                                          return null;
-                                        });
+                                        if (!isApi) {
+                                          isApi = true;
+                                          await BoardService.deleteBoard(
+                                                  snapshot.data!.boardId)
+                                              .then((value) => Navigator
+                                                  .pushNamedAndRemoveUntil(
+                                                      context,
+                                                      '/home',
+                                                      (route) => false))
+                                              .catchError((e) {
+                                            ErrorService.showToast(
+                                                "잘못된 요청입니다.");
+                                            return null;
+                                          });
+                                          isApi = false;
+                                        }
                                       },
                                       child: const Row(
                                         children: [
@@ -593,35 +603,31 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                                                                 GestureDetector(
                                                                   onTap:
                                                                       () async {
-                                                                    await BoardService.deleteComment(
-                                                                            snapshot
-                                                                                .data!.boardId,
-                                                                            snapshot
-                                                                                .data!
-                                                                                .comments[
-                                                                                    i]
-                                                                                .commentId)
-                                                                        .then(
-                                                                            (value) {
-                                                                      boardDetail
-                                                                          .then(
-                                                                              (value) {
-                                                                        value
-                                                                            .comments
-                                                                            .removeAt(i);
-                                                                      });
+                                                                    if (!isApi) {
+                                                                      isApi =
+                                                                          true;
+                                                                      await BoardService.deleteComment(snapshot.data!.boardId, snapshot.data!.comments[i].commentId).then(
+                                                                          (value) {
+                                                                        boardDetail
+                                                                            .then((value) {
+                                                                          value
+                                                                              .comments
+                                                                              .removeAt(i);
+                                                                        });
 
-                                                                      setState(
-                                                                          () {});
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                    }).catchError(
-                                                                            (e) {
-                                                                      ErrorService
-                                                                          .showToast(
-                                                                              "잘못된 요청입니다.");
-                                                                      return null;
-                                                                    });
+                                                                        setState(
+                                                                            () {});
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      }).catchError(
+                                                                          (e) {
+                                                                        ErrorService.showToast(
+                                                                            "잘못된 요청입니다.");
+                                                                        return null;
+                                                                      });
+                                                                      isApi =
+                                                                          false;
+                                                                    }
                                                                   },
                                                                   child:
                                                                       const Padding(
@@ -738,11 +744,15 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
                 child: IconButton(
                     icon: const Icon(Icons.send),
                     onPressed: () async {
-                      if (_commetController.text.isEmpty) {
-                        ErrorService.showToast("댓글을 입력해주세요");
-                        return;
+                      if (!isApi) {
+                        isApi = true;
+                        if (_commetController.text.isEmpty) {
+                          ErrorService.showToast("댓글을 입력해주세요");
+                          return;
+                        }
+                        addComment();
+                        isApi = false;
                       }
-                      addComment();
                     }),
               ),
             ],

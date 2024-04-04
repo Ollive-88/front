@@ -21,17 +21,22 @@ class UnregisterScreen extends StatelessWidget {
 
   final StatusController _userInfoController = Get.put(StatusController());
   final storage = const FlutterSecureStorage();
+  bool isComplet = false;
 
   void removeMembership(BuildContext context) {
-    UserService.deleteUserInfo().then((value) async {
-      await storage.delete(key: 'accessToken');
-      await storage.delete(key: 'refreshToken');
-      _userInfoController
-          .setToken(Token(accessToken: null, refreshToken: null));
+    if (!isComplet) {
+      isComplet = true;
+      UserService.deleteUserInfo().then((value) async {
+        await storage.delete(key: 'accessToken');
+        await storage.delete(key: 'refreshToken');
+        _userInfoController
+            .setToken(Token(accessToken: null, refreshToken: null));
 
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/login', (Route<dynamic> route) => false);
-    });
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/login', (Route<dynamic> route) => false);
+      });
+      isComplet = false;
+    }
   }
 
   @override

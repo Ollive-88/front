@@ -44,6 +44,7 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
   // 수정 이미지 리스트
   final List<ImageDetailModel> _updatePickedImgs = [];
   final List<int> _deletePickedImgs = [];
+  bool isComplet = false;
 
   // 태그 입력 처리 메서드
   void _handleInput(String input) {
@@ -195,70 +196,75 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
               ),
               GestureDetector(
                 onTap: () async {
-                  if (_titleController.text.isEmpty ||
-                      _titleController.text.length > 50 ||
-                      _contentController.text.isEmpty) {
-                    ErrorService.showToast("제목 혹은 본문을 입력해 주세요");
-                    return;
-                  }
-
-                  if (!isModify) {
-                    List<XFile> imgList = [];
-
-                    for (var i = 0; i < _pickedImgs.length; i++) {
-                      imgList.add(_pickedImgs[i].imgFile);
-                    }
-                    List<MultipartFile> imgs =
-                        await BoardService.convertXFileToMultipartFile(imgList);
-
-                    List<String> tagList = [];
-
-                    for (var i = 0; i < tagNames.length; i++) {
-                      tagList.add(tagNames[i].tagName);
+                  if (!isComplet) {
+                    isComplet = true;
+                    if (_titleController.text.isEmpty ||
+                        _titleController.text.length > 50 ||
+                        _contentController.text.isEmpty) {
+                      ErrorService.showToast("제목 혹은 본문을 입력해 주세요");
+                      return;
                     }
 
-                    await BoardService.postBoard(_titleController.text, tagList,
-                            _contentController.text, imgs)
-                        .then((value) => Navigator.pushNamedAndRemoveUntil(
-                            context, '/home', (route) => false))
-                        .catchError((e) {
-                      ErrorService.showToast("잘못된 요청입니다.");
-                      return null;
-                    });
-                  } else {
-                    // 추가된 태그 목록 초기화
-                    List<String> updateTagList = [];
+                    if (!isModify) {
+                      List<XFile> imgList = [];
 
-                    for (var i = 0; i < updateTagNames.length; i++) {
-                      updateTagList.add(updateTagNames[i].tagName);
+                      for (var i = 0; i < _pickedImgs.length; i++) {
+                        imgList.add(_pickedImgs[i].imgFile);
+                      }
+                      List<MultipartFile> imgs =
+                          await BoardService.convertXFileToMultipartFile(
+                              imgList);
+
+                      List<String> tagList = [];
+
+                      for (var i = 0; i < tagNames.length; i++) {
+                        tagList.add(tagNames[i].tagName);
+                      }
+
+                      await BoardService.postBoard(_titleController.text,
+                              tagList, _contentController.text, imgs)
+                          .then((value) => Navigator.pushNamedAndRemoveUntil(
+                              context, '/home', (route) => false))
+                          .catchError((e) {
+                        ErrorService.showToast("잘못된 요청입니다.");
+                        return null;
+                      });
+                    } else {
+                      // 추가된 태그 목록 초기화
+                      List<String> updateTagList = [];
+
+                      for (var i = 0; i < updateTagNames.length; i++) {
+                        updateTagList.add(updateTagNames[i].tagName);
+                      }
+
+                      // 추가된 이미지 초기화
+                      List<XFile> updateImgList = [];
+
+                      for (var i = 0; i < _updatePickedImgs.length; i++) {
+                        updateImgList.add(_updatePickedImgs[i].imgFile);
+                      }
+
+                      List<MultipartFile> updateImages =
+                          await BoardService.convertXFileToMultipartFile(
+                              updateImgList);
+
+                      await BoardService.fatchBoard(
+                        widget.boardDetail!.boardId,
+                        updateTagList,
+                        deleteTagNames,
+                        updateImages,
+                        _deletePickedImgs,
+                        _titleController.text,
+                        _contentController.text,
+                      ).then((value) {
+                        isComplet = false;
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/home', (route) => false);
+                      }).catchError((e) {
+                        ErrorService.showToast("잘못된 요청입니다.");
+                        return null;
+                      });
                     }
-
-                    // 추가된 이미지 초기화
-                    List<XFile> updateImgList = [];
-
-                    for (var i = 0; i < _updatePickedImgs.length; i++) {
-                      updateImgList.add(_updatePickedImgs[i].imgFile);
-                    }
-
-                    List<MultipartFile> updateImages =
-                        await BoardService.convertXFileToMultipartFile(
-                            updateImgList);
-
-                    await BoardService.fatchBoard(
-                      widget.boardDetail!.boardId,
-                      updateTagList,
-                      deleteTagNames,
-                      updateImages,
-                      _deletePickedImgs,
-                      _titleController.text,
-                      _contentController.text,
-                    )
-                        .then((value) => Navigator.pushNamedAndRemoveUntil(
-                            context, '/home', (route) => false))
-                        .catchError((e) {
-                      ErrorService.showToast("잘못된 요청입니다.");
-                      return null;
-                    });
                   }
                 },
                 child: const Text(

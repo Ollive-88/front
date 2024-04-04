@@ -50,17 +50,22 @@ class _BoardSearchScreenState extends State<BoardSearchScreen> {
     setState(() {});
   }
 
+  bool isComplete = false;
   // 검색 메서드
   void onclickSearch() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BoardScreen(
-          tagNames: tagNames,
-          keyword: _inputController.text,
+    if (isComplete = false) {
+      isComplete = true;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BoardScreen(
+            tagNames: tagNames,
+            keyword: _inputController.text,
+          ),
         ),
-      ),
-    );
+      );
+      isComplete = false;
+    }
   }
 
   @override

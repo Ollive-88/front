@@ -24,6 +24,8 @@ class _RecipeScreenState extends State<RecipeScreen> {
   List<bool> isRefrigeratorsSelected = [];
   List<bool> isIngredientsSelected = [];
 
+  bool isSearch = false;
+
   void selstedItem(List<bool> isSelected, int i) {
     isSelected[i] = !isSelected[i];
   }
@@ -419,28 +421,32 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        FocusScope.of(context).unfocus();
+                        if (!isSearch) {
+                          isSearch = true;
+                          FocusScope.of(context).unfocus();
 
-                        if (havingIngredients.isEmpty) {
-                          ErrorService.showToast("포함시킬 재료를 선택해주세요");
-                        } else {
-                          await RecipeService.getRecommendRecipeList(
-                            havingIngredients,
-                            dislikeIngredients,
-                          ).then((value) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RecipeListScreen(
-                                  likeTagNames: havingIngredients,
-                                  hateTagNames: dislikeIngredients,
-                                  recommendrecipes: value,
+                          if (havingIngredients.isEmpty) {
+                            ErrorService.showToast("포함시킬 재료를 선택해주세요");
+                          } else {
+                            await RecipeService.getRecommendRecipeList(
+                              havingIngredients,
+                              dislikeIngredients,
+                            ).then((value) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RecipeListScreen(
+                                    likeTagNames: havingIngredients,
+                                    hateTagNames: dislikeIngredients,
+                                    recommendrecipes: value,
+                                  ),
                                 ),
-                              ),
-                            );
-                          }).catchError((onError) {
-                            ErrorService.showToast("잘못된 요청입니다.");
-                          });
+                              );
+                            }).catchError((onError) {
+                              ErrorService.showToast("잘못된 요청입니다.");
+                            });
+                          }
+                          isSearch = false;
                         }
                       },
                       child: Column(

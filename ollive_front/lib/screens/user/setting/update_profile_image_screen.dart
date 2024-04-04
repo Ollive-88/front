@@ -32,7 +32,7 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
   bool _pickInProgress = false;
   final StatusController _userInfoController = Get.put(StatusController());
   late String profileUrl;
-
+  bool isComplet = false;
   @override
   void initState() {
     super.initState();
@@ -224,11 +224,16 @@ class _ProfileImageScreenState extends State<ProfileImageScreen> {
   }
 
   void updateImage() async {
-    final img = await UserService.convertXFileToMultipartFile(_pickedImg);
+    if (!isComplet) {
+      isComplet = true;
+      final img = await UserService.convertXFileToMultipartFile(_pickedImg);
 
-    await UserService.updateProfileImage(['profilePicture', img]).then((value) {
-      _userInfoController.setImgUrl(value);
-      Navigator.pop(context);
-    });
+      await UserService.updateProfileImage(['profilePicture', img])
+          .then((value) {
+        _userInfoController.setImgUrl(value);
+        Navigator.pop(context);
+      });
+      isComplet = false;
+    }
   }
 }
