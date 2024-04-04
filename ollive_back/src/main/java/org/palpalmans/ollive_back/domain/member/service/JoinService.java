@@ -52,6 +52,7 @@ public class JoinService {
                     .name(name)
                     .nickname(name)
                     .role(role) // role 설정
+                    .profilePicture("")
                     .build();
 
             SocialMember joinMember = new SocialMember(member, SocialType.GOOGLE);
@@ -72,6 +73,7 @@ public class JoinService {
                     .name(name)
                     .nickname(name)
                     .role(role) // role 설정
+                    .profilePicture("")
                     .build();
 
             String encodedPass = bCryptPasswordEncoder.encode(password);
